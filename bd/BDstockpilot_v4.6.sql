@@ -3,7 +3,7 @@
 
 -- TABLAS --
 DROP DATABASE IF EXISTS stockpilot;
-CREATE DATABASE stockPilot;
+USE stockPilot;
 
 CREATE TABLE usuario (
     idusu INT(10) PRIMARY KEY AUTO_INCREMENT,
