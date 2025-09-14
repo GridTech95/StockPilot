@@ -3,6 +3,7 @@
 
 -- TABLAS --
 DROP DATABASE IF EXISTS stockpilot;
+CREATE DATABASE stockpilot;
 USE stockpilot;
 
 CREATE TABLE usuario (
