@@ -1,7 +1,7 @@
 <?php
 require_once('conexion.php');
 
-$usu = isset($_POST['usu']) ? $_POST['usu'] : NULL;
+$usu = isset($_POST['usu']) ? $_POST['usu'] : NULL; // aquí pones el email
 $pas = isset($_POST['pas']) ? $_POST['pas'] : NULL;
 
 if ($usu && $pas) {
@@ -26,7 +26,6 @@ function validar($usu, $pas) {
         // bandera de sesión activa
         $_SESSION['aut'] = "askjhd654-+"; 
 
-        // todos redirigen al home
         echo '<script>window.location="../home.php";</script>';
     } else {
         echo '<script>window.location="../index.php?err=ok";</script>';
@@ -41,15 +40,16 @@ function verdat($usu, $con) {
                    u.idper, p.nomper
             FROM usuario AS u
             INNER JOIN perfil AS p ON u.idper = p.idper
-            WHERE u.act = 1 AND u.ndousu = :ndousu 
+            WHERE u.act = 1 AND u.emausu = :emausu 
               AND u.pasusu = :pasusu";
-    
+
     $modelo = new Conexion();
     $conexion = $modelo->get_conexion();
     $result = $conexion->prepare($sql);
-    $result->bindParam(':ndousu', $usu);
+    $result->bindParam(':emausu', $usu);
     $result->bindParam(':pasusu', $pas);
     $result->execute();
     return $result->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
+
