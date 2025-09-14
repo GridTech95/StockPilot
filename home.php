@@ -23,14 +23,26 @@
 </head>
 <body>
 	<header>
-		
+		<?php
+        $pg = isset($_REQUEST["pg"]) ? $_REQUEST["pg"]:NULL;
+        require_once("models/conexion.php");
+        require_once("views/vpf.php");
+        require_once("controllers/misfun.php");
+        require_once("views/vmen.php");
+        
+        ?>
 	</header>
 	<section>
 		<?php
+		 $pg = isset($_REQUEST["pg"]) ? $_REQUEST["pg"]:NULL;
 			if(!$pg OR $pg==1001)
 				require_once("views/vemp.php");
 			elseif($pg==1002)
 				require_once("views/vprod.php");
+			elseif($pg==1003)
+				require_once("views/vprov.php");
+			elseif($pg==1004)
+				require_once("views/vusemp.php");
 			else
 				echo "Pagina No Disponible Para Este Usuario";
 		?>

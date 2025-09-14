@@ -21,6 +21,9 @@
 
 </head>
 <body>
+	<?php 
+		require_once ("models/conexion.php");
+	?>
 	<header>
 		
 	</header>
