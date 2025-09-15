@@ -4,7 +4,7 @@ class Mmen {
 
     // obtiene el menú según el perfil del usuario
     public function menu($idper) {
-        $sql = "SELECT g.idpag, g.nompag, g.ruta, g.icono
+        $sql = "SELECT g.idpag, g.nompag, g.ruta, g.icono AS icopag
                 FROM pagina AS g
                 INNER JOIN pxp AS f ON g.idpag = f.idpag
                 WHERE g.act = 1 AND f.idper = :idper AND f.ver = 1
@@ -20,7 +20,7 @@ class Mmen {
 
     // valida si un perfil tiene acceso a una página
     public function valpg($idper, $idpag) {
-        $sql = "SELECT g.idpag, g.nompag, g.ruta, g.icono, f.ver, f.crear, f.editar, f.eliminar
+        $sql = "SELECT g.idpag, g.nompag, g.ruta, g.icono AS icopag, f.ver, f.crear, f.editar, f.eliminar
                 FROM pagina AS g
                 INNER JOIN pxp AS f ON g.idpag = f.idpag
                 WHERE f.idper = :idper AND g.idpag = :idpag AND g.act = 1";
