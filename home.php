@@ -43,6 +43,30 @@
 				require_once("views/vprov.php");
 			elseif($pg==1004)
 				require_once("views/vusemp.php");
+			elseif($pg==1005)
+				require_once("views/vcat.php");
+			elseif($pg==1006)
+				require_once("views/vaud.php");
+			elseif($pg==1007)
+				require_once("views/vkard.php");
+			elseif($pg==1008)
+				require_once("views/vlote.php");
+			elseif($pg==1009)
+				require_once("views/vinv.php");
+			elseif($pg==1010)
+				require_once("views/vmovim.php");
+			elseif($pg==1011)
+				require_once("views/vdom.php");
+			elseif($pg==1012)
+				require_once("views/vval.php");
+			elseif($pg==1013)
+				require_once("views/vsal.php");
+			elseif($pg==1014)
+				require_once("views/vsolsal.php");
+			elseif($pg==1015)
+				require_once("views/vusemp.php");
+			elseif($pg==1016)
+				require_once("views/vubi.php");
 			else
 				echo "Pagina No Disponible Para Este Usuario";
 		?>
