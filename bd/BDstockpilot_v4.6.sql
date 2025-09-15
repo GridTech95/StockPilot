@@ -417,7 +417,7 @@ INSERT INTO perfil (codper, nomper, nivel) VALUES
 ('BOD', 'Bodeguero', 1);
 
 INSERT INTO usuario (nomusu, apeusu, tdousu, ndousu, celusu, emausu, pasusu, idper) VALUES
-('Admin', 'Sistema', 'CC', '123456789', '3001234567', 'admin@gmail.com', '$2b$12$6oTkFgnxtIkSkZsTnjy5Zu3ydEEdgUUU9PA46z3DGljO3U2KPCclq', 1),
+('Admin', 'Sistema', 'CC', '123456789', '3001234567', 'admin@gmail.com', 'e0f53c0a8c931f995f898d5f166491ccbdc7f528kjahw9', 1),
 ('Juan', 'Pérez', 'CC', '987654321', '3102345678', 'juan@example.com', '$2b$12$6oTkFgnxtIkSkZsTnjy5Zu3ydEEdgUUU9PA46z3DGljO3U2KPCclq', 2),
 ('María', 'Gómez', 'TI', '1122334455', '3203456789', 'maria@example.com', '$2b$12$6oTkFgnxtIkSkZsTnjy5Zu3ydEEdgUUU9PA46z3DGljO3U2KPCclq', 3),
 ('Pedro', 'Rodríguez', 'CC', '2233445566', '3009876543', 'pedro@example.com', '$2b$12$6oTkFgnxtIkSkZsTnjy5Zu3ydEEdgUUU9PA46z3DGljO3U2KPCclq', 4),
@@ -486,23 +486,24 @@ VALUES
 (1, 'Principal', 'fa fa-layer-group', '#', 1, NOW(), 1);
 
 -- 2. Crear páginas base y adicionales
-INSERT INTO pagina (idpag, idmod, nompag, ruta, icono, orden, fec_crea, act)
-VALUES 
+INSERT INTO pagina (idpag, idmod, nompag, ruta, icono, orden, fec_crea, act) VALUES
 (1001, 1, 'Empresas', 'views/vemp.php', 'fa fa-building', 1, NOW(), 1),
 (1002, 1, 'Productos', 'views/vprod.php', 'fa fa-box', 2, NOW(), 1),
 (1003, 1, 'Proveedores', 'views/vprov.php', 'fa fa-truck', 3, NOW(), 1),
-(1004, 1, 'Usuarios Empresa', 'views/vusemp.php', 'fa fa-users', 4, NOW(), 1);
-(1005, 1, 'Categorías', 'views/vcat.php', 'fa fa-tags',  5, NOW(), 1),
-(1006, 1, 'Auditoría',  'views/vaud.php', 'fa fa-shield', 6, NOW(), 1),
+(1004, 1, 'Usuarios Empresa', 'views/vusemp.php', 'fa fa-users', 4, NOW(), 1),
+(1005, 1, 'Categorías', 'views/vcat.php', 'fa fa-tags', 5, NOW(), 1),
+(1006, 1, 'Auditoría', 'views/vaud.php', 'fa fa-shield', 6, NOW(), 1),
 (1007, 1, 'Kardex', 'views/vkard.php', 'fa fa-clipboard-list', 7, NOW(), 1),
 (1008, 1, 'Lotes', 'views/vlote.php', 'fa fa-layer-group', 8, NOW(), 1),
-(1009, 1, 'Inventario', 'views/vinv.php',  'fa fa-boxes', 9, NOW(), 1),
-(1010, 1, 'Movimientos', 'views/vmovim.php','fa fa-exchange-alt',  10, NOW(), 1),
-(1011, 1, 'Dominios', 'views/vdom.php',  'fa fa-database', 11, NOW(), 1),
-(1012, 1, 'Valores', 'views/vval.php',  'fa fa-check-circle', 12, NOW(), 1),
-(1013, 1, 'Salidas', 'views/vsal.php',  'fa fa-sign-out-alt', 13, NOW(), 1),
+(1009, 1, 'Inventario', 'views/vinv.php', 'fa fa-boxes', 9, NOW(), 1),
+(1010, 1, 'Movimientos', 'views/vmovim.php', 'fa fa-exchange-alt', 10, NOW(), 1),
+(1011, 1, 'Dominios', 'views/vdom.php', 'fa fa-database', 11, NOW(), 1),
+(1012, 1, 'Valores', 'views/vval.php', 'fa fa-check-circle', 12, NOW(), 1),
+(1013, 1, 'Salidas', 'views/vsal.php', 'fa fa-sign-out-alt', 13, NOW(), 1),
 (1014, 1, 'Solicitudes Salida', 'views/vsolsal.php', 'fa fa-file-alt', 14, NOW(), 1),
-(1015, 1, 'Ubicaciones', 'views/vubi.php',  'fa fa-map-marker-alt', 16, NOW(), 1);
+(1015, 1, 'Ubicaciones', 'views/vubi.php', 'fa fa-map-marker-alt', 15, NOW(), 1),
+(1016, 1, 'Usuarios Empresa (Alt)', 'views/vusemp.php', 'fa fa-user-cog', 16, NOW(), 1);
+
 
 -- 3. Permisos para el perfil Administrador (idper=1)
 INSERT INTO pxp (idper, idpag, ver, crear, editar, eliminar, fec_crea)
@@ -510,4 +511,16 @@ VALUES
 (1, 1001, 1, 1, 1, 1, NOW()),
 (1, 1002, 1, 1, 1, 1, NOW()),
 (1, 1003, 1, 1, 1, 1, NOW()),
-(1, 1004, 1, 1, 1, 1, NOW());
+(1, 1004, 1, 1, 1, 1, NOW()),
+(1, 1005, 1, 1, 1, 1, NOW()),
+(1, 1006, 1, 1, 1, 1, NOW()),
+(1, 1007, 1, 1, 1, 1, NOW()),
+(1, 1008, 1, 1, 1, 1, NOW()),
+(1, 1009, 1, 1, 1, 1, NOW()),
+(1, 1010, 1, 1, 1, 1, NOW()),
+(1, 1011, 1, 1, 1, 1, NOW()),
+(1, 1012, 1, 1, 1, 1, NOW()),
+(1, 1013, 1, 1, 1, 1, NOW()),
+(1, 1014, 1, 1, 1, 1, NOW()),
+(1, 1015, 1, 1, 1, 1, NOW());
+
