@@ -15,27 +15,27 @@
                         <th>Nombre</th>
                         <th>Descripción</th>
                         <th>Categoría</th>
-                        <th>Stock</th>
-                        <th>Precio</th>
+                        <th>Unidad</th>
+                        <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if (!empty($productos)): ?>
-                        <?php foreach ($productos as $p): ?>
+                    <?php if (!empty($datAll)): ?>
+                        <?php foreach ($datAll as $p): ?>
                             <tr>
                                 <td><?= htmlspecialchars($p['codprod']) ?></td>
                                 <td><?= htmlspecialchars($p['nomprod']) ?></td>
                                 <td><?= htmlspecialchars($p['desprod']) ?></td>
-                                <td><?= htmlspecialchars($p['categoria']) ?></td>
-                                <td><?= htmlspecialchars($p['stock']) ?></td>
-                                <td>$<?= number_format($p['precio'], 2) ?></td>
+                                <td><?= htmlspecialchars($p['idcat']) ?></td>
+                                <td><?= htmlspecialchars($p['unimed']) ?></td>
+                                <td><?= $p['act'] ? "Activo" : "Inactivo" ?></td>
                                 <td>
-                                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
-                                        data-bs-target="#modalProducto">
+                                    <a href="cprod.php?ope=edi&idprod=<?= $p['idprod'] ?>" 
+                                       class="btn btn-sm btn-warning">
                                         <i class="fa fa-edit"></i>
-                                    </button>
-                                    <a href="cprod.php?m=eliminar&id=<?= $p['idprod'] ?>"
+                                    </a>
+                                    <a href="cprod.php?ope=eli&idprod=<?= $p['idprod'] ?>"
                                        class="btn btn-sm btn-danger"
                                        onclick="return confirm('¿Seguro que deseas eliminar este producto?')">
                                         <i class="fa fa-trash"></i>
@@ -63,7 +63,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
-                <form action="cprod.php?m=guardar" method="POST" enctype="multipart/form-data">
+                <form action="cprod.php?ope=save" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="idprod" id="idprod">
 
                     <div class="row g-3">
@@ -103,6 +103,22 @@
                         <div class="col-md-6">
                             <label class="form-label">Imagen</label>
                             <input type="file" name="imgprod" id="imgprod" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Empresa</label>
+                            <select name="idemp" id="idemp" class="form-select" required>
+                                <option value="">Seleccione...</option>
+                                <?php foreach ($empresas as $e): ?>
+                                    <option value="<?= $e['idemp'] ?>"><?= htmlspecialchars($e['nomemp']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Estado</label>
+                            <select name="act" id="act" class="form-select">
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
                         </div>
                         <div class="col-12">
                             <label class="form-label">Tipo de Inventario</label>
