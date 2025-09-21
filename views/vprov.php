@@ -1,112 +1,97 @@
-<!-- Vista: Proveedores -->
-<div class="container py-4">
-    <div class="card shadow-sm border-0 rounded-3">
-        <div class="card-header bg-gradient text-white"
-             style="background: linear-gradient(135deg, #4e73df, #224abe);">
-            <h4 class="mb-0">
-                <i class="fa fa-truck me-2"></i> Gestión de Proveedores
-            </h4>
-        </div>
-        <div class="card-body">
-            
-            <!-- Botón agregar -->
-            <div class="d-flex justify-content-end mb-3">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProveedor">
-                    <i class="fa fa-plus me-1"></i> Nuevo Proveedor
-                </button>
-            </div>
+<?php require_once("controllers/cprov.php"); ?>
 
-            <!-- Tabla proveedores -->
-            <div class="table-responsive">
-                <table class="table table-striped table-hover align-middle">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>#</th>
-                            <th>Nombre</th>
-                            <th>Contacto</th>
-                            <th>Teléfono</th>
-                            <th>Email</th>
-                            <th>Dirección</th>
-                            <th class="text-center">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($proveedores)): ?>
-                            <?php foreach ($proveedores as $p): ?>
-                                <tr>
-                                    <td><?= $p['idprov'] ?></td>
-                                    <td><?= htmlspecialchars($p['nomprov']) ?></td>
-                                    <td><?= htmlspecialchars($p['contacto']) ?></td>
-                                    <td><?= htmlspecialchars($p['telefono']) ?></td>
-                                    <td><?= htmlspecialchars($p['email']) ?></td>
-                                    <td><?= htmlspecialchars($p['direccion']) ?></td>
-                                    <td class="text-center">
-                                        <button class="btn btn-sm btn-warning">
-                                            <i class="fa fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-danger">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="7" class="text-center text-muted">No hay proveedores registrados.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
+<form action="index.php?pg=<?=$pg;?>" method="POST">
+<div class="row">
+    <div class="form-group col-md-6">
+        <label for="tipoprov">Tipo Proveedor</label>
+        <input type="text" name="tipoprov" id="tipoprov" class="form-control" value="<?php if($datOne && $datOne[0]['tipoprov']) echo $datOne[0]['tipoprov']; ?>">
+    </div>
+    <div class="form-group col-md-6">
+        <label for="nomprov">Nombre Proveedor</label>
+        <input type="text" name="nomprov" id="nomprov" class="form-control" value="<?php if($datOne && $datOne[0]['nomprov']) echo $datOne[0]['nomprov']; ?>">
+    </div>
+    <div class="form-group col-md-6">
+        <label for="docprov">Documento</label>
+        <input type="text" name="docprov" id="docprov" class="form-control" value="<?php if($datOne && $datOne[0]['docprov']) echo $datOne[0]['docprov']; ?>">
+    </div>
+    <div class="form-group col-md-6">
+        <label for="telprov">Teléfono</label>
+        <input type="text" name="telprov" id="telprov" class="form-control" value="<?php if($datOne && $datOne[0]['telprov']) echo $datOne[0]['telprov']; ?>">
+    </div>
+    <div class="form-group col-md-6">
+        <label for="emaprov">Email</label>
+        <input type="email" name="emaprov" id="emaprov" class="form-control" value="<?php if($datOne && $datOne[0]['emaprov']) echo $datOne[0]['emaprov']; ?>">
+    </div>
+    <div class="form-group col-md-6">
+        <label for="dirprov">Dirección</label>
+        <input type="text" name="dirprov" id="dirprov" class="form-control" value="<?php if($datOne && $datOne[0]['dirprov']) echo $datOne[0]['dirprov']; ?>">
+    </div>
+    <div class="form-group col-md-6">
+        <label for="idubi">Ubicación</label>
+        <select name="idubi" id="idubi" class="form-control">
+            <?php foreach($datUbi as $ubi) { ?>
+                <option value="<?=$ubi['idubi'];?>" <?php if($datOne && $datOne[0]['idubi'] == $ubi['idubi']) echo "selected"; ?>>
+                    <?=$ubi['nomubi'];?> - <?=$ubi['ciuubi'];?>, <?=$ubi['depubi'];?>
+                </option>
+            <?php } ?>
+        </select>
+    </div>
+    <div class="form-group col-md-6">
+        <label for="idemp">Empresa</label>
+        <select name="idemp" id="idemp" class="form-control">
+            <?php foreach($datEmp as $emp) { ?>
+                <option value="<?=$emp['idemp'];?>" <?php if($datOne && $datOne[0]['idemp'] == $emp['idemp']) echo "selected"; ?>>
+                    <?=$emp['nomemp'];?> - <?=$emp['diremp'];?> - <?=$emp['emaemp'];?>
+                </option>
+            <?php } ?>
+        </select>
+    </div>
 
-        </div>
+    <input type="hidden" name="idprov" value="<?php if($datOne && $datOne[0]['idprov']) echo $datOne[0]['idprov']; ?>">
+    <input type="hidden" name="ope" value="save">
+
+    <div class="form-group col-md-12 mt-3">
+        <input type="submit" class="btn btn-primary" value="Guardar">
     </div>
 </div>
+</form>
 
-<!-- Modal -->
-<div class="modal fade" id="modalProveedor" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content shadow">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title"><i class="fa fa-truck me-2"></i> Nuevo Proveedor</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            <div class="modal-body">
-                <form id="formProveedor">
-                    <input type="hidden" name="idprov" id="idprov">
+<hr><br>
 
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="nomprov" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" name="nomprov" id="nomprov" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="contacto" class="form-label">Persona de Contacto</label>
-                            <input type="text" class="form-control" name="contacto" id="contacto" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="telefono" class="form-label">Teléfono</label>
-                            <input type="text" class="form-control" name="telefono" id="telefono" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="email" class="form-label">Correo Electrónico</label>
-                            <input type="email" class="form-control" name="email" id="email" required>
-                        </div>
-                        <div class="col-12">
-                            <label for="direccion" class="form-label">Dirección</label>
-                            <textarea class="form-control" name="direccion" id="direccion" rows="2"></textarea>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fa fa-times me-1"></i> Cancelar
-                </button>
-                <button type="submit" form="formProveedor" class="btn btn-primary">
-                    <i class="fa fa-save me-1"></i> Guardar
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+<table id="example" class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Documento</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Ubicación</th>
+            <th>Empresa</th>
+            <th></th>
+        </tr>   
+    </thead>
+    <tbody>
+        <?php if($datAll){ foreach($datAll as $dt){ ?>
+        <tr>
+            <td><?=$dt['idprov'];?></td>
+            <td><?=$dt['nomprov'];?></td>
+            <td><?=$dt['tipoprov'];?></td>
+            <td><?=$dt['docprov'];?></td>
+            <td><?=$dt['telprov'];?></td>
+            <td><?=$dt['emaprov'];?></td>
+            <td><?=$dt['nomubi'];?> - <?=$dt['ciuubi'];?>, <?=$dt['depubi'];?></td>
+            <td><?=$dt['nomemp'];?> - <?=$dt['diremp'];?></td>
+            <td style="text-align: right;">
+                <a href="index.php?pg=<?=$pg;?>&idprov=<?=$dt['idprov'];?>&ope=edi" title="Editar">
+                    <i class="fa-solid fa-pen-to-square fa-2x"></i>
+                </a>
+                <a href="index.php?pg=<?=$pg;?>&idprov=<?=$dt['idprov'];?>&ope=eli" title="Eliminar" onclick="return eliminar();">
+                    <i class="fa-solid fa-trash-can fa-2x"></i>
+                </a>
+            </td>
+        </tr>
+        <?php }} ?>
+    </tbody>
+</table>

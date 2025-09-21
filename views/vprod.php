@@ -1,3 +1,5 @@
+<?php require_once('controllers/cprod.php')?> 
+
 <div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="mb-0"><i class="fa fa-box"></i> Gestión de Productos</h2>
@@ -16,7 +18,11 @@
                         <th>Descripción</th>
                         <th>Categoría</th>
                         <th>Unidad</th>
+                        <th>costouni</th>
+                        <th>precioven</th>
                         <th>Estado</th>
+                        <th>Creado</th>
+                        <th>Actualizado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -27,9 +33,13 @@
                                 <td><?= htmlspecialchars($p['codprod']) ?></td>
                                 <td><?= htmlspecialchars($p['nomprod']) ?></td>
                                 <td><?= htmlspecialchars($p['desprod']) ?></td>
-                                <td><?= htmlspecialchars($p['idcat']) ?></td>
+                                <td><?= htmlspecialchars($p['nomcat']) ?></td>
                                 <td><?= htmlspecialchars($p['unimed']) ?></td>
+                                <td><?= number_format($p['costouni'], 2, ',', '.') ?></td>
+                                <td><?= number_format($p['precioven'], 2, ',', '.') ?></td>
                                 <td><?= $p['act'] ? "Activo" : "Inactivo" ?></td>
+                                <td><?= htmlspecialchars($p['fec_crea']) ?></td>
+                                <td><?= htmlspecialchars($p['fec_actu']) ?></td>
                                 <td>
                                     <a href="cprod.php?ope=edi&idprod=<?= $p['idprod'] ?>" 
                                        class="btn btn-sm btn-warning">
@@ -45,7 +55,7 @@
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="7" class="text-center text-muted">No hay productos registrados</td>
+                            <td colspan="11" class="text-center text-muted">No hay productos registrados</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
@@ -64,70 +74,83 @@
             </div>
             <div class="modal-body">
                 <form action="cprod.php?ope=save" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="idprod" id="idprod">
+                    <input type="hidden" name="idprod" id="idprod" 
+                           value="<?= !empty($datOne[0]['idprod']) ? $datOne[0]['idprod'] : '' ?>">
 
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label">Código</label>
-                            <input type="text" name="codprod" id="codprod" class="form-control" required>
+                            <input type="text" name="codprod" id="codprod" class="form-control" 
+                                   value="<?= !empty($datOne[0]['codprod']) ? htmlspecialchars($datOne[0]['codprod']) : '' ?>" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Nombre</label>
-                            <input type="text" name="nomprod" id="nomprod" class="form-control" required>
+                            <input type="text" name="nomprod" id="nomprod" class="form-control" 
+                                   value="<?= !empty($datOne[0]['nomprod']) ? htmlspecialchars($datOne[0]['nomprod']) : '' ?>" required>
                         </div>
                         <div class="col-12">
                             <label class="form-label">Descripción</label>
-                            <textarea name="desprod" id="desprod" class="form-control"></textarea>
+                            <textarea name="desprod" id="desprod" class="form-control"><?= !empty($datOne[0]['desprod']) ? htmlspecialchars($datOne[0]['desprod']) : '' ?></textarea>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Categoría</label>
                             <select name="idcat" id="idcat" class="form-select" required>
                                 <option value="">Seleccione...</option>
-                                <?php foreach ($categorias as $c): ?>
-                                    <option value="<?= $c['idcat'] ?>"><?= htmlspecialchars($c['nomcat']) ?></option>
+                                <?php foreach ($datCat as $c): ?>
+                                    <option value="<?= $c['idcat'] ?>" 
+                                        <?= (!empty($datOne[0]['idcat']) && $datOne[0]['idcat'] == $c['idcat']) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($c['nomcat']) ?>
+                                    </option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Stock Mín.</label>
-                            <input type="number" name="stkmin" id="stkmin" class="form-control">
+                            <input type="number" name="stkmin" id="stkmin" class="form-control"
+                                   value="<?= !empty($datOne[0]['stkmin']) ? $datOne[0]['stkmin'] : '' ?>">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Stock Máx.</label>
-                            <input type="number" name="stkmax" id="stkmax" class="form-control">
+                            <input type="number" name="stkmax" id="stkmax" class="form-control"
+                                   value="<?= !empty($datOne[0]['stkmax']) ? $datOne[0]['stkmax'] : '' ?>">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Unidad de Medida</label>
-                            <input type="text" name="unimed" id="unimed" class="form-control">
+                            <input type="text" name="unimed" id="unimed" class="form-control"
+                                   value="<?= !empty($datOne[0]['unimed']) ? htmlspecialchars($datOne[0]['unimed']) : '' ?>">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Imagen</label>
                             <input type="file" name="imgprod" id="imgprod" class="form-control">
+                            <?php if (!empty($datOne[0]['imgprod'])): ?>
+                                <small class="text-muted">Imagen actual: <?= htmlspecialchars($datOne[0]['imgprod']) ?></small>
+                            <?php endif; ?>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Empresa</label>
-                            <select name="idemp" id="idemp" class="form-select" required>
-                                <option value="">Seleccione...</option>
-                                <?php foreach ($empresas as $e): ?>
-                                    <option value="<?= $e['idemp'] ?>"><?= htmlspecialchars($e['nomemp']) ?></option>
-                                <?php endforeach; ?>
-                            </select>
+                        <div class="col-md-3">
+                            <label class="form-label">costouni</label>
+                            <input type="number" step="0.01" name="costouni" id="costouni" class="form-control"
+                                   value="<?= !empty($datOne[0]['costouni']) ? $datOne[0]['costouni'] : '' ?>">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">precioven</label>
+                            <input type="number" step="0.01" name="precioven" id="precioven" class="form-control"
+                                   value="<?= !empty($datOne[0]['precioven']) ? $datOne[0]['precioven'] : '' ?>">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Estado</label>
                             <select name="act" id="act" class="form-select">
-                                <option value="1">Activo</option>
-                                <option value="0">Inactivo</option>
+                                <option value="1" <?= (!empty($datOne[0]['act']) && $datOne[0]['act'] == 1) ? 'selected' : '' ?>>Activo</option>
+                                <option value="0" <?= (!empty($datOne[0]['act']) && $datOne[0]['act'] == 0) ? 'selected' : '' ?>>Inactivo</option>
                             </select>
                         </div>
                         <div class="col-12">
                             <label class="form-label">Tipo de Inventario</label>
                             <select name="tipo_inventario" id="tipo_inventario" class="form-select">
                                 <option value="">Seleccione...</option>
-                                <option value="1">Mercancías</option>
-                                <option value="2">Materia Prima</option>
-                                <option value="3">En Proceso</option>
-                                <option value="4">Terminados</option>
+                                <option value="1" <?= (!empty($datOne[0]['tipo_inventario']) && $datOne[0]['tipo_inventario'] == 1) ? 'selected' : '' ?>>Mercancías</option>
+                                <option value="2" <?= (!empty($datOne[0]['tipo_inventario']) && $datOne[0]['tipo_inventario'] == 2) ? 'selected' : '' ?>>Materia Prima</option>
+                                <option value="3" <?= (!empty($datOne[0]['tipo_inventario']) && $datOne[0]['tipo_inventario'] == 3) ? 'selected' : '' ?>>En Proceso</option>
+                                <option value="4" <?= (!empty($datOne[0]['tipo_inventario']) && $datOne[0]['tipo_inventario'] == 4) ? 'selected' : '' ?>>Terminados</option>
                             </select>
                         </div>
                     </div>

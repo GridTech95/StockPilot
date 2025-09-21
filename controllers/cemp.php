@@ -15,12 +15,14 @@ $idusu = isset($_POST['idusu']) ? $_POST['idusu']:NULL;
 $fec_crea = isset($_POST['fec_crea']) ? $_POST['fec_crea']:NULL;
 $fec_actu = isset($_POST['fec_actu']) ? $_POST['fec_actu']:NULL;
 $act = isset($_POST['act']) ? $_POST['act']:NULL;
+$estado = isset($_POST['estado']) ? $_POST['estado']:NULL;
 
 $ope = isset($_REQUEST['ope']) ? $_REQUEST['ope']:NULL;
-$datOne = NULL;
+$datOne   = NULL;
 
 $memp->setIdemp($idemp);
-if($ope == "save"){
+
+if($ope=="save"){
     $memp->setNomemp($nomemp);
     $memp->setRazemp($razemp);
     $memp->setNitemp($nitemp);
@@ -32,11 +34,13 @@ if($ope == "save"){
     $memp->setFec_crea($fec_crea);
     $memp->setFec_actu($fec_actu);
     $memp->setAct($act);
+    $memp->setEstado($estado);
+
     if(!$idemp) $memp->save(); else $memp->edit();
 }
 
-if($ope =="eli" && $idemp) $memp->del();
-if($ope =="edi" && $idemp) $datOne = $memp->getOne();
+if($ope == "eli" && $idemp) $memp->del();
+if($ope == "edi" && $idemp) $datOne = $memp->getOne();
 
 $datAll = $memp->getAll();
 ?>

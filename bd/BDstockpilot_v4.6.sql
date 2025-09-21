@@ -41,21 +41,21 @@ CREATE TABLE perfil (
     act TINYINT(1)
 );
 
-CREATE TABLE empresa (
-    estado TINYINT(1),
-    idemp INT(10) PRIMARY KEY AUTO_INCREMENT,
-    nomemp VARCHAR(100),
-    razemp VARCHAR(150),
-    nitemp VARCHAR(20) UNIQUE,
-    diremp VARCHAR(150),
-    telemp VARCHAR(15),
-    emaemp VARCHAR(100),
-    logo VARCHAR(255),
-    idusu INT(10) COMMENT 'Usuario creador',
-    fec_crea DATETIME,
-    fec_actu DATETIME,
-    act TINYINT(1)
-);
+    CREATE TABLE empresa (
+        estado TINYINT(1),
+        idemp INT(10) PRIMARY KEY AUTO_INCREMENT,
+        nomemp VARCHAR(100),
+        razemp VARCHAR(150),
+        nitemp VARCHAR(20) UNIQUE,
+        diremp VARCHAR(150),
+        telemp VARCHAR(15),
+        emaemp VARCHAR(100),
+        logo VARCHAR(255),
+        idusu INT(10) COMMENT 'Usuario creador',
+        fec_crea DATETIME,
+        fec_actu DATETIME,
+        act TINYINT(1)
+    );
 
 CREATE TABLE ubicacion (
     idubi INT(10) PRIMARY KEY AUTO_INCREMENT,
@@ -93,10 +93,13 @@ CREATE TABLE producto (
     stkmin INT,
     stkmax INT,
     imgprod VARCHAR(255),
+    costouni DECIMAL(12,2) COMMENT 'Costo unitario (opcional)',
+    precioven DECIMAL(12,2) COMMENT 'Precio de venta (opcional)',
     fec_crea DATETIME,
     fec_actu DATETIME,
     act TINYINT(1)
 );
+
 
 CREATE TABLE proveedor (
     idprov INT(10) PRIMARY KEY AUTO_INCREMENT,
