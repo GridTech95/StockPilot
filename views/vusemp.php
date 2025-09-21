@@ -3,7 +3,7 @@
 <h2 class="mb-4 text-primary"><i class="fa-solid fa-user"></i> Usuarios de mi Empresa</h2>
 
 <!-- FORMULARIO AGREGAR/EDITAR USUARIO -->
-<form action="index.php?pg=<?php echo $pg; ?>" method="POST">
+<form action="home.php?pg=<?php echo $pg; ?>" method="POST">
     <input type="hidden" name="idemp" value="<?php echo $_SESSION['idemp']; ?>">
     <input type="hidden" name="idusu" value="<?php echo isset($datOne['idusu']) ? $datOne['idusu'] : ''; ?>">
     <input type="hidden" name="ope" value="save">
@@ -78,10 +78,10 @@
             <td>--</td> <!-- Ubicación, si tienes tabla de ubicaciones puedes mostrarla -->
             <td><?php echo $dt['nomemp']; ?></td>
             <td style="text-align: right;">
-                <a href="index.php?pg=<?php echo $pg; ?>&idusu=<?php echo $dt['idusu']; ?>&idemp=<?php echo $dt['idemp']; ?>&ope=edi" title="Editar">
+                <a href="home.php?pg=<?php echo $pg; ?>&idusu=<?php echo $dt['idusu']; ?>&idemp=<?php echo $dt['idemp']; ?>&ope=edi" title="Editar">
                     <i class="fa-solid fa-pen-to-square fa-2x"></i>
                 </a>
-                <a href="index.php?pg=<?php echo $pg; ?>&idusu=<?php echo $dt['idusu']; ?>&idemp=<?php echo $dt['idemp']; ?>&ope=eli" title="Eliminar" onclick="return eliminar();">
+                <a href="home.php?pg=<?php echo $pg; ?>&idusu=<?php echo $dt['idusu']; ?>&idemp=<?php echo $dt['idemp']; ?>&ope=eli" title="Eliminar" onclick="return eliminar();">
                     <i class="fa-solid fa-trash-can fa-2x"></i>
                 </a>
             </td>
