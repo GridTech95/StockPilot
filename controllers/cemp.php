@@ -1,7 +1,7 @@
 <?php
 require_once('models/memp.php');
 
-$memp = new MEmp();
+$memp = new Memp();
 
 $idemp = isset($_REQUEST['idemp']) ? $_REQUEST['idemp']:NULL;
 $nomemp = isset($_POST['nomemp']) ? $_POST['nomemp']:NULL;
@@ -14,8 +14,8 @@ $logo = isset($_POST['logo']) ? $_POST['logo']:NULL;
 $idusu = isset($_POST['idusu']) ? $_POST['idusu']:NULL;
 $fec_crea = isset($_POST['fec_crea']) ? $_POST['fec_crea']:NULL;
 $fec_actu = isset($_POST['fec_actu']) ? $_POST['fec_actu']:NULL;
-$act = isset($_POST['act']) ? $_POST['act']:NULL;
-$estado = isset($_POST['estado']) ? $_POST['estado']:NULL;
+$act = isset($_POST['act']) ? $_POST['act']: NULL;
+$estado = isset($_POST['estado']) ? $_POST['estado']: NULL;
 
 $ope = isset($_REQUEST['ope']) ? $_REQUEST['ope']:NULL;
 $datOne   = NULL;

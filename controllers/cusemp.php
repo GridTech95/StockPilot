@@ -15,35 +15,35 @@ $usemp->setIdemp($idemp);
 
 if($ope == "save") {
     if(!$idusu) {
-        // Crear usuario nuevo
-        $usuario = new Musu();
-        $usuario->setNomusu($_POST['nomusu']);
-        $usuario->setApeusu($_POST['apeusu']);
-        $usuario->setTdousu($_POST['tdousu']);
-        $usuario->setNdousu($_POST['ndousu']);
-        $usuario->setEmausu($_POST['emausu']);
-        $usuario->setCelusu($_POST['celusu']);
-        $usuario->setPass(password_hash($_POST['pass'], PASSWORD_DEFAULT));
-        $idusu = $usuario->save(); // debe retornar el id del nuevo usuario
+        // Crear musu nuevo
+        $musu = new Musu();
+        $musu->setNomusu($_POST['nomusu']);
+        $musu->setApeusu($_POST['apeusu']);
+        $musu->setTdousu($_POST['tdousu']);
+        $musu->setNdousu($_POST['ndousu']);
+        $musu->setEmausu($_POST['emausu']);
+        $musu->setCelusu($_POST['celusu']);
+        $musu->setPass(password_hash($_POST['pass'], PASSWORD_DEFAULT));
+        $idusu = $musu->save(); // debe retornar el id del nuevo musu
 
         // Vincular a empresa
         $usemp->setIdusu($idusu);
         $usemp->setFec_crea($fec_crea);
         $usemp->save();
     } else {
-        // Editar usuario existente
-        $usuario = new Musu();
-        $usuario->setIdusu($idusu);
-        $usuario->setNomusu($_POST['nomusu']);
-        $usuario->setApeusu($_POST['apeusu']);
-        $usuario->setTdousu($_POST['tdousu']);
-        $usuario->setNdousu($_POST['ndousu']);
-        $usuario->setEmausu($_POST['emausu']);
-        $usuario->setCelusu($_POST['celusu']);
+        // Editar musu existente
+        $musu = new Musu();
+        $musu->setIdusu($idusu);
+        $musu->setNomusu($_POST['nomusu']);
+        $musu->setApeusu($_POST['apeusu']);
+        $musu->setTdousu($_POST['tdousu']);
+        $musu->setNdousu($_POST['ndousu']);
+        $musu->setEmausu($_POST['emausu']);
+        $musu->setCelusu($_POST['celusu']);
         if(!empty($_POST['pass'])) {
-            $usuario->setPass(password_hash($_POST['pass'], PASSWORD_DEFAULT));
+            $musu->setPass(password_hash($_POST['pass'], PASSWORD_DEFAULT));
         }
-        $usuario->edit();
+        $musu->edit();
     }
 }
 
