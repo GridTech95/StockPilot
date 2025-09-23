@@ -1,6 +1,5 @@
 <?php
-// --- FORMULARIO ---
-?>
+include ("controllers/cmovimp.php");?>
 <div class="container">
     <h2><?php echo $dtOne ? "Editar Movimiento" : "Nuevo Movimiento"; ?></h2>
 
