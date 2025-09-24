@@ -36,13 +36,8 @@ function verdat($usu, $con) {
     // generar hash SHA1/MD5 + sal
     $pas = sha1(md5($con . "/Pq5@-+")) . "kjahw9";
 
-    $sql = "SELECT u.idusu, u.ndousu, u.nomusu, u.apeusu, u.emausu, 
-                   u.idper, p.nomper
-            FROM usuario AS u
-            INNER JOIN perfil AS p ON u.idper = p.idper
-            WHERE u.act = 1 AND u.emausu = :emausu 
-              AND u.pasusu = :pasusu";
-
+    $sql = SELECT u.idusu, u.nomusu, u.apeusu, u.emausu, u.pasusu, u.imgusu, u.idper,p.nomper FROM usuario AS u INNER JOIN perfil AS p ON u.idper = p.idper
+            WHERE u.emausu = :emausu AND u.pasusu = :pasusu";
     $modelo = new Conexion();
     $conexion = $modelo->get_conexion();
     $result = $conexion->prepare($sql);
