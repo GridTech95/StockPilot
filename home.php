@@ -69,6 +69,8 @@
 				require_once("views/vsolsal.php");
 			elseif($pg==1015)
 				require_once("views/vubi.php");
+			elseif($pg==1017)
+				require_once("views/vpag.php");
 			else
 				echo "Pagina No Disponible Para Este Usuario";
 		?>

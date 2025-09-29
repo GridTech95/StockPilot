@@ -1,5 +1,5 @@
 <?php 
-include("models/mmov.php");
+include("models/mmovim.php");
 
 $mmov = new Mmov();
 

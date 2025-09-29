@@ -35,53 +35,64 @@ class Mmov {
     function getFec_actu() { return $this->fec_actu; }
 
     // Setters
-    function setIdmov($idmov)        { return $this->idmov = $idmov; }
-    function setIdemp($idemp)        { return $this->idemp = $idemp; }
-    function setIdkar($idkar)        { return $this->idkar = $idkar; }
-    function setIdprod($idprod)      { return $this->idprod = $idprod; }
-    function setIdubi($idubi)        { return $this->idubi = $idubi; }
-    function setFecmov($fecmov)      { return $this->fecmov = $fecmov; }
-    function setTipmov($tipmov)      { return $this->tipmov = $tipmov; }
-    function setCantmov($cantmov)    { return $this->cantmov = $cantmov; }
-    function setValmov($valmov)      { return $this->valmov = $valmov; }
-    function setCostprom($costprom)  { return $this->costprom = $costprom; }
-    function setDocref($docref)      { return $this->docref = $docref; }
-    function setObs($obs)            { return $this->obs = $obs; }
-    function setIdusu($idusu)        { return $this->idusu = $idusu; }
-    function setFec_crea($fec_crea)  { return $this->fec_crea = $fec_crea; }
-    function setFec_actu($fec_actu)  { return $this->fec_actu = $fec_actu; }
+    function setIdmov($idmov)        { $this->idmov = $idmov; }
+    function setIdemp($idemp)        { $this->idemp = $idemp; }
+    function setIdkar($idkar)        { $this->idkar = $idkar; }
+    function setIdprod($idprod)      { $this->idprod = $idprod; }
+    function setIdubi($idubi)        { $this->idubi = $idubi; }
+    function setFecmov($fecmov)      { $this->fecmov = $fecmov; }
+    function setTipmov($tipmov)      { $this->tipmov = $tipmov; }
+    function setCantmov($cantmov)    { $this->cantmov = $cantmov; }
+    function setValmov($valmov)      { $this->valmov = $valmov; }
+    function setCostprom($costprom)  { $this->costprom = $costprom; }
+    function setDocref($docref)      { $this->docref = $docref; }
+    function setObs($obs)            { $this->obs = $obs; }
+    function setIdusu($idusu)        { $this->idusu = $idusu; }
+    function setFec_crea($fec_crea)  { $this->fec_crea = $fec_crea; }
+    function setFec_actu($fec_actu)  { $this->fec_actu = $fec_actu; }
 
     // CRUD
     public function getAll(){
-        try{
-            $sql = "SELECT * FROM movim";
+        try {
+            $sql = "SELECT idmov, idemp, idkar, idprod, idubi, fecmov, tipmov, 
+                           cantmov, valmov, costprom, docref, obs, idusu, fec_crea, fec_actu 
+                    FROM movim";
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
-            $res = $conexion->prepare($sql);
-            $res->execute();
-            return $res->fetchAll(PDO::FETCH_ASSOC);
-    
+            $result = $conexion->prepare($sql);
+            $result->execute();
+            return $result->fetchAll(PDO::FETCH_ASSOC);
+        } catch(Exception $e){
+            echo "Error en getAll: ".$e->getMessage()."<br><br>";
+            return [];
         }
     }
 
     public function getOne(){
-        try{
-            $sql = "SELECT * FROM movim WHERE idmov=:idmov";
+        try {
+            $sql = "SELECT idmov, idemp, idkar, idprod, idubi, fecmov, tipmov, 
+                           cantmov, valmov, costprom, docref, obs, idusu, fec_crea, fec_actu 
+                    FROM movim 
+                    WHERE idmov=:idmov";
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
-            $res = $conexion->prepare($sql);
+            $result = $conexion->prepare($sql);
             $idmov = $this->getIdmov();
-            $res->bindParam(":idmov", $idmov);
-            $res->execute();
-            return $res->fetchAll(PDO::FETCH_ASSOC);
-    
+            $result->bindParam(':idmov', $idmov);
+            $result->execute();
+            return $result->fetch(PDO::FETCH_ASSOC);
+        } catch(Exception $e){
+            echo "Error en getOne: ".$e->getMessage()."<br><br>";
+            return null;
         }
     }
 
     public function save(){
-        try{
-            $sql = "INSERT INTO movim(idemp, idkar, idprod, idubi, fecmov, tipmov, cantmov, valmov, costprom, docref, obs, idusu, fec_crea, fec_actu) 
-                    VALUES(:idemp, :idkar, :idprod, :idubi, :fecmov, :tipmov, :cantmov, :valmov, :costprom, :docref, :obs, :idusu, NOW(), NOW())";
+        try {
+            $sql = "INSERT INTO movim(idemp, idkar, idprod, idubi, fecmov, tipmov, 
+                                      cantmov, valmov, costprom, docref, obs, idusu, fec_crea, fec_actu) 
+                    VALUES(:idemp, :idkar, :idprod, :idubi, :fecmov, :tipmov, 
+                           :cantmov, :valmov, :costprom, :docref, :obs, :idusu, NOW(), NOW())";
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
             $res = $conexion->prepare($sql);
@@ -98,18 +109,21 @@ class Mmov {
             $res->bindParam(":docref", $this->docref);
             $res->bindParam(":obs", $this->obs);
             $res->bindParam(":idusu", $this->idusu);
-
-            $res->execute();
             
+            return $res->execute();
+        } catch(Exception $e){
+            echo "Error en save: ".$e->getMessage()."<br><br>";
+            return false;
         }
     }
 
     public function upd(){
-        try{
+        try {
             $sql = "UPDATE movim SET 
                         idemp=:idemp, idkar=:idkar, idprod=:idprod, idubi=:idubi, 
                         fecmov=:fecmov, tipmov=:tipmov, cantmov=:cantmov, valmov=:valmov, 
-                        costprom=:costprom, docref=:docref, obs=:obs, idusu=:idusu, fec_actu=NOW() 
+                        costprom=:costprom, docref=:docref, obs=:obs, idusu=:idusu, 
+                        fec_actu=NOW() 
                     WHERE idmov=:idmov";
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
@@ -129,21 +143,24 @@ class Mmov {
             $res->bindParam(":obs", $this->obs);
             $res->bindParam(":idusu", $this->idusu);
 
-            $res->execute();
-            
-      
+            return $res->execute();
+        } catch(Exception $e){
+            echo "Error en upd: ".$e->getMessage()."<br><br>";
+            return false;
         }
     }
 
     public function del(){
-        try{
+        try {
             $sql = "DELETE FROM movim WHERE idmov=:idmov";
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
             $res = $conexion->prepare($sql);
             $res->bindParam(":idmov", $this->idmov);
-            $res->execute();
-        
+            return $res->execute();
+        } catch(Exception $e){
+            echo "Error en del: ".$e->getMessage()."<br><br>";
+            return false;
         }
     }
 }

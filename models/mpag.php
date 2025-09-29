@@ -1,5 +1,4 @@
 <?php
-
 class MPag{
     private $idpag;
     private $nompag;
@@ -7,7 +6,6 @@ class MPag{
     private $pespag;
     private $rugpag;
     private $mospag;
-    private $idpag_dep;
     private $fec_crea;
     private $fec_actu;
     private $act;
@@ -31,9 +29,6 @@ class MPag{
     function getMospag(){
         return $this->mospag;
     }
-    function getIdpag_dep(){
-        return $this->idpag_dep;
-    }
     function getFec_crea(){
         return $this->fec_crea;
     }
@@ -45,9 +40,6 @@ class MPag{
     }
 
     // Setters
-    function setIdpag($idpag){
-        $this->idpag = $idpag;
-    }
     function setNompag($nompag){
         $this->nompag = $nompag;
     }
@@ -63,8 +55,8 @@ class MPag{
     function setMospag($mospag){
         $this->mospag = $mospag;
     }
-    function setIdpag_dep($idpag_dep){
-        $this->idpag_dep = $idpag_dep;
+    function setidpag($idpag){
+        $this->idpag = $idpag;
     }
     function setFec_crea($fec_crea){
         $this->fec_crea = $fec_crea;
@@ -78,10 +70,7 @@ class MPag{
 
     public function getAll(){
         try{
-            $sql = "SELECT p1.idpag, p1.nompag, p1.icpag, p1.pespag, p1.rugpag, p1.mospag, p1.idpag_dep, p1.fec_crea, p1.fec_actu, p1.act, 
-                           p2.nompag as nompag_dep 
-                    FROM pagina p1 
-                    LEFT JOIN pagina p2 ON p1.idpag_dep = p2.idpag";
+            $sql = "SELECT * FROM pagina";
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
             $result = $conexion->prepare($sql);
@@ -95,11 +84,7 @@ class MPag{
 
     public function getOne(){
         try{
-            $sql = "SELECT p1.idpag, p1.nompag, p1.icpag, p1.pespag, p1.rugpag, p1.mospag, p1.idpag_dep, p1.fec_crea, p1.fec_actu, p1.act, 
-                           p2.nompag as nompag_dep 
-                    FROM pagina p1 
-                    LEFT JOIN pagina p2 ON p1.idpag_dep = p2.idpag 
-                    WHERE p1.idpag=:idpag";
+            $sql = "SELECT * FROM pagina WHERE idpag=:idpag";
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
             $result = $conexion->prepare($sql);
@@ -115,8 +100,8 @@ class MPag{
 
     public function save(){
         try{
-            $sql = "INSERT INTO pagina(nompag, icpag, pespag, rugpag, mospag, idpag_dep, fec_crea, fec_actu, act) 
-                    VALUES (:nompag, :icpag, :pespag, :rugpag, :mospag, :idpag_dep, :fec_crea, :fec_actu, :act)";
+            $sql = "INSERT INTO pagina(nompag, icpag, pespag, rugpag, mospag, idpag, fec_crea, fec_actu, act) 
+                    VALUES (:nompag, :icpag, :pespag, :rugpag, :mospag, :idpag, :fec_crea, :fec_actu, :act)";
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
             $result = $conexion->prepare($sql);
@@ -130,8 +115,8 @@ class MPag{
             $result->bindParam(':rugpag', $rugpag);
             $mospag = $this->getMospag();
             $result->bindParam(':mospag', $mospag);
-            $idpag_dep = $this->getIdpag_dep();
-            $result->bindParam(':idpag_dep', $idpag_dep);
+            $idpag = $this->getidpag();
+            $result->bindParam(':idpag', $idpag);
             $fec_crea = $this->getFec_crea();
             $result->bindParam(':fec_crea', $fec_crea);
             $fec_actu = $this->getFec_actu();
@@ -148,8 +133,8 @@ class MPag{
 
     public function edit(){
         try{
-            $sql = "UPDATE pagina SET nompag=:nompag, icpag=:icpag, pespag=:pespag, rugpag=:rugpag, mospag=:mospag, idpag_dep=:idpag_dep, 
-                           fec_crea=:fec_crea, fec_actu=:fec_actu, act=:act 
+            $sql = "UPDATE pagina SET nompag=:nompag, icpag=:icpag, pespag=:pespag, rugpag=:rugpag, mospag=:mospag, idpag=:idpag, 
+                        fec_crea=:fec_crea, fec_actu=:fec_actu, act=:act 
                     WHERE idpag=:idpag";
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
@@ -166,8 +151,8 @@ class MPag{
             $result->bindParam(':rugpag', $rugpag);
             $mospag = $this->getMospag();
             $result->bindParam(':mospag', $mospag);
-            $idpag_dep = $this->getIdpag_dep();
-            $result->bindParam(':idpag_dep', $idpag_dep);
+            $idpag = $this->getidpag();
+            $result->bindParam(':idpag', $idpag);
             $fec_crea = $this->getFec_crea();
             $result->bindParam(':fec_crea', $fec_crea);
             $fec_actu = $this->getFec_actu();
@@ -200,7 +185,7 @@ class MPag{
 
     public function getPagPadre(){
         try{
-            $sql = "SELECT idpag, nompag FROM pagina WHERE idpag_dep IS NULL AND act = 1";
+            $sql = "SELECT idpag, nompag FROM pagina WHERE idpag IS NULL AND act = 1";
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
             $result = $conexion->prepare($sql);

@@ -1,6 +1,6 @@
 <?php
 require_once('models/mpag.php');
-$mpag = new MPagina();
+$mpag = new MPag();
 $idpag = isset($_REQUEST['idpag']) ? $_REQUEST['idpag']:NULL;
 $nompag = isset($_POST['nompag']) ? $_POST['nompag']:NULL;
 $despag = isset($_POST['despag']) ? $_POST['despag']:NULL;
@@ -12,7 +12,6 @@ $datOne = NULL;
 $mpag->setIdpag($idpag);
 if($ope == "save"){
     $mpag->setNompag($nompag);
-    $mpag->setDespag($despag);
     $mpag->setFec_crea($fec_crea);
     $mpag->setFec_actu($fec_actu);
     $mpag->setAct($act);

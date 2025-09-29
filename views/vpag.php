@@ -24,7 +24,7 @@ require_once('controllers/cpag.php');
         <thead>
             <tr>
                 <th>Nombre de la página</th>
-                <th>Id del Inventario</th>
+                <th>Ruta Pagina</th>
                 <th>Acciones</th>
                 <th></th> 
             </tr>
@@ -33,7 +33,7 @@ require_once('controllers/cpag.php');
             <?php if($datAll){ foreach ($datAll AS $dt){ ?>
             <tr>
                 <td><?=$dt['idpag']."-".$dt['nompag'];?></td>
-                <td><?=$dt['idinv'];?></td>
+                <td><?=$dt['ruta'];?></td>
                 <td>
                     <a href="index.php?pg=<?=$pg;?>&idpag=<?=$dt['idpag'];?>&ope=edi" title="Editar">
                     <i class="fa-solid fa-pen-to-square fa-2x"></i>
@@ -48,7 +48,7 @@ require_once('controllers/cpag.php');
         <thead>
             <tr>
                 <th>Nombre de la página</th>
-                <th>Id del Inventario</th>
+                <th>Ruta Pagina</th>
                 <th>Acciones</th>
                 <th></th>
             </tr>
