@@ -1,7 +1,7 @@
 <?php 
 include("models/msolsal.php"); // modelo de solsalida
 
-$msol = new Msolsalida();
+$msol = new Msolsal();
 
 // Variables recibidas
 $idsol      = isset($_REQUEST['idsol']) ? $_REQUEST['idsol'] : NULL;
