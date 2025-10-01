@@ -1,6 +1,6 @@
 <?php
 require_once('models/mmod.php');
-$cmod = new Cmod();
+$mmod = new Mmod();
 $idmod = isset($_REQUEST['idmod']) ? $_REQUEST['idmod']:NULL;
 $nommod = isset($_POST['nommod']) ? $_POST['nommod']:NULL;
 $desmod = isset($_POST['desmod']) ? $_POST['desmod']:NULL;
@@ -23,4 +23,5 @@ if($ope =="edi" && $idmod) $datOne = $mmod->getOne();
 $datAll = $mmod->getAll();
 
 ?>
+
 
