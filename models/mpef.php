@@ -1,6 +1,6 @@
 <?php
 
-class MPef{
+class Mpef{
     private $idpef;
     private $nompef;
     private $despef;
@@ -144,4 +144,5 @@ class MPef{
         }
     }
 }
+
 ?>
