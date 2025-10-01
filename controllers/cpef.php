@@ -1,6 +1,6 @@
 <?php
 require_once('models/mpef.php');
-$mpef = new MPerfil();
+$mpef = new Mperfil();
 $idpef = isset($_REQUEST['idpef']) ? $_REQUEST['idpef']:NULL;
 $nompef = isset($_POST['nompef']) ? $_POST['nompef']:NULL;
 $despef = isset($_POST['despef']) ? $_POST['despef']:NULL;
@@ -21,4 +21,5 @@ if($ope == "save"){
 if($ope =="eli" && $idpef) $mpef->del();
 if($ope =="edi" && $idpef) $datOne = $mpef->getOne();
 $datAll = $mpef->getAll();
+
 ?>
