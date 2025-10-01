@@ -1,5 +1,5 @@
 <?php
-class MPag{
+class Mpag{
     private $idpag;
     private $nompag;
     private $icpag;
@@ -197,4 +197,5 @@ class MPag{
         }
     }
 }
+
 ?>
