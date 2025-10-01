@@ -1,6 +1,6 @@
 <?php
 
-class MModulo{
+class Mmod{
     private $idmod;
     private $nommod;
     private $desmod;
@@ -141,4 +141,5 @@ class MModulo{
         }
     }
 }
+
 ?>
