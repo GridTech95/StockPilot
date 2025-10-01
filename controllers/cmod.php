@@ -1,6 +1,6 @@
 <?php
 require_once('models/mmod.php');
-$mmod = new MModulo();
+$mmod = new Mmodulo();
 $idmod = isset($_REQUEST['idmod']) ? $_REQUEST['idmod']:NULL;
 $nommod = isset($_POST['nommod']) ? $_POST['nommod']:NULL;
 $desmod = isset($_POST['desmod']) ? $_POST['desmod']:NULL;
@@ -21,4 +21,5 @@ if($ope == "save"){
 if($ope =="eli" && $idmod) $mmod->del();
 if($ope =="edi" && $idmod) $datOne = $mmod->getOne();
 $datAll = $mmod->getAll();
+
 ?>
