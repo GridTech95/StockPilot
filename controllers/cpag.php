@@ -1,6 +1,6 @@
 <?php
 require_once('models/mpag.php');
-$mpag = new MPag();
+$mpag = new Mpag();
 $idpag = isset($_REQUEST['idpag']) ? $_REQUEST['idpag']:NULL;
 $nompag = isset($_POST['nompag']) ? $_POST['nompag']:NULL;
 $despag = isset($_POST['despag']) ? $_POST['despag']:NULL;
@@ -20,4 +20,5 @@ if($ope == "save"){
 if($ope =="eli" && $idpag) $mpag->del();
 if($ope =="edi" && $idpag) $datOne = $mpag->getOne();
 $datAll = $mpag->getAll();
+
 ?>
