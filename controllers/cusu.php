@@ -1,6 +1,6 @@
 <?php
 require_once('models/musu.php');
-$musu = new MUsuario();
+$musu = new Musuario();
 $idusu = isset($_REQUEST['idusu']) ? $_REQUEST['idusu']:NULL;
 $nomusu = isset($_POST['nomusu']) ? $_POST['nomusu']:NULL;
 $desusu = isset($_POST['desusu']) ? $_POST['desusu']:NULL;
@@ -21,4 +21,5 @@ if($ope == "save"){
 if($ope =="eli" && $idusu) $musu->del();
 if($ope =="edi" && $idusu) $datOne = $musu->getOne();
 $datAll = $musu->getAll();
+
 ?>
