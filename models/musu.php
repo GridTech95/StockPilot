@@ -1,6 +1,6 @@
 <?php
 
-class MUsu{
+class Musu{
     private $idusu;
     private $nomusu;
     private $apeusu;
@@ -198,4 +198,5 @@ class MUsu{
         }
     }
 }
+
 ?>
