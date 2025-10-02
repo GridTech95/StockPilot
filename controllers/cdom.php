@@ -1,7 +1,7 @@
 <?php
 require_once('models/mdom.php');
 
-$mdom = new Mdom();
+$mdom = new MDom();
 
 $iddom = isset($_REQUEST['iddom']) ? $_REQUEST['iddom']:NULL;
 $nomdom = isset($_POST['nomdom']) ? $_POST['nomdom']:NULL;
