@@ -2,7 +2,6 @@
 require_once('models/minv.php');
 
 $minv = new MInv();
-
 $idinv = isset($_REQUEST['idinv']) ? $_REQUEST['idinv']:NULL;
 $idprod = isset($_POST['idprod']) ? $_POST['idprod']:NULL;
 $idubi = isset($_POST['idubi']) ? $_POST['idubi']:NULL;
@@ -12,7 +11,6 @@ $fec_actu = isset($_POST['fec_actu']) ? $_POST['fec_actu']:NULL;
 
 $ope = isset($_REQUEST['ope']) ? $_REQUEST['ope']:NULL;
 $datOne = NULL;
-
 $minv->setIdinv($idinv);
 if($ope == "save"){
     $minv->setIdprod($idprod);
