@@ -31,4 +31,5 @@ if($ope =="eli" && $idval) $mval->del();
 if($ope =="edi" && $idval) $datOne = $mval->getOne();
 
 $datAll = $mval->getAll();
+$datDom = $mval->getAllDom();
 ?>
