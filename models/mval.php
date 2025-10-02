@@ -162,5 +162,18 @@ class MVal{
             echo "Error".$e."<br><br>";
         }
     }
+    public function getAllDom(){
+        try{
+            $sql = "SELECT iddom, nomdom, desdom, fec_crea, fec_actu, act FROM dominio";
+            $modelo = new conexion();
+            $conexion = $modelo->get_conexion();
+            $result = $conexion->prepare($sql);
+            $result->execute();
+            $res = $result->fetchAll(PDO::FETCH_ASSOC);
+            return $res;
+        }catch(Exception $e){
+            echo "Error".$e."<br><br>";
+        }
+    }
 }
 ?>
