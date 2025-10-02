@@ -77,7 +77,7 @@ require_once('controllers/ccat.php');
                                 </a>
 
                                 <!-- Botón Inventario -->
-                                <a href="home.php?pg=1002&idcat=<?= $dt['idcat']; ?>" 
+                                <a href="home.php?pg=1009&idcat=<?= $dt['idcat']; ?>" 
                                    class="btn btn-sm btn-outline-primary" title="Ver Inventario">
                                     <i class="fa-solid fa-boxes-stacked"></i>
                                 </a>
