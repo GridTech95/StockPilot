@@ -18,7 +18,7 @@ if($ope == "save"){
     $minv->setCant($cant);
     $minv->setFec_crea($fec_crea);
     $minv->setFec_actu($fec_actu);
-    if(!$idinv) $minv->save(); else $minv->edit();
+    if(!$idinv) $minv->save(); else $minv->upd();
 }
 
 if($ope =="eli" && $idinv) $minv->del();
