@@ -40,7 +40,10 @@ footer {
     justify-content: center;
     color: #fff;
     font-size: 0.9rem;
+    position: fixed;
+    bottom: 0%;
     box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
+   
 }
 
 /* =====================================
