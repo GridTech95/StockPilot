@@ -1,6 +1,6 @@
 <?php require_once("controllers/cprov.php"); ?>
 
-<form action="index.php?pg=<?=$pg;?>" method="POST">
+<form action="home.php?pg=<?=$pg;?>" method="POST">
 <div class="row">
     <div class="form-group col-md-6">
         <label for="tipoprov">Tipo Proveedor</label>

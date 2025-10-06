@@ -1,4 +1,6 @@
-<?php require_once('controllers/cprod.php')?> 
+<?php 
+require_once('controllers/cprod.php')
+?> 
 
 <div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -41,13 +43,13 @@
                                 <td><?= htmlspecialchars($p['fec_crea']) ?></td>
                                 <td><?= htmlspecialchars($p['fec_actu']) ?></td>
                                 <td>
-                                    <a href="cprod.php?ope=edi&idprod=<?= $p['idprod'] ?>" 
-                                       class="btn btn-sm btn-warning">
+                                    <a href="home.php?pg=<?= $pg ?>&ope=edi&idprod=<?= $p['idprod'] ?>" 
+                                        class="btn btn-sm btn-warning">
                                         <i class="fa fa-edit"></i>
                                     </a>
-                                    <a href="cprod.php?ope=eli&idprod=<?= $p['idprod'] ?>"
-                                       class="btn btn-sm btn-danger"
-                                       onclick="return confirm('¿Seguro que deseas eliminar este producto?')">
+                                    <a href="home.php?pg=<?= $pg ?>&ope=eli&idprod=<?= $p['idprod'] ?>"
+                                        class="btn btn-sm btn-danger"
+                                        onclick="return confirm('¿Seguro que deseas eliminar este producto?')">
                                         <i class="fa fa-trash"></i>
                                     </a>
                                 </td>
@@ -64,7 +66,6 @@
     </div>
 </div>
 
-<!-- Modal Crear/Editar Producto -->
 <div class="modal fade" id="modalProducto" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content rounded-3 shadow">
@@ -73,20 +74,22 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
-                <form action="cprod.php?ope=save" method="POST" enctype="multipart/form-data">
+                <form action="home.php?pg=<?= $pg ;?>" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="idprod" id="idprod" 
-                           value="<?= !empty($datOne[0]['idprod']) ? $datOne[0]['idprod'] : '' ?>">
+                        value="<?= !empty($datOne[0]['idprod']) ? $datOne[0]['idprod'] : '' ?>">
+                    
+                    <input type="hidden" name="ope" value="save">
 
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label">Código</label>
                             <input type="text" name="codprod" id="codprod" class="form-control" 
-                                   value="<?= !empty($datOne[0]['codprod']) ? htmlspecialchars($datOne[0]['codprod']) : '' ?>" required>
+                                value="<?= !empty($datOne[0]['codprod']) ? htmlspecialchars($datOne[0]['codprod']) : '' ?>" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Nombre</label>
                             <input type="text" name="nomprod" id="nomprod" class="form-control" 
-                                   value="<?= !empty($datOne[0]['nomprod']) ? htmlspecialchars($datOne[0]['nomprod']) : '' ?>" required>
+                                value="<?= !empty($datOne[0]['nomprod']) ? htmlspecialchars($datOne[0]['nomprod']) : '' ?>" required>
                         </div>
                         <div class="col-12">
                             <label class="form-label">Descripción</label>
@@ -107,17 +110,17 @@
                         <div class="col-md-3">
                             <label class="form-label">Stock Mín.</label>
                             <input type="number" name="stkmin" id="stkmin" class="form-control"
-                                   value="<?= !empty($datOne[0]['stkmin']) ? $datOne[0]['stkmin'] : '' ?>">
+                                value="<?= !empty($datOne[0]['stkmin']) ? $datOne[0]['stkmin'] : '' ?>">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Stock Máx.</label>
                             <input type="number" name="stkmax" id="stkmax" class="form-control"
-                                   value="<?= !empty($datOne[0]['stkmax']) ? $datOne[0]['stkmax'] : '' ?>">
+                                value="<?= !empty($datOne[0]['stkmax']) ? $datOne[0]['stkmax'] : '' ?>">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Unidad de Medida</label>
                             <input type="text" name="unimed" id="unimed" class="form-control"
-                                   value="<?= !empty($datOne[0]['unimed']) ? htmlspecialchars($datOne[0]['unimed']) : '' ?>">
+                                value="<?= !empty($datOne[0]['unimed']) ? htmlspecialchars($datOne[0]['unimed']) : '' ?>">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Imagen</label>
@@ -129,12 +132,12 @@
                         <div class="col-md-3">
                             <label class="form-label">costouni</label>
                             <input type="number" step="0.01" name="costouni" id="costouni" class="form-control"
-                                   value="<?= !empty($datOne[0]['costouni']) ? $datOne[0]['costouni'] : '' ?>">
+                                value="<?= !empty($datOne[0]['costouni']) ? $datOne[0]['costouni'] : '' ?>">
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">precioven</label>
                             <input type="number" step="0.01" name="precioven" id="precioven" class="form-control"
-                                   value="<?= !empty($datOne[0]['precioven']) ? $datOne[0]['precioven'] : '' ?>">
+                                value="<?= !empty($datOne[0]['precioven']) ? $datOne[0]['precioven'] : '' ?>">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Estado</label>
@@ -164,3 +167,26 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalProducto" tabindex="-1" aria-hidden="true">
+    </div>
+
+<?php 
+// **INICIO DEL CÓDIGO A AÑADIR/MODIFICAR**
+// 1. Se verifica si la operación actual es "edi" (edición).
+// 2. Se verifica si el controlador $cprod.php logró traer el registro ($datOne no está vacío).
+if ($ope == "edi" && !empty($datOne)): 
+?>
+<script>
+    // Script para abrir el modal automáticamente
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializa el objeto Modal de Bootstrap 5 usando el ID
+        var modalElement = document.getElementById('modalProducto');
+        if (modalElement) {
+            var myModal = new bootstrap.Modal(modalElement);
+            // Abre el modal
+            myModal.show();
+        }
+    });
+</script>
+<?php endif; ?>

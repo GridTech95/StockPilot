@@ -177,8 +177,6 @@ class Mprod{
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
             $result = $conexion->prepare($sql);
-            $idprod = $this->getIdprod();
-            $result->bindParam(':idprod', $idprod);
             $codprod = $this->getCodprod();
             $result->bindParam(':codprod', $codprod);
             $nomprod = $this->getNomprod();

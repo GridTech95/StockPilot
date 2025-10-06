@@ -197,6 +197,22 @@ class Musu{
             echo "Error".$e."<br><br>";
         }
     }
+
+    //Verifica email
+    public function getByEmail($email){
+    try{
+        $sql = "SELECT * FROM usuario WHERE emausu = :emausu";
+        $modelo = new conexion();
+        $conexion = $modelo->get_conexion();
+        $result = $conexion->prepare($sql);
+        $result->bindParam(':emausu', $email);
+        $result->execute();
+        return $result->fetch(PDO::FETCH_ASSOC); // devuelve el usuario si existe
+    }catch(Exception $e){
+        echo "Error: ".$e."<br><br>";
+    }
+}
+
 }
 
 ?>
