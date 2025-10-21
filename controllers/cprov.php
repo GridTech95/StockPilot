@@ -23,6 +23,10 @@ $act = isset($_POST['act']) ? $_POST['act'] : NULL;
 $ope = isset($_REQUEST['ope']) ? $_REQUEST['ope'] : NULL;
 $datOne = NULL;
 
+// Variables para mensaje de éxito/error
+$mensaje = '';
+$tipoMensaje = '';
+
 $mprov->setIdprov($idprov);
 
 if($ope == "save") {
@@ -39,13 +43,34 @@ if($ope == "save") {
     $mprov->setAct($act);
 
     if(!$idprov) {
-        $mprov->save();
+        if($mprov->save()) {
+            $mensaje = "Proveedor guardado correctamente.";
+            $tipoMensaje = "success";
+        } else {
+            $mensaje = "Error al guardar el proveedor.";
+            $tipoMensaje = "danger";
+        }
     } else {
-        $mprov->edit();
+        if($mprov->edit()) {
+            $mensaje = "Proveedor actualizado correctamente.";
+            $tipoMensaje = "success";
+        } else {
+            $mensaje = "Error al actualizar el proveedor.";
+            $tipoMensaje = "danger";
+        }
     }
 }
 
-if($ope == "eli" && $idprov) $mprov->del();
+if($ope == "eli" && $idprov) {
+    if($mprov->del()) {
+        $mensaje = "Proveedor eliminado correctamente.";
+        $tipoMensaje = "success";
+    } else {
+        $mensaje = "Error al eliminar el proveedor.";
+        $tipoMensaje = "danger";
+    }
+}
+
 if($ope == "edi" && $idprov) $datOne = $mprov->getOne();
 
 $datAll = $mprov->getAll();

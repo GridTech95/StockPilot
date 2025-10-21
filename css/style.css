@@ -11,10 +11,16 @@ body {
     font-family: 'Segoe UI', sans-serif;
     background-color: #f4f6f9;
     color: #2c3e50;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
+
 section {
     padding: 40px 20px;
+    flex: 1; /* Hace que el contenido empuje al footer hacia abajo */
 }
+
 /* =====================================
    ENCABEZADO Y PIE
 ===================================== */
@@ -40,10 +46,8 @@ footer {
     justify-content: center;
     color: #fff;
     font-size: 0.9rem;
-    position: fixed;
-    bottom: 0%;
     box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
-   
+    margin-top: auto; /* Lo mantiene fijo al final sin superponerse */
 }
 
 /* =====================================
@@ -122,6 +126,7 @@ h6 {
 .pf {
     display: flex;
     position: fixed;
+    float: right;
     right: 0px;
     top: 10px;
     background-color: rgba(59, 89, 152, 0.85);
@@ -158,6 +163,22 @@ h6 {
 
 .divico2 a:hover {
     color: #e60000;
+}
+/* AJUSTES PARA SEPARAR NOMBRE Y ROL EN DOS LINEAS */
+
+.divitext {
+    /* Quitamos el display: flex del padre .divpf para que el texto fluya normalmente */
+    /* y permita el salto de línea (<br>) de forma tradicional. */
+    display: block; 
+    line-height: 1.1; /* Reducimos el espacio entre líneas para que se vea más compacto */
+    padding-top: 2px; /* Damos un pequeño ajuste superior si es necesario para el centrado */
+}
+
+.divitext small {
+    /* Le quitamos la negrita al rol para diferenciarlo del nombre */
+    font-weight: normal;
+    /* Hacemos que la fuente del rol sea un poco más pequeña */
+    font-size: 0.9em; 
 }
 
 /* =====================================
@@ -205,7 +226,7 @@ h6 {
 
 /* =====================================
    SIDEBAR
-===================================== */
+===================================== /
 .sidebar {
     background: #2c3e50;
     color: #ecf0f1;
@@ -225,3 +246,4 @@ h6 {
     background: #34495e;
     color: #fff;
 }
+*/

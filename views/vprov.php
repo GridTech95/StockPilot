@@ -1,5 +1,28 @@
 <?php require_once("controllers/cprov.php"); ?>
 
+<!-- INICIO: Mensaje de éxito/error -->
+<?php if(!empty($mensaje)): ?>
+<div class="d-flex justify-content-center mb-3">
+    <div id="mensajeToast" class="toast align-items-center text-bg-<?= $tipoMensaje ?> border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body text-center">
+                <?= $mensaje ?>
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var toastEl = document.getElementById('mensajeToast');
+        var toast = new bootstrap.Toast(toastEl, { delay: 3000 }); // se cierra automáticamente en 3 segundos
+        toast.show();
+    });
+</script>
+<?php endif; ?>
+<!-- FIN: Mensaje de éxito/error -->
+
 <form action="home.php?pg=<?=$pg;?>" method="POST">
 <div class="row">
     <div class="form-group col-md-6">
@@ -84,10 +107,10 @@
             <td><?=$dt['nomubi'];?> - <?=$dt['ciuubi'];?>, <?=$dt['depubi'];?></td>
             <td><?=$dt['nomemp'];?> - <?=$dt['diremp'];?></td>
             <td style="text-align: right;">
-                <a href="index.php?pg=<?=$pg;?>&idprov=<?=$dt['idprov'];?>&ope=edi" title="Editar">
+                <a href="home.php?pg=<?=$pg;?>&idprov=<?=$dt['idprov'];?>&ope=edi" title="Editar">
                     <i class="fa-solid fa-pen-to-square fa-2x"></i>
                 </a>
-                <a href="index.php?pg=<?=$pg;?>&idprov=<?=$dt['idprov'];?>&ope=eli" title="Eliminar" onclick="return eliminar();">
+                <a href="home.php?pg=<?=$pg;?>&idprov=<?=$dt['idprov'];?>&ope=eli" title="Eliminar" onclick="return eliminar();">
                     <i class="fa-solid fa-trash-can fa-2x"></i>
                 </a>
             </td>

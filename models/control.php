@@ -1,7 +1,7 @@
 <?php
 require_once('conexion.php');
 
-$usu = isset($_POST['usu']) ? $_POST['usu'] : NULL; // aquí pones el email
+$usu = isset($_POST['usu']) ? $_POST['usu'] : NULL; // Email o usuario
 $pas = isset($_POST['pas']) ? $_POST['pas'] : NULL;
 
 if ($usu && $pas) {
@@ -22,9 +22,8 @@ function validar($usu, $pas) {
         $_SESSION['idper']  = $res[0]['idper'];
         $_SESSION['nomper'] = $res[0]['nomper'];
         $_SESSION['emausu'] = $res[0]['emausu'];
-
-        // bandera de sesión activa
-        $_SESSION['aut'] = "askjhd654-+"; 
+        $_SESSION['idemp']  = $res[0]['idemp']; // ✅ añadimos la empresa del usuario
+        $_SESSION['aut']    = "askjhd654-+"; // bandera de sesión activa
 
         echo '<script>window.location="../home.php";</script>';
     } else {
@@ -36,8 +35,14 @@ function verdat($usu, $con) {
     // generar hash SHA1/MD5 + sal
     $pas = sha1(md5($con . "/Pq5@-+")) . "kjahw9";
 
-    $sql = "SELECT u.idusu, u.nomusu, u.apeusu, u.emausu, u.pasusu, u.imgusu, u.idper,p.nomper FROM usuario AS u INNER JOIN perfil AS p ON u.idper = p.idper
+    // 🔹 Traemos también el idemp asociado desde usuario_empresa
+    $sql = "SELECT u.idusu, u.nomusu, u.apeusu, u.emausu, u.pasusu, 
+                   u.imgusu, u.idper, p.nomper, ue.idemp
+            FROM usuario AS u
+            INNER JOIN perfil AS p ON u.idper = p.idper
+            LEFT JOIN usuario_empresa AS ue ON ue.idusu = u.idusu
             WHERE u.emausu = :emausu AND u.pasusu = :pasusu";
+
     $modelo = new Conexion();
     $conexion = $modelo->get_conexion();
     $result = $conexion->prepare($sql);
@@ -47,4 +52,3 @@ function verdat($usu, $con) {
     return $result->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
-

@@ -2,6 +2,29 @@
 require_once('controllers/cprod.php')
 ?> 
 
+<!-- INICIO: Mensaje de éxito/error -->
+<?php if(!empty($mensaje)): ?>
+<div class="d-flex justify-content-center mb-3">
+    <div id="mensajeToast" class="toast align-items-center text-bg-<?= $tipoMensaje ?> border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body text-center">
+                <?= $mensaje ?>
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var toastEl = document.getElementById('mensajeToast');
+        var toast = new bootstrap.Toast(toastEl, { delay: 3000 }); // se cierra automáticamente en 3 segundos
+        toast.show();
+    });
+</script>
+<?php endif; ?>
+<!-- FIN: Mensaje de éxito/error -->
+
 <div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="mb-0"><i class="fa fa-box"></i> Gestión de Productos</h2>
@@ -66,6 +89,7 @@ require_once('controllers/cprod.php')
     </div>
 </div>
 
+<!-- Modal Producto -->
 <div class="modal fade" id="modalProducto" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content rounded-3 shadow">
@@ -101,7 +125,7 @@ require_once('controllers/cprod.php')
                                 <option value="">Seleccione...</option>
                                 <?php foreach ($datCat as $c): ?>
                                     <option value="<?= $c['idcat'] ?>" 
-                                        <?= (!empty($datOne[0]['idcat']) && $datOne[0]['idcat'] == $c['idcat']) ? 'selected' : '' ?>>
+                                        <?= (!empty($datOne[0]['idcat']) && $datOne[0]['idcat'] == $c['idcat']) ? 'selected' : '' ?> >
                                         <?= htmlspecialchars($c['nomcat']) ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -168,25 +192,17 @@ require_once('controllers/cprod.php')
     </div>
 </div>
 
-<div class="modal fade" id="modalProducto" tabindex="-1" aria-hidden="true">
-    </div>
-
 <?php 
-// **INICIO DEL CÓDIGO A AÑADIR/MODIFICAR**
-// 1. Se verifica si la operación actual es "edi" (edición).
-// 2. Se verifica si el controlador $cprod.php logró traer el registro ($datOne no está vacío).
+// Abrir modal automáticamente si estamos editando
 if ($ope == "edi" && !empty($datOne)): 
 ?>
 <script>
-    // Script para abrir el modal automáticamente
-    document.addEventListener('DOMContentLoaded', function() {
-        // Inicializa el objeto Modal de Bootstrap 5 usando el ID
-        var modalElement = document.getElementById('modalProducto');
-        if (modalElement) {
-            var myModal = new bootstrap.Modal(modalElement);
-            // Abre el modal
-            myModal.show();
-        }
-    });
+document.addEventListener('DOMContentLoaded', function() {
+    var modalElement = document.getElementById('modalProducto');
+    if (modalElement) {
+        var myModal = new bootstrap.Modal(modalElement);
+        myModal.show();
+    }
+});
 </script>
 <?php endif; ?>

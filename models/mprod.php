@@ -208,8 +208,9 @@ class Mprod{
             $tipo_inventario = $this->getTipo_inventario();
             $result->bindParam(':tipo_inventario', $tipo_inventario);
             $result->execute();
+            return true;
         }catch(Exception $e){
-            echo "Error".$e."<br><br>";
+            return false;
         }
     }
 
@@ -259,8 +260,9 @@ class Mprod{
             $tipo_inventario = $this->getTipo_inventario();
             $result->bindParam(':tipo_inventario', $tipo_inventario);
             $result->execute();
+            return true;
         }catch(Exception $e){
-            echo "Error".$e."<br><br>";
+            return false;
         }
     }
 
@@ -274,9 +276,9 @@ class Mprod{
             $result->bindParam(':idprod', $idprod);
             $result->execute();
             $res = $result->fetchAll(PDO::FETCH_ASSOC);
-            return $res;
+            return true;
         }catch(Exception $e){
-            echo "Error".$e."<br><br>";
+            return false;
         }
     }
 }

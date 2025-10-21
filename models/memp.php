@@ -161,8 +161,9 @@ class Memp {
         $estado   = $this->getEstado();
         $result->bindParam(':estado', $estado);
         $result->execute();
+        return true;
     }catch(Exception $e){
-        echo "Error".$e."<br><br>";
+        return false;
     }
 }
 
@@ -212,8 +213,9 @@ class Memp {
         $estado   = $this->getEstado();
         $result->bindParam(':estado', $estado);
         $result->execute();
+        return true;
     }catch(Exception $e){
-        echo "Error".$e."<br><br>";
+        return false;
     }
 }
 
@@ -226,8 +228,9 @@ class Memp {
             $idemp = $this->getIdemp();
             $result->bindParam(':idemp',$idemp);
             $result->execute();
+            return true;
         } catch(Exception $e){
-            echo "Error".$e."<br><br>";
+            return false;
         }
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 class Mpef{
-    private $idpef;
+    private $idper;
     private $nompef;
     private $despef;
     private $fec_crea;
@@ -9,8 +9,8 @@ class Mpef{
     private $act;
 
     // Getters
-    function getIdpef(){
-        return $this->idpef;
+    function getIdper(){
+        return $this->idper;
     }
     function getNompef(){
         return $this->nompef;
@@ -29,8 +29,8 @@ class Mpef{
     }
 
     // Setters
-    function setIdpef($idpef){
-        $this->idpef = $idpef;
+    function setidper($idper){
+        $this->idper = $idper;
     }
     function setNompef($nompef){
         $this->nompef = $nompef;
@@ -50,7 +50,7 @@ class Mpef{
 
     public function getAll(){
         try{
-            $sql = "SELECT idpef, nompef, despef, fec_crea, fec_actu, act FROM perfil";
+            $sql = "SELECT idper, nompef, despef, fec_crea, fec_actu, act FROM perfil";
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
             $result = $conexion->prepare($sql);
@@ -64,12 +64,12 @@ class Mpef{
 
     public function getOne(){
         try{
-            $sql = "SELECT idpef, nompef, despef, fec_crea, fec_actu, act FROM perfil WHERE idpef=:idpef";
+            $sql = "SELECT idper, nompef, despef, fec_crea, fec_actu, act FROM perfil WHERE idper=:idper";
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
             $result = $conexion->prepare($sql);
-            $idpef = $this->getIdpef();
-            $result->bindParam(':idpef', $idpef);
+            $idper = $this->getidper();
+            $result->bindParam(':idper', $idper);
             $result->execute();
             $res = $result->fetchAll(PDO::FETCH_ASSOC);
             return $res;
@@ -104,12 +104,12 @@ class Mpef{
 
     public function edit(){
         try{
-            $sql = "UPDATE perfil SET nompef=:nompef, despef=:despef, fec_crea=:fec_crea, fec_actu=:fec_actu, act=:act WHERE idpef=:idpef";
+            $sql = "UPDATE perfil SET nompef=:nompef, despef=:despef, fec_crea=:fec_crea, fec_actu=:fec_actu, act=:act WHERE idper=:idper";
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
             $result = $conexion->prepare($sql);
-            $idpef = $this->getIdpef();
-            $result->bindParam(':idpef', $idpef);
+            $idper = $this->getidper();
+            $result->bindParam(':idper', $idper);
             $nompef = $this->getNompef();
             $result->bindParam(':nompef', $nompef);
             $despef = $this->getDespef();
@@ -130,12 +130,12 @@ class Mpef{
 
     public function del(){
         try{
-            $sql = "DELETE FROM perfil WHERE idpef=:idpef";
+            $sql = "DELETE FROM perfil WHERE idper=:idper";
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
             $result = $conexion->prepare($sql);
-            $idpef = $this->getIdpef();
-            $result->bindParam(':idpef', $idpef);
+            $idper = $this->getidper();
+            $result->bindParam(':idper', $idper);
             $result->execute();
             $res = $result->fetchAll(PDO::FETCH_ASSOC);
             return $res;

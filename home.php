@@ -71,6 +71,8 @@
 				require_once("views/vubi.php");
 			elseif($pg==1017)
 				require_once("views/vpag.php");
+			elseif($pg==2000)
+				require_once("views/vpef.php");
 			else
 				echo "Pagina No Disponible Para Este Usuario";
 		?>

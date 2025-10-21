@@ -143,8 +143,6 @@ class Mprov {
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
             $result = $conexion->prepare($sql);
-            $idprov = $this->getIdprov();
-            $result->bindParam(':idprov', $idprov);
             $idubi = $this->getIdubi();
             $result->bindParam(':idubi', $idubi);
             $tipoprov = $this->getTipoprov();
@@ -168,8 +166,9 @@ class Mprov {
             $act = $this->getAct();
             $result->bindParam(':act', $act);
             $result->execute();
+            return true;
         }catch(Exception $e){
-            echo "Error: ".$e."<br><br>";
+            return false;
         }
     }
 
@@ -207,10 +206,10 @@ class Mprov {
             $result->bindParam(':fec_actu', $fec_actu);
             $act = $this->getAct();
             $result->bindParam(':act', $act);
-
             $result->execute();
+            return true;
         }catch(Exception $e){
-            echo "Error: ".$e."<br><br>";
+            return false;
         }
     }
 
@@ -224,8 +223,9 @@ class Mprov {
             $idprov = $this->getIdprov();
             $result->bindParam(':idprov',$idprov);
             $result->execute();
+            return true;
         }catch(Exception $e){
-            echo "Error: ".$e."<br><br>";
+            return false;
         }
     }
 }

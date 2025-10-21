@@ -1,9 +1,12 @@
+<?php
+echo "<pre>EMPRESA EN SESIÓN: " . ($_SESSION['idemp'] ?? 'no definida') . "</pre>";
+?>
+
+
 <?php require_once("controllers/cusemp.php"); ?>
 
-
-
 <!-- FORMULARIO AGREGAR/EDITAR USUARIO -->
-<form action="home.php?pg=<?=$pg;?>" method="POST">
+<form action="home.php?pg=<?= $pg; ?>" method="POST">
     <div class="row">
         <div class="form-group col-md-6">
             <label for="nomusu">Nombre</label>
@@ -42,23 +45,32 @@
         </div>
 
         <div class="form-group col-md-6">
-            <label for="pass">Password</label>
-            <input type="password" name="pass" id="pass" class="form-control" 
+            <label for="pasusu">Password</label>
+            <input type="password" name="pasusu" id="pasusu" class="form-control"
                 <?= isset($datOne['idusu']) ? '' : 'required'; ?>>
+            <?php if (isset($datOne['idusu'])) { ?>
+                <small>Deja el campo vacío si no deseas cambiar la contraseña.</small>
+            <?php } ?>
         </div>
 
         <div class="form-group col-md-6">
+            <!-- Campos ocultos -->
             <input type="hidden" name="idemp" value="<?= $_SESSION['idemp']; ?>">
             <input type="hidden" name="idusu" value="<?= isset($datOne['idusu']) ? $datOne['idusu'] : ''; ?>">
             <input type="hidden" name="ope" value="save">
             <br>
-            <input type="submit" class="btn btn-primary" value="<?= isset($datOne['idusu']) ? 'Actualizar' : 'Guardar'; ?>">
+            <input type="submit" class="btn btn-primary" 
+                value="<?= isset($datOne['idusu']) ? 'Actualizar' : 'Guardar'; ?>">
+            <?php if (isset($datOne['idusu'])) { ?>
+                <a href="home.php?pg=<?= $pg; ?>" class="btn btn-secondary">Cancelar</a>
+            <?php } ?>
         </div>
     </div>
 </form>
 
 <hr><br>
 
+<!-- TABLA DE USUARIOS DE LA EMPRESA -->
 <table id="example" class="table table-striped">
     <thead>
         <tr>
@@ -72,27 +84,39 @@
             <th></th>
         </tr>
     </thead>
+
     <tbody>
-        <?php if($datAll){ foreach($datAll as $dt){ ?>
+        <?php 
+        if (!empty($datAll)) { 
+            $i = 1;
+            foreach ($datAll as $dt) { 
+        ?>
         <tr>
-            <td><?=$dt['idusu']?></td>
-            <td><?=$dt['nomusu'].' '.$dt['apeusu']?></td>
-            <td><?=$dt['tdousu']?></td>
-            <td><?=$dt['ndousu']?></td>
-            <td><?=$dt['celusu']?></td>
-            <td><?=$dt['emausu']?></td>
-            <td><?=$dt['nomemp']?></td>
+            <td><?= $i++; ?></td>
+            <td><?= $dt['nomusu'] . ' ' . $dt['apeusu']; ?></td>
+            <td><?= $dt['tdousu']; ?></td>
+            <td><?= $dt['ndousu']; ?></td>
+            <td><?= $dt['celusu']; ?></td>
+            <td><?= $dt['emausu']; ?></td>
+            <td><?= $dt['nomemp']; ?></td>
             <td style="text-align: right;">
-                <a href="home.php?pg=<?=$pg;?>&idusu=<?=$dt['idusu'];?>&idemp=<?=$dt['idemp'];?>&ope=edi" title="Editar">
+                <a href="home.php?pg=<?= $pg; ?>&idusu=<?= $dt['idusu']; ?>&idemp=<?= $dt['idemp']; ?>&ope=edi" 
+                   title="Editar">
                     <i class="fa-solid fa-pen-to-square fa-2x"></i>
                 </a>
-                <a href="home.php?pg=<?=$pg;?>&idusu=<?=$dt['idusu'];?>&idemp=<?=$dt['idemp'];?>&ope=eli" title="Eliminar" onclick="return eliminar();">
+                &nbsp;
+                <a href="home.php?pg=<?= $pg; ?>&idusu=<?= $dt['idusu']; ?>&idemp=<?= $dt['idemp']; ?>&ope=eli" 
+                   title="Eliminar" onclick="return eliminar();">
                     <i class="fa-solid fa-trash-can fa-2x"></i>
                 </a>
             </td>
         </tr>
-        <?php }} ?>
+        <?php 
+            } 
+        } 
+        ?>
     </tbody>
+
     <tfoot>
         <tr>
             <th>No.</th>

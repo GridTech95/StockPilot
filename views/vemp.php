@@ -1,5 +1,26 @@
 <?php require_once("controllers/cemp.php"); ?>
 
+<?php if(!empty($mensaje)): ?>
+<!-- Toast de Bootstrap centrado sobre el formulario -->
+<div class="d-flex justify-content-center mb-3">
+  <div id="mensajeToast" class="toast align-items-center text-bg-<?= $tipoMensaje ?> border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body text-center">
+        <?= $mensaje ?>
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var toastEl = document.getElementById('mensajeToast');
+    var toast = new bootstrap.Toast(toastEl, { delay: 3000 }); // se cierra automáticamente en 3 segundos
+    toast.show();
+  });
+</script>
+<?php endif; ?>
 
 <form action="home.php?pg=<?=$pg;?>" method="POST">
 <div class="row">

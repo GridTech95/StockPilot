@@ -20,6 +20,10 @@ $estado = isset($_POST['estado']) ? $_POST['estado']: NULL;
 $ope = isset($_REQUEST['ope']) ? $_REQUEST['ope']:NULL;
 $datOne   = NULL;
 
+// Variables para el mensaje del toast
+$mensaje = "";
+$tipoMensaje = "";
+
 $memp->setIdemp($idemp);
 
 if($ope=="save"){
@@ -36,10 +40,23 @@ if($ope=="save"){
     $memp->setAct($act);
     $memp->setEstado($estado);
 
-    if(!$idemp) $memp->save(); else $memp->edit();
+    if(!$idemp){
+        $res = $memp->save();
+        $mensaje = $res ? "Guardado exitoso" : "Error: no se pudo guardar";
+        $tipoMensaje = $res ? "success" : "danger";
+    } else {
+        $res = $memp->edit();
+        $mensaje = $res ? "Editado exitoso" : "Error: no se pudo editar";
+        $tipoMensaje = $res ? "success" : "danger";
+    }
 }
 
-if($ope == "eli" && $idemp) $memp->del();
+if($ope == "eli" && $idemp){
+    $res = $memp->del();
+    $mensaje = $res ? "Eliminado exitoso" : "Error: no se pudo eliminar";
+    $tipoMensaje = $res ? "success" : "danger";
+}
+
 if($ope == "edi" && $idemp) $datOne = $memp->getOne();
 
 $datAll = $memp->getAll();
