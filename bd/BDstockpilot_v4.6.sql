@@ -138,7 +138,7 @@ CREATE TABLE kardex (
 
 CREATE TABLE movim (
     idmov INT(10) PRIMARY KEY AUTO_INCREMENT,
-    idemp INT(10),
+    -->idemp INT(10),
     idkar INT(10),
     idprod INT(10),
     idubi INT(10),

@@ -23,16 +23,23 @@
 
 	<!-- Tus estilos -->
 	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/menu.css">
 </head>
 
 <body>
+	<?php
+	$pg = isset($_REQUEST["pg"]) ? $_REQUEST["pg"]:NULL;
+        require_once("models/conexion.php");
+	?>
+
+	<?php require_once("views/vmen.php"); ?>
+	<div id="main-content-wrapper">
 	<header>
 		<?php
-        $pg = isset($_REQUEST["pg"]) ? $_REQUEST["pg"]:NULL;
-        require_once("models/conexion.php");
+        //require_once("views/cabecera.php");
         require_once("views/vpf.php");
         require_once("controllers/misfun.php");
-        require_once("views/vmen.php");
+        
         
         ?>
 	</header>
@@ -72,14 +79,17 @@
 			elseif($pg==1017)
 				require_once("views/vpag.php");
 			elseif($pg==2000)
-				require_once("views/vpef.php");
+				require_once("views/vper.php");
 			else
 				echo "Pagina No Disponible Para Este Usuario";
 		?>
 	</section>
 	<footer>
-		
+		<?php 
+		//require_once("views/pie.php");
+		?>
 	</footer>
+</div>
 </body>
 	<script src="js/code.js"></script>
 </html>
