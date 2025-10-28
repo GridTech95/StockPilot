@@ -1,56 +1,143 @@
 <?php
 require_once('controllers/cusu.php');
 ?>
-<h2>Usuario</h2> <i class="fas fa-user"></i>
-<form action="home.php?pg=<?=$pg?>" method="POST">
+
+<h2><i class="fas fa-user"></i> Gestión de Usuarios</h2>
+
+<form action="home.php?pg=<?= $pg ?>" method="POST">
     <div class="row">
+
+        <input type="hidden" name="idusu" value="<?php if($datOne && isset($datOne['idusu'])) echo $datOne['idusu']; ?>">
+        <input type="hidden" name="ope" value="save">
+
+        <!-- Nombre -->
         <div class="form-group col-md-6">
-        <label for="nomusu">Nombre del Usuario</label>
-        <input type="text" name="nomusu" id="nomusu" class="form-control">
+            <label for="nomusu">Nombre</label>
+            <input type="text" name="nomusu" id="nomusu" class="form-control"
+                value="<?php if($datOne) echo $datOne['nomusu']; ?>" required>
         </div>
+
+        <!-- Apellido -->
         <div class="form-group col-md-6">
-            <label for="desusu">Descripción del Usuario</label>
-            <input type="text" name="desusu" id="desusu" class="form-control">
+            <label for="apeusu">Apellido</label>
+            <input type="text" name="apeusu" id="apeusu" class="form-control"
+                value="<?php if($datOne) echo $datOne['apeusu']; ?>" required>
         </div>
-                                <div class="form-group col-md-12">
-                                <input type="hidden" name="idusu" value="<?php if($datOne &&$datOne[0]['idusu']) echo $datOne[0]['idusu']; ?>">
-                                <input type="hidden" name="ope" value="save">
-                                <br>
-                                <input type="submit" class="form-control btn btn-dark" value="Enviar">
-                            </div>
+
+        <!-- Tipo de documento -->
+        <div class="form-group col-md-6">
+            <label for="tdousu">Tipo de documento</label>
+            <input type="text" name="tdousu" id="tdousu" class="form-control"
+                placeholder="CC, TI, CE, etc."
+                value="<?php if($datOne) echo $datOne['tdousu']; ?>">
+        </div>
+
+        <!-- Número de documento -->
+        <div class="form-group col-md-6">
+            <label for="ndousu">Número de documento</label>
+            <input type="text" name="ndousu" id="ndousu" class="form-control"
+                value="<?php if($datOne) echo $datOne['ndousu']; ?>">
+        </div>
+
+        <!-- Celular -->
+        <div class="form-group col-md-6">
+            <label for="celusu">Celular</label>
+            <input type="text" name="celusu" id="celusu" class="form-control"
+                value="<?php if($datOne) echo $datOne['celusu']; ?>">
+        </div>
+
+        <!-- Email -->
+        <div class="form-group col-md-6">
+            <label for="emausu">Correo electrónico</label>
+            <input type="email" name="emausu" id="emausu" class="form-control"
+                value="<?php if($datOne) echo $datOne['emausu']; ?>" required>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="form-group col-md-6">
+            <label for="pasusu">Contraseña</label>
+            <input type="password" name="pasusu" id="pasusu" class="form-control"
+                placeholder="********" <?php if(!$datOne) echo "required"; ?>>
+        </div>
+
+        <!-- Imagen -->
+        <div class="form-group col-md-6">
+            <label for="imgusu">Foto / Imagen (URL)</label>
+            <input type="text" name="imgusu" id="imgusu" class="form-control"
+                value="<?php if($datOne) echo $datOne['imgusu']; ?>">
+        </div>
+
+        <!-- Perfil -->
+        <div class="form-group col-md-6">
+            <label for="idper">Perfil</label>
+            <select name="idper" id="idper" class="form-control">
+                <option value="">Seleccione...</option>
+                <?php 
+                $perfiles = $musu->getPerfiles();
+                if($perfiles){
+                    foreach($perfiles as $p){
+                        $selected = ($datOne && $datOne['idper'] == $p['idpef']) ? "selected" : "";
+                        echo "<option value='{$p['idpef']}' $selected>{$p['nompef']}</option>";
+                    }
+                }
+                ?>
+            </select>
+        </div>
+
+        <!-- Activo -->
+        <div class="form-group col-md-6">
+            <label for="act">Estado</label>
+            <select name="act" id="act" class="form-control">
+                <option value="1" <?php if($datOne && $datOne['act'] == 1) echo "selected"; ?>>Activo</option>
+                <option value="0" <?php if($datOne && $datOne['act'] == 0) echo "selected"; ?>>Inactivo</option>
+            </select>
+        </div>
+
+        <!-- Botón -->
+        <div class="form-group col-md-12 mt-3">
+            <input type="submit" class="btn btn-dark form-control" value="Guardar Usuario">
+        </div>
+
     </div>
 </form>
-<table id="table" class="table table-striped">
-        <thead>
+
+<hr>
+
+<!-- Tabla de usuarios -->
+<table id="table" class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Nombre completo</th>
+            <th>Documento</th>
+            <th>Correo</th>
+            <th>Celular</th>
+            <th>Perfil</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if($datAll){ foreach ($datAll as $dt){ ?>
             <tr>
-                <th>Nombre del usuario</th>
-                <th>Id del Inventario</th>
-                <th>Acciones</th>
-                <th></th> 
-            </tr>
-        </thead>
-        <tbody>
-            <?php if($datAll){ foreach ($datAll AS $dt){ ?>
-            <tr>
-                <td><?=$dt['idusu']."-".$dt['nomusu'];?></td>
-                <td><?=$dt['idinv'];?></td>
+                <td><?= $dt['idusu']; ?></td>
+                <td><?= $dt['nomusu'] . ' ' . $dt['apeusu']; ?></td>
+                <td><?= $dt['tdousu'] . ' ' . $dt['ndousu']; ?></td>
+                <td><?= $dt['emausu']; ?></td>
+                <td><?= $dt['celusu']; ?></td>
+                <td><?= $dt['nompef']; ?></td>
+                <td><?= $dt['act'] ? 'Activo' : 'Inactivo'; ?></td>
                 <td>
-                    <a href="index.php?pg=<?=$pg;?>&idusu=<?=$dt['idusu'];?>&ope=edi" title="Editar">
-                    <i class="fa-solid fa-pen-to-square fa-2x"></i>
+                    <a href="home.php?pg=<?= $pg; ?>&idusu=<?= $dt['idusu']; ?>&ope=edi" title="Editar">
+                        <i class="fa-solid fa-pen-to-square fa-2x text-primary"></i>
                     </a>
-                    <a href="index.php?pg=<?=$pg;?>&idusu=<?=$dt['idusu'];?>&ope=eli" title="Eliminar" onclick="return eliminar();">
-                        <i class="fa-solid fa-trash-can fa-2x"></i>
+                    <a href="home.php?pg=<?= $pg; ?>&idusu=<?= $dt['idusu']; ?>&ope=eli" title="Eliminar" onclick="return confirm('¿Desea eliminar este usuario?');">
+                        <i class="fa-solid fa-trash-can fa-2x text-danger"></i>
                     </a>
                 </td>
             </tr>
-            <?php }}?>
-        </tbody>
-        <thead>
-            <tr>
-                <th>Nombre del usuario</th>
-                <th>Id del Inventario</th>
-                <th>Acciones</th>
-                <th></th>
-            </tr>
-        </thead>
-    </table>
+        <?php }} else { ?>
+            <tr><td colspan="8" class="text-center">No hay usuarios registrados</td></tr>
+        <?php } ?>
+    </tbody>
+</table>

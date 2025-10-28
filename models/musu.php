@@ -1,6 +1,6 @@
 <?php
 
-class Musu{
+class Musu {
     private $idusu;
     private $nomusu;
     private $apeusu;
@@ -90,6 +90,7 @@ class Musu{
         $this->act = $act;
     }
 
+    // ======= MÉTODOS CRUD =======
     public function getAll(){
         try{
             $sql = "SELECT u.idusu, u.nomusu, u.apeusu, u.tdousu, u.ndousu, u.celusu, u.emausu, u.idper, u.fec_crea, u.fec_actu, u.act, p.nompef 
@@ -99,10 +100,9 @@ class Musu{
             $conexion = $modelo->get_conexion();
             $result = $conexion->prepare($sql);
             $result->execute();
-            $res = $result->fetchAll(PDO::FETCH_ASSOC);
-            return $res;
+            return $result->fetchAll(PDO::FETCH_ASSOC);
         }catch(Exception $e){
-            echo "Error".$e."<br><br>";
+            echo "Error: ".$e->getMessage()."<br>";
         }
     }
 
@@ -115,13 +115,11 @@ class Musu{
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
             $result = $conexion->prepare($sql);
-            $idusu = $this->getIdusu();
-            $result->bindParam(':idusu', $idusu);
+            $result->bindParam(':idusu', $this->idusu);
             $result->execute();
-            $res = $result->fetchAll(PDO::FETCH_ASSOC);
-            return $res;
+            return $result->fetch(PDO::FETCH_ASSOC);
         }catch(Exception $e){
-            echo "Error".$e."<br><br>";
+            echo "Error: ".$e->getMessage()."<br>";
         }
     }
 
@@ -150,7 +148,7 @@ class Musu{
             // 🔹 devolvemos el ID insertado
             return $conexion->lastInsertId();
         }catch(Exception $e){
-            echo "Error".$e."<br><br>";
+            echo "Error: ".$e->getMessage()."<br>";
         }
     }
 
@@ -179,23 +177,20 @@ class Musu{
             $res = $result->fetchAll(PDO::FETCH_ASSOC);
             return $res;
         }catch(Exception $e){
-            echo "Error".$e."<br><br>";
+            echo "Error: ".$e->getMessage()."<br>";
         }
     }
 
     public function del(){
         try{
-            $sql = "DELETE FROM usuario WHERE idusu=:idusu";
+            $sql = "DELETE FROM usuario WHERE idusu = :idusu";
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
             $result = $conexion->prepare($sql);
-            $idusu = $this->getIdusu();
-            $result->bindParam(':idusu', $idusu);
-            $result->execute();
-            $res = $result->fetchAll(PDO::FETCH_ASSOC);
-            return $res;
+            $result->bindParam(':idusu', $this->idusu);
+            return $result->execute();
         }catch(Exception $e){
-            echo "Error".$e."<br><br>";
+            echo "Error: ".$e->getMessage()."<br>";
         }
     }
 
@@ -206,14 +201,13 @@ class Musu{
             $conexion = $modelo->get_conexion();
             $result = $conexion->prepare($sql);
             $result->execute();
-            $res = $result->fetchAll(PDO::FETCH_ASSOC);
-            return $res;
+            return $result->fetchAll(PDO::FETCH_ASSOC);
         }catch(Exception $e){
-            echo "Error".$e."<br><br>";
+            echo "Error: ".$e->getMessage()."<br>";
         }
     }
 
-    //Verifica email
+    // ======= Buscar por email =======
     public function getByEmail($email){
         try{
             $sql = "SELECT * FROM usuario WHERE emausu = :emausu";

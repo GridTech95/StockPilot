@@ -45,16 +45,45 @@ if (isset($_SESSION['idemp'])) {
 
 // Guardar/editar kardex
 if ($ope == "save") {
+    require_once __DIR__ . '/../models/maud.php';
+    $maud = new MAud();
+    $accion = $idkar ? 2 : 1; // 1=INSERT, 2=UPDATE
+    $datos_ant = $idkar ? json_encode($mkard->getOne()) : null;
     if (!$idkar) {
         $mkard->save();
+        $idreg = $mkard->getIdkar();
+        $_SESSION['mensaje'] = 'Kardex creado con éxito.';
     } else {
         $mkard->edit();
+        $idreg = $idkar;
+        $_SESSION['mensaje'] = 'Kardex editado con éxito.';
     }
+    $maud->setIdusu($_SESSION['idusu']);
+    $maud->setTabla('kardex');
+    $maud->setAccion($accion);
+    $maud->setIdreg($idreg);
+    $maud->setDatos_ant($datos_ant);
+    $maud->setDatos_nue(json_encode($_POST));
+    $maud->setFecha(date('Y-m-d H:i:s'));
+    $maud->setIp($_SERVER['REMOTE_ADDR']);
+    $maud->save();
 }
 
 // Eliminar kardex
 if ($ope == "eli" && $idkar) {
+    require_once __DIR__ . '/../models/maud.php';
+    $maud = new MAud();
+    $maud->setIdusu($_SESSION['idusu']);
+    $maud->setTabla('kardex');
+    $maud->setAccion(3); // 3=DELETE
+    $maud->setIdreg($idkar);
+    $maud->setDatos_ant(json_encode($mkard->getOne()));
+    $maud->setDatos_nue(null);
+    $maud->setFecha(date('Y-m-d H:i:s'));
+    $maud->setIp($_SERVER['REMOTE_ADDR']);
+    $maud->save();
     $mkard->del();
+    $_SESSION['mensaje'] = 'Kardex eliminado con éxito.';
 }
 
 // Editar kardex
@@ -74,6 +103,18 @@ if ($ope == "addmov" && $idkar) {
         "obs"     => $_POST['obs']
     ];
     $mkard->saveMovimiento($data);
+    require_once __DIR__ . '/../models/maud.php';
+    $maud = new MAud();
+    $maud->setIdusu($_SESSION['idusu']);
+    $maud->setTabla('movim');
+    $maud->setAccion(1); // 1=INSERT
+    $maud->setIdreg($idkar);
+    $maud->setDatos_ant(null);
+    $maud->setDatos_nue(json_encode($data));
+    $maud->setFecha(date('Y-m-d H:i:s'));
+    $maud->setIp($_SERVER['REMOTE_ADDR']);
+    $maud->save();
+    $_SESSION['mensaje'] = 'Movimiento agregado con éxito.';
 }
 
 // ✅ Consultar movimientos si hay kardex seleccionado
@@ -86,3 +127,4 @@ $productos = $mkard->getProductos();
 
 // Listar todos los kardex
 $dtKardex = $mkard->getAll();
+
