@@ -99,7 +99,6 @@ class MDom{
         }
     }
 
-    
     public function edit(){
         try{
             $sql = "UPDATE dominio SET nomdom=:nomdom, desdom=:desdom, fec_crea=:fec_crea, fec_actu=:fec_actu, act=:act WHERE iddom=:iddom";
