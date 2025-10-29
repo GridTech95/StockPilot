@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/conexion.php';
 class Mkard {
     private $idkar;
     private $anio;
@@ -20,6 +21,9 @@ class Mkard {
 
     // ✅ Listar todos los kardex
     public function getAll() {
+        if (!$this->getIdemp()) {
+            return array('error' => 'No se encontró la empresa activa.');
+        }
         $sql = "SELECT k.*, 
                        COUNT(m.idmov) AS total_movs, 
                        IFNULL(SUM(m.cantmov), 0) AS balance
@@ -40,6 +44,9 @@ class Mkard {
 
     // ✅ Obtener un kardex
     public function getOne() {
+        if (!$this->getIdemp()) {
+            return array('error' => 'No se encontró la empresa activa.');
+        }
         $sql = "SELECT * FROM kardex WHERE idkar = :idkar AND idemp = :idemp";
         $modelo = new conexion();
         $conexion = $modelo->get_conexion();
@@ -52,26 +59,45 @@ class Mkard {
         return $result->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // ✅ Guardar nuevo kardex
+    // ✅ Guardar nuevo kardex (ahora solo crea si no existe)
     public function save() {
-        $sql = "INSERT INTO kardex (anio, mes, cerrado, idemp)
-                VALUES (:anio, :mes, :cerrado, :idemp)";
+        if (!$this->getIdemp()) {
+            return array('error' => 'No se encontró la empresa activa.');
+        }
+        // Verificar si ya existe un kardex para ese año, mes y empresa
         $modelo = new conexion();
         $conexion = $modelo->get_conexion();
-        $result = $conexion->prepare($sql);
+        $sql_check = "SELECT idkar FROM kardex WHERE anio = :anio AND mes = :mes AND idemp = :idemp LIMIT 1";
+        $result_check = $conexion->prepare($sql_check);
         $anio = $this->getAnio();
         $mes = $this->getMes();
-        $cerrado = $this->getCerrado();
         $idemp = $this->getIdemp();
+        $result_check->bindParam(":anio", $anio);
+        $result_check->bindParam(":mes", $mes);
+        $result_check->bindParam(":idemp", $idemp);
+        $result_check->execute();
+        $existe = $result_check->fetch(PDO::FETCH_ASSOC);
+        if ($existe) {
+            // Ya existe, no crear otro
+            return $existe['idkar'];
+        }
+        $sql = "INSERT INTO kardex (anio, mes, cerrado, idemp)
+                VALUES (:anio, :mes, :cerrado, :idemp)";
+        $result = $conexion->prepare($sql);
+        $cerrado = $this->getCerrado();
         $result->bindParam(":anio", $anio);
         $result->bindParam(":mes", $mes);
         $result->bindParam(":cerrado", $cerrado);
         $result->bindParam(":idemp", $idemp);
         $result->execute();
+        return $conexion->lastInsertId();
     }
 
     // ✅ Editar kardex
     public function edit() {
+        if (!$this->getIdemp()) {
+            return array('error' => 'No se encontró la empresa activa.');
+        }
         $sql = "UPDATE kardex SET anio = :anio, mes = :mes, cerrado = :cerrado
                 WHERE idkar = :idkar AND idemp = :idemp";
         $modelo = new conexion();
@@ -92,6 +118,9 @@ class Mkard {
 
     // ✅ Eliminar kardex
     public function del() {
+        if (!$this->getIdemp()) {
+            return array('error' => 'No se encontró la empresa activa.');
+        }
         $sql = "DELETE FROM kardex WHERE idkar = :idkar AND idemp = :idemp";
         $modelo = new conexion();
         $conexion = $modelo->get_conexion();
