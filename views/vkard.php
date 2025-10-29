@@ -3,7 +3,7 @@
     <h2><i class="fa-solid fa-boxes"></i> Kardex</h2>
 
     <div class="inser">
-        <form id="frmins" action="dashboard.php?pg=2001" method="POST">
+        <form id="frmins" action="home.php?pg=1007" method="POST">
             <div class="row">
                 <div class="form-group col-md-3">
                     <label for="anio">Año</label>
@@ -56,12 +56,10 @@
                         <td><?= $row['total_movs']; ?></td>
                         <td><?= $row['balance']; ?></td>
                         <td>
-                            <a href="dashboard.php?pg=2001&idkar=<?= $row['idkar']; ?>" 
-                               class="btn btn-sm btn-info">Ver Movimientos</a>
-                            <a href="dashboard.php?pg=2001&idkar=<?= $row['idkar']; ?>&ope=edi" 
-                               class="btn btn-sm btn-warning">Editar</a>
+                            <a href="#" onclick="verMovimientos(<?= $row['idkar']; ?>);return false;" class="btn btn-sm btn-info">Ver Movimientos</a>
+                            <a href="#" onclick="verMovimientos(<?= $row['idkar']; ?>);return false;" class="btn btn-sm btn-warning">Editar</a>
                             <?php if ($row['total_movs'] == 0) { ?>
-                                <a href="dashboard.php?pg=2001&idkar=<?= $row['idkar']; ?>&ope=eli" 
+                                <a href="home.php?pg=1007&idkar=<?= $row['idkar']; ?>&ope=eli" 
                                    class="btn btn-sm btn-danger" 
                                    onclick="return confirm('¿Seguro que desea eliminar este Kardex?')">
                                    Eliminar
@@ -77,6 +75,39 @@
     </table>
 
     <hr>
+
+    <!-- Modal para ver movimientos y agregar movimiento -->
+    <div class="modal fade" id="modalMovimientos" tabindex="-1" aria-labelledby="modalMovimientosLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalMovimientosLabel">Movimientos del Kardex</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="modalMovimientosBody">
+            <!-- Aquí se cargará la info por AJAX -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    function verMovimientos(idkar) {
+        $.get('views/vkard_mov_modal.php', {idkar: idkar}, function(data) {
+            $('#modalMovimientosBody').html(data);
+            var modal = new bootstrap.Modal(document.getElementById('modalMovimientos'));
+            modal.show();
+        });
+    }
+    $(document).ready(function(){
+        $(document).on('submit', '#formAddMov', function(e){
+            e.preventDefault();
+            $.post('views/vkard_mov_modal.php', $(this).serialize(), function(data){
+                $('#modalMovimientosBody').html(data);
+            });
+        });
+    });
+    </script>
 
     <?php if (!empty($dtMovimientos)) { ?>
         <h5>Movimientos del Kardex (Año <?= $datOne[0]['anio'] ?? '' ?>, Mes <?= $datOne[0]['mes'] ?? '' ?>)</h5>
@@ -112,7 +143,7 @@
 
     <?php if ($idkar) { ?>
         <h5>Agregar Movimiento</h5>
-        <form action="dashboard.php?pg=2001" method="POST">
+        <form action="home.php?pg=1007" method="POST">
             <input type="hidden" name="ope" value="addmov">
             <input type="hidden" name="idkar" value="<?= $idkar; ?>">
 
