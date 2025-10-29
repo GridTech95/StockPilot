@@ -92,9 +92,9 @@
                                    class="btn btn-sm btn-outline-warning me-2" title="Editar">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
-                                <!-- Botón Eliminar -->
-                                <a href="home.php?pg=<?= $pg; ?>&idinv=<?= $row['idinv']; ?>&ope=eli" 
-                                   class="btn btn-sm btn-outline-danger" title="Eliminar" onclick="return eliminar();">
+                                <a href="javascript:void(0);"
+                                   onclick="confirmarEliminacion('home.php?pg=<?= $pg; ?>&idinv=<?= $row['idinv']; ?>&ope=eli')"
+                                    class="btn btn-sm btn-outline-danger" title="Eliminar">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </a>
                             </td>
@@ -112,3 +112,62 @@
     </div>
 
 </div>
+
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const msg = urlParams.get('msg');
+
+    if (msg === 'saved') {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Guardado exitosamente!',
+            text: 'El nuevo Inventario se ha registrado correctamente.',
+            confirmButtonColor: '#198754',
+            confirmButtonText: 'Aceptar'
+        });
+    }
+
+    if (msg === 'updated') {
+        Swal.fire({
+            icon: 'info',
+            title: '¡Actualización exitosa!',
+            text: 'Los datos se han actualizado correctamente.',
+            confirmButtonColor: '#0d6efd',
+            confirmButtonText: 'Aceptar'
+        });
+    }
+
+    if (msg === 'deleted') {
+        Swal.fire({
+            icon: 'warning',
+            title: '¡Eliminación exitosa!',
+            text: 'El Inventario ha sido eliminado correctamente.',
+            confirmButtonColor: '#dc3545',
+            confirmButtonText: 'Aceptar'
+        });
+    }
+});
+
+// Confirmación antes de eliminar
+function confirmarEliminacion(url) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Esta acción no se puede deshacer.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = url;
+        }
+    });
+}
+</script>
