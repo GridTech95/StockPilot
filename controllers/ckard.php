@@ -52,11 +52,9 @@ if ($ope == "save") {
     if (!$idkar) {
         $mkard->save();
         $idreg = $mkard->getIdkar();
-        $_SESSION['mensaje'] = 'Kardex creado con éxito.';
     } else {
         $mkard->edit();
         $idreg = $idkar;
-        $_SESSION['mensaje'] = 'Kardex editado con éxito.';
     }
     $maud->setIdusu($_SESSION['idusu']);
     $maud->setTabla('kardex');
@@ -83,7 +81,6 @@ if ($ope == "eli" && $idkar) {
     $maud->setIp($_SERVER['REMOTE_ADDR']);
     $maud->save();
     $mkard->del();
-    $_SESSION['mensaje'] = 'Kardex eliminado con éxito.';
 }
 
 // Editar kardex
@@ -114,7 +111,6 @@ if ($ope == "addmov" && $idkar) {
     $maud->setFecha(date('Y-m-d H:i:s'));
     $maud->setIp($_SERVER['REMOTE_ADDR']);
     $maud->save();
-    $_SESSION['mensaje'] = 'Movimiento agregado con éxito.';
 }
 
 // ✅ Consultar movimientos si hay kardex seleccionado
@@ -127,4 +123,3 @@ $productos = $mkard->getProductos();
 
 // Listar todos los kardex
 $dtKardex = $mkard->getAll();
-
