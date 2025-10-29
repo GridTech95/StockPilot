@@ -253,14 +253,8 @@ CREATE TABLE pagina (
 );
 
 CREATE TABLE pxp (
-    idpxp INT(10) PRIMARY KEY AUTO_INCREMENT,
     idper INT(10),
     idpag INT(10),
-    ver TINYINT(1),
-    crear TINYINT(1),
-    editar TINYINT(1),
-    eliminar TINYINT(1),
-    fec_crea DATETIME
 );
 
 CREATE TABLE auditoria (
