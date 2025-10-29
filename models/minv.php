@@ -1,6 +1,5 @@
 <?php
 
-require_once(__DIR__ . '/conexion.php');
 class MInv{
     private $idinv;
     private $idprod;
@@ -59,11 +58,6 @@ class MInv{
         echo "Error: ".$e->getMessage()."<br><br>";
     }
 }
-
-
-
-
-
 
     public function getOne(){
         try{
