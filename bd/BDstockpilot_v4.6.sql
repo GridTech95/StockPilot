@@ -468,12 +468,14 @@ INSERT INTO kardex (idemp, anio, mes, cerrado) VALUES
 (4, 2024, 2, 1),
 (5, 2024, 3, 0);
 
-INSERT INTO movim (idemp, idkar, idprod, idubi, fecmov, tipmov, cantmov, valmov, costprom, docref, idusu) VALUES
-(1, 1, 1, 1, '2024-01-15', 1, 5, 2500.00, 500.00, 'FACT-001', 1),
-(1, 1, 2, 1, '2024-01-15', 1, 10, 2000.00, 200.00, 'FACT-001', 1),
-(2, 2, 3, 2, '2024-01-18', 1, 50, 180.50, 3.61, 'FACT-002', 1),
-(3, 3, 4, 3, '2024-02-05', 2, 3, 900.00, 300.00, 'FACT-003', 2),
-(4, 4, 5, 4, '2024-02-10', 1, 7, 1400.00, 200.00, 'FACT-004', 3);
+INSERT INTO movim (
+    idkar, idprod, idubi, fecmov, tipmov, cantmov, valmov, costprom, docref, idusu, fec_crea, fec_actu) VALUES
+(1, 1, 1, '2024-01-15', 1, 5, 2500.00, 500.00, 'FACT-001', 1, NOW(), NOW()),
+(1, 2, 1, '2024-01-15', 1, 10, 2000.00, 200.00, 'FACT-001', 1, NOW(), NOW()),
+(2, 3, 2, '2024-01-18', 1, 50, 180.50, 3.61, 'FACT-002', 1, NOW(), NOW()),
+(3, 4, 3, '2024-02-05', 2, 3, 900.00, 300.00, 'FACT-003', 2, NOW(), NOW()),
+(4, 5, 4, '2024-02-10', 1, 7, 1400.00, 200.00, 'FACT-004', 3, NOW(), NOW());
+
 
 -- 1. Crear módulo Principal
 INSERT INTO modulo (idmod, nommod, icono, ruta, orden, fec_crea, act)
