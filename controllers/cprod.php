@@ -22,10 +22,6 @@ $precioven = isset($_POST['precioven']) ? $_POST['precioven'] : NULL;
 $ope = isset($_REQUEST['ope']) ? $_REQUEST['ope'] : NULL;
 $datOne = NULL;
 
-// Variables para mensajes
-$mensaje = '';
-$tipoMensaje = 'success';
-
 $mprod->setIdprod($idprod);
 
 if ($ope == "save") {
@@ -61,24 +57,25 @@ if ($ope == "save") {
 
     $fec_actu = date("Y-m-d H:i:s");
 
+    // Guardar o actualizar
     if (!$idprod) {
         $mprod->setFec_crea($fec_actu);
         $mprod->setFec_actu($fec_actu);
         $mprod->save();
-        $mensaje = 'Producto creado correctamente.';
-        $tipoMensaje = 'success';
+        echo "<script>window.location.href = 'home.php?pg=$pg&msg=saved';</script>";
+        exit;
     } else {
         $mprod->setFec_actu($fec_actu);
         $mprod->edit();
-        $mensaje = 'Producto actualizado correctamente.';
-        $tipoMensaje = 'success';
+        echo "<script>window.location.href = 'home.php?pg=$pg&msg=updated';</script>";
+        exit;
     }
 }
 
 if ($ope == "eli" && $idprod) {
     $mprod->del();
-    $mensaje = 'Producto eliminado correctamente.';
-    $tipoMensaje = 'danger';
+    echo "<script>window.location.href = 'home.php?pg=$pg&msg=deleted';</script>";
+    exit;
 }
 
 if ($ope == "edi" && $idprod) $datOne = $mprod->getOne();

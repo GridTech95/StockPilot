@@ -53,27 +53,27 @@ require_once('controllers/cprod.php')
                 </thead>
                 <tbody>
                     <?php if (!empty($datAll)): ?>
-                        <?php foreach ($datAll as $p): ?>
+                        <?php foreach ($datAll as $dt): ?>
                             <tr>
-                                <td><?= htmlspecialchars($p['codprod']) ?></td>
-                                <td><?= htmlspecialchars($p['nomprod']) ?></td>
-                                <td><?= htmlspecialchars($p['desprod']) ?></td>
-                                <td><?= htmlspecialchars($p['nomcat']) ?></td>
-                                <td><?= htmlspecialchars($p['unimed']) ?></td>
-                                <td><?= number_format($p['costouni'], 2, ',', '.') ?></td>
-                                <td><?= number_format($p['precioven'], 2, ',', '.') ?></td>
-                                <td><?= $p['act'] ? "Activo" : "Inactivo" ?></td>
-                                <td><?= htmlspecialchars($p['fec_crea']) ?></td>
-                                <td><?= htmlspecialchars($p['fec_actu']) ?></td>
+                                <td><?= htmlspecialchars($dt['codprod']) ?></td>
+                                <td><?= htmlspecialchars($dt['nomprod']) ?></td>
+                                <td><?= htmlspecialchars($dt['desprod']) ?></td>
+                                <td><?= htmlspecialchars($dt['nomcat']) ?></td>
+                                <td><?= htmlspecialchars($dt['unimed']) ?></td>
+                                <td><?= number_format($dt['costouni'], 2, ',', '.') ?></td>
+                                <td><?= number_format($dt['precioven'], 2, ',', '.') ?></td>
+                                <td><?= $dt['act'] ? "Activo" : "Inactivo" ?></td>
+                                <td><?= htmlspecialchars($dt['fec_crea']) ?></td>
+                                <td><?= htmlspecialchars($dt['fec_actu']) ?></td>
                                 <td>
-                                    <a href="home.php?pg=<?= $pg ?>&ope=edi&idprod=<?= $p['idprod'] ?>" 
-                                        class="btn btn-sm btn-warning">
-                                        <i class="fa fa-edit"></i>
+                                    <a href="home.php?pg=<?= $pg; ?>&idprod=<?= $dt['idprod']; ?>&ope=edi" 
+                                       class="btn btn-sm btn-outline-warning me-2" title="Editar">
+                                        <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
-                                    <a href="home.php?pg=<?= $pg ?>&ope=eli&idprod=<?= $p['idprod'] ?>"
-                                        class="btn btn-sm btn-danger"
-                                        onclick="return confirm('¿Seguro que deseas eliminar este producto?')">
-                                        <i class="fa fa-trash"></i>
+                                    <a href="javascript:void(0);"
+                                       onclick="confirmarEliminacion('home.php?pg=<?= $pg; ?>&idprod=<?= $dt['idprod']; ?>&ope=eli')"
+                                       class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                        <i class="fa-solid fa-trash-can"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -191,18 +191,60 @@ require_once('controllers/cprod.php')
         </div>
     </div>
 </div>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<?php 
-// Abrir modal automáticamente si estamos editando
-if ($ope == "edi" && !empty($datOne)): 
-?>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    var modalElement = document.getElementById('modalProducto');
-    if (modalElement) {
-        var myModal = new bootstrap.Modal(modalElement);
-        myModal.show();
+document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const msg = urlParams.get('msg');
+
+    if (msg === 'saved') {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Guardado exitosamente!',
+            text: 'El nuevo Dominio se ha registrado correctamente.',
+            confirmButtonColor: '#198754',
+            confirmButtonText: 'Aceptar'
+        });
+    }
+
+    if (msg === 'updated') {
+        Swal.fire({
+            icon: 'info',
+            title: '¡Actualización exitosa!',
+            text: 'Los datos se han actualizado correctamente.',
+            confirmButtonColor: '#0d6efd',
+            confirmButtonText: 'Aceptar'
+        });
+    }
+
+    if (msg === 'deleted') {
+        Swal.fire({
+            icon: 'warning',
+            title: '¡Eliminación exitosa!',
+            text: 'El Dominio ha sido eliminado correctamente.',
+            confirmButtonColor: '#dc3545',
+            confirmButtonText: 'Aceptar'
+        });
     }
 });
+
+// Confirmación antes de eliminar
+function confirmarEliminacion(url) {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'Esta acción no se puede deshacer.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = url;
+        }
+    });
+}
 </script>
-<?php endif; ?>

@@ -71,14 +71,20 @@
 			elseif($pg==1012)
 				require_once("views/vval.php");
 			elseif($pg==1013)
-				require_once("views/vdetsal.php");
-			elseif($pg==1014)
 				require_once("views/vsolsal.php");
+			elseif($pg==1014)
+				require_once("views/vdetsal.php");
 			elseif($pg==1015)
-				require_once("views/vubi.php");
+				require_once("views/vsoent.php");
+			elseif($pg==1016)
+				require_once("views/vmod.php");
 			elseif($pg==1017)
+				require_once("views/vubi.php");
+			elseif($pg==1018)
+				require_once("views/vusu.php");
+			elseif($pg==1019)
 				require_once("views/vpag.php");
-			elseif($pg==2000)
+			elseif($pg==1020)
 				require_once("views/vper.php");
 			else
 				echo "Pagina No Disponible Para Este Usuario";

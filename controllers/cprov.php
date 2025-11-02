@@ -23,10 +23,6 @@ $act = isset($_POST['act']) ? $_POST['act'] : NULL;
 $ope = isset($_REQUEST['ope']) ? $_REQUEST['ope'] : NULL;
 $datOne = NULL;
 
-// Variables para mensaje de éxito/error
-$mensaje = '';
-$tipoMensaje = '';
-
 $mprov->setIdprov($idprov);
 
 if($ope == "save") {
@@ -42,36 +38,25 @@ if($ope == "save") {
     $mprov->setFec_actu($fec_actu);
     $mprov->setAct($act);
 
-    if(!$idprov) {
-        if($mprov->save()) {
-            $mensaje = "Proveedor guardado correctamente.";
-            $tipoMensaje = "success";
-        } else {
-            $mensaje = "Error al guardar el proveedor.";
-            $tipoMensaje = "danger";
-        }
+    // Guardar o actualizar
+    if (!$idprov) {
+        $mprov->save();
+        echo "<script>window.location.href = 'home.php?pg=$pg&msg=saved';</script>";
+        exit;
     } else {
-        if($mprov->edit()) {
-            $mensaje = "Proveedor actualizado correctamente.";
-            $tipoMensaje = "success";
-        } else {
-            $mensaje = "Error al actualizar el proveedor.";
-            $tipoMensaje = "danger";
-        }
+        $mprov->edit();
+        echo "<script>window.location.href = 'home.php?pg=$pg&msg=updated';</script>";
+        exit;
     }
 }
 
-if($ope == "eli" && $idprov) {
-    if($mprov->del()) {
-        $mensaje = "Proveedor eliminado correctamente.";
-        $tipoMensaje = "success";
-    } else {
-        $mensaje = "Error al eliminar el proveedor.";
-        $tipoMensaje = "danger";
-    }
+if ($ope == "eli" && $idprov) {
+    $mprov->del();
+    echo "<script>window.location.href = 'home.php?pg=$pg&msg=deleted';</script>";
+    exit;
 }
 
-if($ope == "edi" && $idprov) $datOne = $mprov->getOne();
+if ($ope == "edi" && $idprov) $datOne = $mprov->getOne();
 
 $datAll = $mprov->getAll();
 $datUbi = $mubi->getAll();

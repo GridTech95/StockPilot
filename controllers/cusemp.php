@@ -25,22 +25,18 @@ $usemp->setIdemp($idemp);
 // Guardar o actualizar usuario
 if ($ope == "save") {
 
-    // ✅ Si no hay idusu, crear nuevo usuario y vincular
     if (!$idusu) {
-        // Verificar si el correo ya existe en la tabla usuario
         $existe = $musu->getByEmail($_POST['emausu']);
 
         if ($existe) {
             echo "<script>alert('El correo ya está registrado en el sistema.');</script>";
 
-            // Si ya existe, solo lo vinculamos si no está vinculado
             $idusu = $existe['idusu'];
             $usemp->setIdusu($idusu);
             $usemp->setFec_crea($fec_crea);
             $usemp->save();
 
         } else {
-            // Crear nuevo usuario
             $musu->setNomusu($_POST['nomusu']);
             $musu->setApeusu($_POST['apeusu']);
             $musu->setTdousu($_POST['tdousu']);
@@ -48,20 +44,17 @@ if ($ope == "save") {
             $musu->setEmausu($_POST['emausu']);
             $musu->setCelusu($_POST['celusu']);
 
-            // ✅ Solo si existe el campo de contraseña
             if (isset($_POST['pasusu']) && !empty($_POST['pasusu'])) {
                 $musu->setPasusu(password_hash($_POST['pasusu'], PASSWORD_DEFAULT));
             }
 
-            $musu->setIdper(2); // Perfil por defecto: empleado
+            $musu->setIdper(2);
             $musu->setFec_crea($fec_crea);
             $musu->setFec_actu($fec_crea);
             $musu->setAct(1);
 
-            // Guardar y obtener el ID insertado
             $idusu = $musu->save();
 
-            // Si se insertó correctamente, vincularlo con la empresa
             if ($idusu) {
                 $usemp->setIdusu($idusu);
                 $usemp->setFec_crea($fec_crea);
@@ -70,7 +63,6 @@ if ($ope == "save") {
         }
 
     } else {
-        // ✅ Editar usuario existente
         $musu->setIdusu($idusu);
         $musu->setNomusu($_POST['nomusu']);
         $musu->setApeusu($_POST['apeusu']);
@@ -79,18 +71,27 @@ if ($ope == "save") {
         $musu->setEmausu($_POST['emausu']);
         $musu->setCelusu($_POST['celusu']);
 
-        // ✅ Solo cambiar contraseña si viene un valor nuevo
         if (isset($_POST['pasusu']) && !empty($_POST['pasusu'])) {
             $musu->setPasusu(password_hash($_POST['pasusu'], PASSWORD_DEFAULT));
         }
 
         $musu->edit();
     }
+
+    // 🔹 Redirección con mensajes al estilo del ejemplo
+    if($idusu) {
+        echo "<script>window.location.href = 'home.php?pg=$pg&msg=updated';</script>";
+    } else {
+        echo "<script>window.location.href = 'home.php?pg=$pg&msg=saved';</script>";
+    }
+    exit;
 }
 
 // Eliminar vínculo usuario-empresa
 if ($ope == "eli" && $idusu && $idemp) {
     $usemp->del();
+    echo "<script>window.location.href = 'home.php?pg=$pg&msg=deleted';</script>";
+    exit;
 }
 
 // Obtener datos de un usuario para editar

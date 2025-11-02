@@ -113,12 +113,13 @@ class Mprov {
     public function getOne(){
     try {
         $sql = "SELECT p.idprov, p.tipoprov, p.nomprov, p.docprov, p.telprov, p.emaprov, p.dirprov, p.fec_crea, p.fec_actu, p.act,
-                       u.nomubi, u.dirubi, u.depubi, u.ciuubi,
-                       e.nomemp, e.telemp, e.emaemp, e.diremp
-                FROM proveedor AS p
-                INNER JOIN ubicacion AS u ON p.idubi = u.idubi
-                INNER JOIN empresa AS e ON p.idemp = e.idemp
-                WHERE p.idprov=:idprov";
+               u.idubi, u.nomubi, u.dirubi, u.depubi, u.ciuubi,
+               e.idemp, e.nomemp, e.telemp, e.emaemp, e.diremp
+        FROM proveedor AS p
+        INNER JOIN ubicacion AS u ON p.idubi = u.idubi
+        INNER JOIN empresa AS e ON p.idemp = e.idemp
+        WHERE p.idprov=:idprov";
+
         $modelo = new conexion();
         $conexion = $modelo->get_conexion();
         $result = $conexion->prepare($sql);

@@ -33,13 +33,15 @@ CREATE TABLE usuario_empresa (
 
 CREATE TABLE perfil (
     idper INT(10) PRIMARY KEY AUTO_INCREMENT,
-    codper VARCHAR(20),
     nomper VARCHAR(100),
-    nivel TINYINT,
-    fec_crea DATETIME,
-    fec_actu DATETIME,
-    act TINYINT(1)
+    -- Permisos CRUD
+    ver TINYINT(1),
+    crear TINYINT(1),
+    editar TINYINT(1),
+    eliminar TINYINT(1),
+    act TINYINT(1) DEFAULT 1
 );
+
 
     CREATE TABLE empresa (
         estado TINYINT(1),
@@ -406,12 +408,11 @@ ALTER TABLE lote ADD CONSTRAINT fk_lote_prod FOREIGN KEY (idprod) REFERENCES pro
 
 -- DATOS DE PRUEBA --
 
-INSERT INTO perfil (codper, nomper, nivel) VALUES
-('ADM', 'Administrador', 3),
-('USR', 'Usuario', 2),
-('CON', 'Consulta', 1),
-('VEN', 'Vendedor', 2),
-('BOD', 'Bodeguero', 1);
+INSERT INTO perfil (nomper, ver, crear, editar, eliminar, act) VALUES
+('Superadmin', 1, 1, 1, 1, 1),
+('Admin/empresa', 1, 1, 1, 0, 1),
+('Empleado', 1, 0, 0, 0, 1);
+
 
 INSERT INTO usuario (nomusu, apeusu, tdousu, ndousu, celusu, emausu, pasusu, idper) VALUES
 ('Admin', 'Sistema', 'CC', '123456789', '3001234567', 'admin@gmail.com', 'e0f53c0a8c931f995f898d5f166491ccbdc7f528kjahw9', 1),
@@ -496,10 +497,14 @@ INSERT INTO pagina (idpag, idmod, nompag, ruta, icono, orden, fec_crea, act) VAL
 (1010, 1, 'Movimientos', 'views/vmovim.php', 'fa fa-exchange-alt', 10, NOW(), 1),
 (1011, 1, 'Dominios', 'views/vdom.php', 'fa fa-database', 11, NOW(), 1),
 (1012, 1, 'Valores', 'views/vval.php', 'fa fa-check-circle', 12, NOW(), 1),
-(1013, 1, 'Salidas', 'views/vsal.php', 'fa fa-sign-out-alt', 13, NOW(), 1),
-(1014, 1, 'Solicitudes Salida', 'views/vsolsal.php', 'fa fa-file-alt', 14, NOW(), 1),
-(1015, 1, 'Ubicaciones', 'views/vubi.php', 'fa fa-map-marker-alt', 15, NOW(), 1),
-(1016, 1, 'Usuarios Empresa (Alt)', 'views/vusemp.php', 'fa fa-user-cog', 16, NOW(), 1);
+(1013, 1, 'Solicitud Salida', 'views/vsolsal.php', 'fa fa-file-alt', 13, NOW(), 1),
+(1014, 1, 'Detalle salida', 'views/vdetsal.php', 'fa fa-file-alt', 14, NOW(), 1),
+(1015, 1, 'Solicitud entrada', 'views/vsoent.php', 'fa fa-file-alt', 15, NOW(), 1),
+(1016, 1, 'Modulo', 'views/vmod.php', 'fa fa-file-alt', 16, NOW(), 1),
+(1017, 1, 'Ubicacion', 'views/vubi.php', 'fa fa-map-marker-alt', 17, NOW(), 1),
+(1018, 1, 'Usuarios', 'views/vusu.php', 'fa fa-user-cog', 18, NOW(), 1)
+(1019, 1, 'Pagina', 'views/vpag.php', 'fa fa-user-cog', 19, NOW(), 1)
+(1020, 1, 'Perfil', 'views/vper.php', 'fa fa-user-cog', 20, NOW(), 1);
 
 
 -- 3. Permisos para el perfil Administrador (idper=1)
@@ -519,5 +524,10 @@ VALUES
 (1, 1012, 1, 1, 1, 1, NOW()),
 (1, 1013, 1, 1, 1, 1, NOW()),
 (1, 1014, 1, 1, 1, 1, NOW()),
-(1, 1015, 1, 1, 1, 1, NOW());
+(1, 1015, 1, 1, 1, 1, NOW()),
+(1, 1016, 1, 1, 1, 1, NOW()),
+(1, 1017, 1, 1, 1, 1, NOW()),
+(1, 1018, 1, 1, 1, 1, NOW()),
+(1, 1019, 1, 1, 1, 1, NOW()),
+(1, 1020, 1, 1, 1, 1, NOW());
 
