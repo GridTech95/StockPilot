@@ -140,7 +140,6 @@ CREATE TABLE kardex (
 
 CREATE TABLE movim (
     idmov INT(10) PRIMARY KEY AUTO_INCREMENT,
-    -->idemp INT(10),
     idkar INT(10),
     idprod INT(10),
     idubi INT(10),
@@ -256,7 +255,7 @@ CREATE TABLE pagina (
 
 CREATE TABLE pxp (
     idper INT(10),
-    idpag INT(10),
+    idpag INT(10)
 );
 
 CREATE TABLE auditoria (
@@ -309,7 +308,6 @@ ALTER TABLE inventario ADD KEY fk_inv_idemp (idemp);
 ALTER TABLE inventario ADD KEY fk_inv_idprod (idprod);
 ALTER TABLE inventario ADD KEY fk_inv_idubi (idubi);
 
-ALTER TABLE movim ADD KEY fk_movim_idemp (idemp);
 ALTER TABLE movim ADD KEY fk_movim_idkar (idkar);
 ALTER TABLE movim ADD KEY fk_movim_idprod (idprod);
 ALTER TABLE movim ADD KEY fk_movim_idubi (idubi);
@@ -367,7 +365,6 @@ ALTER TABLE inventario
 ALTER TABLE kardex ADD CONSTRAINT fkkaem FOREIGN KEY (idemp) REFERENCES empresa(idemp);
 
 ALTER TABLE movim
-  ADD CONSTRAINT fk_movim_emp FOREIGN KEY (idemp) REFERENCES empresa(idemp),
   ADD CONSTRAINT fk_movim_kar FOREIGN KEY (idkar) REFERENCES kardex(idkar),
   ADD CONSTRAINT fk_movim_prod FOREIGN KEY (idprod) REFERENCES producto(idprod),
   ADD CONSTRAINT fk_movim_ubi FOREIGN KEY (idubi) REFERENCES ubicacion(idubi),
@@ -418,8 +415,8 @@ INSERT INTO usuario (nomusu, apeusu, tdousu, ndousu, celusu, emausu, pasusu, idp
 ('Admin', 'Sistema', 'CC', '123456789', '3001234567', 'admin@gmail.com', 'e0f53c0a8c931f995f898d5f166491ccbdc7f528kjahw9', 1),
 ('Juan', 'Pérez', 'CC', '987654321', '3102345678', 'juan@example.com', '$2b$12$6oTkFgnxtIkSkZsTnjy5Zu3ydEEdgUUU9PA46z3DGljO3U2KPCclq', 2),
 ('María', 'Gómez', 'TI', '1122334455', '3203456789', 'maria@example.com', '$2b$12$6oTkFgnxtIkSkZsTnjy5Zu3ydEEdgUUU9PA46z3DGljO3U2KPCclq', 3),
-('Pedro', 'Rodríguez', 'CC', '2233445566', '3009876543', 'pedro@example.com', '$2b$12$6oTkFgnxtIkSkZsTnjy5Zu3ydEEdgUUU9PA46z3DGljO3U2KPCclq', 4),
-('Laura', 'Martínez', 'CE', '3344556677', '3158765432', 'laura@example.com', '$2b$12$6oTkFgnxtIkSkZsTnjy5Zu3ydEEdgUUU9PA46z3DGljO3U2KPCclq', 5);
+('Pedro', 'Rodríguez', 'CC', '2233445566', '3009876543', 'pedro@example.com', '$2b$12$6oTkFgnxtIkSkZsTnjy5Zu3ydEEdgUUU9PA46z3DGljO3U2KPCclq', 1),
+('Laura', 'Martínez', 'CE', '3344556677', '3158765432', 'laura@example.com', '$2b$12$6oTkFgnxtIkSkZsTnjy5Zu3ydEEdgUUU9PA46z3DGljO3U2KPCclq', 3);
 
 INSERT INTO empresa (nomemp, razemp, nitemp, diremp, telemp, emaemp, idusu) VALUES
 ('TechSolutions SA', 'TechSolutions Sociedad Anónima', '123456789-1', 'Calle 123 #45-67, Bogotá', '6012345678', 'contacto@techsolutions.com', 1),
@@ -502,32 +499,32 @@ INSERT INTO pagina (idpag, idmod, nompag, ruta, icono, orden, fec_crea, act) VAL
 (1015, 1, 'Solicitud entrada', 'views/vsoent.php', 'fa fa-file-alt', 15, NOW(), 1),
 (1016, 1, 'Modulo', 'views/vmod.php', 'fa fa-file-alt', 16, NOW(), 1),
 (1017, 1, 'Ubicacion', 'views/vubi.php', 'fa fa-map-marker-alt', 17, NOW(), 1),
-(1018, 1, 'Usuarios', 'views/vusu.php', 'fa fa-user-cog', 18, NOW(), 1)
-(1019, 1, 'Pagina', 'views/vpag.php', 'fa fa-user-cog', 19, NOW(), 1)
+(1018, 1, 'Usuarios', 'views/vusu.php', 'fa fa-user-cog', 18, NOW(), 1),
+(1019, 1, 'Pagina', 'views/vpag.php', 'fa fa-user-cog', 19, NOW(), 1),
 (1020, 1, 'Perfil', 'views/vper.php', 'fa fa-user-cog', 20, NOW(), 1);
 
 
 -- 3. Permisos para el perfil Administrador (idper=1)
-INSERT INTO pxp (idper, idpag, ver, crear, editar, eliminar, fec_crea)
+INSERT INTO pxp (idper, idpag)
 VALUES 
-(1, 1001, 1, 1, 1, 1, NOW()),
-(1, 1002, 1, 1, 1, 1, NOW()),
-(1, 1003, 1, 1, 1, 1, NOW()),
-(1, 1004, 1, 1, 1, 1, NOW()),
-(1, 1005, 1, 1, 1, 1, NOW()),
-(1, 1006, 1, 1, 1, 1, NOW()),
-(1, 1007, 1, 1, 1, 1, NOW()),
-(1, 1008, 1, 1, 1, 1, NOW()),
-(1, 1009, 1, 1, 1, 1, NOW()),
-(1, 1010, 1, 1, 1, 1, NOW()),
-(1, 1011, 1, 1, 1, 1, NOW()),
-(1, 1012, 1, 1, 1, 1, NOW()),
-(1, 1013, 1, 1, 1, 1, NOW()),
-(1, 1014, 1, 1, 1, 1, NOW()),
-(1, 1015, 1, 1, 1, 1, NOW()),
-(1, 1016, 1, 1, 1, 1, NOW()),
-(1, 1017, 1, 1, 1, 1, NOW()),
-(1, 1018, 1, 1, 1, 1, NOW()),
-(1, 1019, 1, 1, 1, 1, NOW()),
-(1, 1020, 1, 1, 1, 1, NOW());
+(1, 1001),
+(1, 1002),
+(1, 1003),
+(1, 1004),
+(1, 1005),
+(1, 1006),
+(1, 1007),
+(1, 1008),
+(1, 1009),
+(1, 1010),
+(1, 1011),
+(1, 1012),
+(1, 1013),
+(1, 1014),
+(1, 1015),
+(1, 1016),
+(1, 1017),
+(1, 1018),
+(1, 1019),
+(1, 1020);
 
