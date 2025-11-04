@@ -25,6 +25,10 @@ $datOne = NULL;
 
 $mprov->setIdprov($idprov);
 
+// Obtener datos de sesión
+$idemp_usuario = isset($_SESSION['idemp']) ? $_SESSION['idemp'] : null;
+$idper_usuario = isset($_SESSION['idper']) ? $_SESSION['idper'] : null;
+
 if($ope == "save") {
     $mprov->setIdubi($idubi);
     $mprov->setTipoprov($tipoprov);
@@ -56,9 +60,12 @@ if ($ope == "eli" && $idprov) {
     exit;
 }
 
-if ($ope == "edi" && $idprov) $datOne = $mprov->getOne();
+// Editar: llamar getOne con filtro de empresa y perfil
+if ($ope == "edi" && $idprov) $datOne = $mprov->getOne($idemp_usuario, $idper_usuario);
 
-$datAll = $mprov->getAll();
+// Obtener todos los proveedores según empresa/perfil
+$datAll = $mprov->getAll($idemp_usuario, $idper_usuario);
+
 $datUbi = $mubi->getAll();
 $datEmp = $memp->getAll();
 ?>

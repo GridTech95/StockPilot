@@ -90,7 +90,8 @@ class Mprov {
     }
 
     // Obtener todos los proveedores con info de ubicación y empresa
-    public function getAll(){
+    // Obtener todos los proveedores con info de ubicación y empresa
+public function getAll($idemp = null, $idper = null){
     try {
         $sql = "SELECT p.idprov, p.tipoprov, p.nomprov, p.docprov, p.telprov, p.emaprov, p.dirprov, p.fec_crea, p.fec_actu, p.act,
                        u.nomubi, u.dirubi, u.depubi, u.ciuubi,
@@ -98,9 +99,17 @@ class Mprov {
                 FROM proveedor AS p
                 INNER JOIN ubicacion AS u ON p.idubi = u.idubi
                 INNER JOIN empresa AS e ON p.idemp = e.idemp";
+
+        if($idper != 1) { // Si no es SuperAdmin, filtrar por empresa
+            $sql .= " WHERE p.idemp = :idemp";
+        }
+
         $modelo = new conexion();
         $conexion = $modelo->get_conexion();
         $result = $conexion->prepare($sql);
+
+        if($idper != 1) $result->bindParam(':idemp', $idemp);
+
         $result->execute();
         $res = $result->fetchAll(PDO::FETCH_ASSOC);
         return $res;
@@ -109,22 +118,29 @@ class Mprov {
     }
 }
 
-    // Obtener un proveedor con info de ubicación y empresa
-    public function getOne(){
+// Obtener un proveedor específico
+public function getOne($idemp = null, $idper = null){
     try {
         $sql = "SELECT p.idprov, p.tipoprov, p.nomprov, p.docprov, p.telprov, p.emaprov, p.dirprov, p.fec_crea, p.fec_actu, p.act,
-               u.idubi, u.nomubi, u.dirubi, u.depubi, u.ciuubi,
-               e.idemp, e.nomemp, e.telemp, e.emaemp, e.diremp
-        FROM proveedor AS p
-        INNER JOIN ubicacion AS u ON p.idubi = u.idubi
-        INNER JOIN empresa AS e ON p.idemp = e.idemp
-        WHERE p.idprov=:idprov";
+                       u.idubi, u.nomubi, u.dirubi, u.depubi, u.ciuubi,
+                       e.idemp, e.nomemp, e.telemp, e.emaemp, e.diremp
+                FROM proveedor AS p
+                INNER JOIN ubicacion AS u ON p.idubi = u.idubi
+                INNER JOIN empresa AS e ON p.idemp = e.idemp
+                WHERE p.idprov = :idprov";
+
+        if($idper != 1) { // Si no es SuperAdmin, agregar filtro de empresa
+            $sql .= " AND p.idemp = :idemp";
+        }
 
         $modelo = new conexion();
         $conexion = $modelo->get_conexion();
         $result = $conexion->prepare($sql);
+
         $idprov = $this->getIdprov();
-        $result->bindParam(':idprov',$idprov);
+        $result->bindParam(':idprov', $idprov);
+        if($idper != 1) $result->bindParam(':idemp', $idemp);
+
         $result->execute();
         $res = $result->fetchAll(PDO::FETCH_ASSOC);
         return $res;
@@ -132,6 +148,7 @@ class Mprov {
         echo "Error: ".$e."<br><br>";
     }
 }
+
 
     // Guardar proveedor
     public function save(){

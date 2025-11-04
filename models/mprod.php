@@ -118,7 +118,9 @@ class Mprod {
     }
 
     // CRUD
-    public function getAll(){
+    // ...
+// CRUD
+public function getAll($idemp = null, $idper = null){
     try {
         $sql = "SELECT p.idprod, p.codprod, p.nomprod, p.desprod, p.idcat, p.idemp, p.unimed,
                        p.stkmin, p.stkmax, p.imgprod, p.costouni, p.precioven,
@@ -126,9 +128,20 @@ class Mprod {
                        c.nomcat
                 FROM producto AS p
                 LEFT JOIN categoria AS c ON p.idcat = c.idcat";
+
+        // Filtrar por empresa si no es SuperAdmin
+        if ($idper != 1 && $idemp !== null) {
+            $sql .= " WHERE p.idemp = :idemp";
+        }
+
         $modelo = new conexion();
         $conexion = $modelo->get_conexion();
         $result = $conexion->prepare($sql);
+
+        if ($idper != 1 && $idemp !== null) {
+            $result->bindParam(':idemp', $idemp);
+        }
+
         $result->execute();
         $res = $result->fetchAll(PDO::FETCH_ASSOC);
         return $res;
@@ -137,7 +150,8 @@ class Mprod {
     }
 }
 
-public function getOne(){
+
+public function getOne($idemp = null, $idper = null){
     try {
         $sql = "SELECT p.idprod, p.codprod, p.nomprod, p.desprod, p.idcat, p.idemp, p.unimed,
                        p.stkmin, p.stkmax, p.imgprod, p.costouni, p.precioven,
@@ -146,18 +160,32 @@ public function getOne(){
                 FROM producto AS p
                 LEFT JOIN categoria AS c ON p.idcat = c.idcat
                 WHERE p.idprod = :idprod";
+
+        // Filtrar por empresa si no es SuperAdmin
+        if ($idper != 1 && $idemp !== null) {
+            $sql .= " AND p.idemp = :idemp";
+        }
+
         $modelo = new conexion();
         $conexion = $modelo->get_conexion();
         $result = $conexion->prepare($sql);
+
         $idprod = $this->getIdprod();
         $result->bindParam(':idprod', $idprod);
+
+        if ($idper != 1 && $idemp !== null) {
+            $result->bindParam(':idemp', $idemp);
+        }
+
         $result->execute();
         $res = $result->fetchAll(PDO::FETCH_ASSOC);
         return $res;
+
     } catch(Exception $e){
         echo "Error: ".$e."<br><br>";
     }
 }
+
 
     public function save(){
         try{

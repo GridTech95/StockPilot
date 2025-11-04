@@ -78,8 +78,21 @@ if ($ope == "eli" && $idprod) {
     exit;
 }
 
-if ($ope == "edi" && $idprod) $datOne = $mprod->getOne();
+if ($ope == "edi" && $idprod) {
+    $idemp_usuario = isset($_SESSION['idemp']) ? $_SESSION['idemp'] : null;
+    $idper_usuario = isset($_SESSION['idper']) ? $_SESSION['idper'] : null;
+    $datOne = $mprod->getOne($idemp_usuario, $idper_usuario);
+}
 
-$datAll = $mprod->getAll();
+
+// Obtener datos según perfil y empresa
+$idemp_usuario = isset($_SESSION['idemp']) ? $_SESSION['idemp'] : null;
+$idper_usuario = isset($_SESSION['idper']) ? $_SESSION['idper'] : null;
+
+// Llamada a getAll() pasando idemp y idper
+$datAll = $mprod->getAll($idemp_usuario, $idper_usuario);
+
+// Categorías igual
 $datCat = $mcat->getAll();
+
 ?>
