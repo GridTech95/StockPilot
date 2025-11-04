@@ -93,7 +93,7 @@ class Musu {
     // ======= MÉTODOS CRUD =======
     public function getAll(){
         try{
-            $sql = "SELECT u.idusu, u.nomusu, u.apeusu, u.tdousu, u.ndousu, u.celusu, u.emausu, u.idper, u.fec_crea, u.fec_actu, u.act, p.nompef 
+            $sql = "SELECT u.idusu, u.nomusu, u.apeusu, u.tdousu, u.ndousu, u.celusu, u.emausu, u.idper, u.fec_crea, u.fec_actu, u.act, p.nomper 
                     FROM usuario u 
                     INNER JOIN perfil p ON u.idper = p.idper";
             $modelo = new conexion();
@@ -108,7 +108,7 @@ class Musu {
 
     public function getOne(){
         try{
-            $sql = "SELECT u.idusu, u.nomusu, u.apeusu, u.tdousu, u.ndousu, u.celusu, u.emausu, u.pasusu, u.idper, u.fec_crea, u.fec_actu, u.act, p.nompef 
+            $sql = "SELECT u.idusu, u.nomusu, u.apeusu, u.tdousu, u.ndousu, u.celusu, u.emausu, u.pasusu, u.idper, u.fec_crea, u.fec_actu, u.act, p.nomper 
                     FROM usuario u 
                     INNER JOIN perfil p ON u.idper = p.idper 
                     WHERE u.idusu=:idusu";
@@ -196,7 +196,7 @@ class Musu {
 
     public function getPerfiles(){
         try{
-            $sql = "SELECT idper, nompef FROM perfil WHERE act = 1";
+            $sql = "SELECT idper, nomper FROM perfil WHERE act = 1";
             $modelo = new conexion();
             $conexion = $modelo->get_conexion();
             $result = $conexion->prepare($sql);

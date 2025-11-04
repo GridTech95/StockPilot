@@ -1,4 +1,14 @@
-<?php require_once("controllers/cemp.php"); ?>
+<?php
+require_once('controllers/cemp.php');
+
+// Verifica el perfil actual del usuario
+$perfil = $_SESSION['idper'] ?? 0; // Se maneja por número (1=SuperAdmin)
+
+// Según el perfil, carga la vista correspondiente
+if ($perfil == 1) {
+?>
+
+<!-- ======== VISTA PARA SUPER ADMIN ======== -->
 
 <?php if(!empty($mensaje)): ?>
 <!-- Toast de Bootstrap centrado sobre el formulario -->
@@ -16,7 +26,7 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     var toastEl = document.getElementById('mensajeToast');
-    var toast = new bootstrap.Toast(toastEl, { delay: 3000 }); // se cierra automáticamente en 3 segundos
+    var toast = new bootstrap.Toast(toastEl, { delay: 3000 });
     toast.show();
   });
 </script>
@@ -101,17 +111,16 @@
             <td><?=$dt['telemp'] ?></td>
             <td style="text-align: right;">
                 <a href="home.php?pg=<?= $pg; ?>&idemp=<?= $dt['idemp']; ?>&ope=edi" 
-                                   class="btn btn-sm btn-outline-warning me-2" title="Editar">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </a>
-                <a href="javascript:void(0);"
-                                   onclick="confirmarEliminacion('home.php?pg=<?= $pg; ?>&idemp=<?= $dt['idemp']; ?>&ope=eli')"
-                                  class="btn btn-sm btn-outline-danger" title="Eliminar">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </a>
-            </td>      <?php }}?>  
+                   class="btn btn-sm btn-outline-warning me-2" title="Editar">
+                   <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <a href="javascript:void(0);" onclick="confirmarEliminacion('home.php?pg=<?= $pg; ?>&idemp=<?= $dt['idemp']; ?>&ope=eli')" 
+                   class="btn btn-sm btn-outline-danger" title="Eliminar">
+                   <i class="fa-solid fa-trash-can"></i>
+                </a>
+            </td>      
         </tr>
-  
+        <?php }}?>  
     </tbody>
 
     <tfoot>
@@ -138,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function() {
         Swal.fire({
             icon: 'success',
             title: '¡Guardado exitosamente!',
-            text: 'El nuevo Dominio se ha registrado correctamente.',
+            text: 'La empresa se ha registrado correctamente.',
             confirmButtonColor: '#198754',
             confirmButtonText: 'Aceptar'
         });
@@ -158,14 +167,13 @@ document.addEventListener("DOMContentLoaded", function() {
         Swal.fire({
             icon: 'warning',
             title: '¡Eliminación exitosa!',
-            text: 'El Dominio ha sido eliminado correctamente.',
+            text: 'La empresa ha sido eliminada correctamente.',
             confirmButtonColor: '#dc3545',
             confirmButtonText: 'Aceptar'
         });
     }
 });
 
-// Confirmación antes de eliminar
 function confirmarEliminacion(url) {
     Swal.fire({
         title: '¿Estás seguro?',
@@ -183,3 +191,191 @@ function confirmarEliminacion(url) {
     });
 }
 </script>
+
+<!-- ======== FIN VISTA SUPER ADMIN ======== -->
+
+<?php
+} else {
+// ======== VISTA MODERNA PARA ADMIN / EMPLEADO ========
+
+// Obtiene la empresa activa desde la sesión
+$idemp = $_SESSION['idemp'] ?? null;
+
+if ($idemp) {
+    $memp->setIdemp($idemp);
+    $empresaUsuario = $memp->getOne(); 
+    $emp = $empresaUsuario[0] ?? null;
+} else {
+    $emp = null;
+}
+
+if (!$emp) {
+    ?>
+    <div class="alert alert-warning text-center mt-5 p-4 rounded-4 shadow-sm">
+        <i class="fas fa-exclamation-circle fa-2x mb-2"></i><br>
+        No se encontró información de tu empresa.
+    </div>
+    <?php
+} else {
+    ?>
+    <style>
+        .empresa-header {
+            background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
+            color: #fff;
+            padding: 3rem 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .empresa-header img {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #555;
+            box-shadow: 0 0 10px rgba(255,255,255,0.1);
+        }
+        .empresa-header h2 {
+            font-weight: 700;
+            margin-top: 1rem;
+        }
+        .empresa-body {
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-top: -2rem;
+        }
+        .empresa-item strong {
+            display: inline-block;
+            width: 160px;
+            color: #555;
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #444, #222);
+            color: white;
+            border: none;
+            transition: 0.3s ease;
+        }
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #555, #000);
+        }
+        .modal-header {
+            background: linear-gradient(135deg, #333, #000);
+            color: white;
+        }
+        .badge-estado {
+            font-size: 0.9rem;
+            padding: 0.5em 0.8em;
+        }
+        .edit-btn-container {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+        }
+    </style>
+
+    <div class="container-fluid px-4 py-5">
+        <div class="empresa-header text-center position-relative">
+            <div class="d-flex justify-content-center">
+                <?php if (!empty($emp['logo'])): ?>
+                    <img src="<?= htmlspecialchars($emp['logo']); ?>" alt="Logo Empresa">
+                <?php else: ?>
+                    <div class="d-flex align-items-center justify-content-center bg-light text-secondary rounded-circle" 
+                         style="width: 140px; height: 140px; font-size: 2rem; box-shadow: inset 0 0 10px rgba(0,0,0,0.1);">
+                        <i class="fas fa-building"></i>
+                    </div>
+                <?php endif; ?>
+            </div>
+            <h2 class="mt-3 mb-0"><?= htmlspecialchars($emp['nomemp']); ?></h2>
+            <p class="lead mb-2"><?= htmlspecialchars($emp['razemp']); ?></p>
+
+            <div class="edit-btn-container">
+                <button class="btn btn-gradient btn-sm px-4 rounded-pill shadow-sm" data-bs-toggle="modal" data-bs-target="#editarEmpresaModal">
+                    <i class="fas fa-pen me-1"></i> Editar información
+                </button>
+            </div>
+        </div>
+
+        <div class="empresa-body mt-4">
+            <h4 class="mb-4 text-dark fw-bold"><i class="fas fa-info-circle me-2"></i>Detalles de la Empresa</h4>
+            <div class="row g-4">
+                <div class="col-md-6 empresa-item"><strong>NIT:</strong> <?= htmlspecialchars($emp['nitemp']); ?></div>
+                <div class="col-md-6 empresa-item"><strong>Dirección:</strong> <?= htmlspecialchars($emp['diremp']); ?></div>
+                <div class="col-md-6 empresa-item"><strong>Teléfono:</strong> <?= htmlspecialchars($emp['telemp']); ?></div>
+                <div class="col-md-6 empresa-item"><strong>Email:</strong> <?= htmlspecialchars($emp['emaemp']); ?></div>
+                <div class="col-md-6 empresa-item"><strong>Estado:</strong> 
+                    <?= $emp['act'] ? '<span class="text-success fw-semibold">Activa</span>' : '<span class="text-danger fw-semibold">Inactiva</span>'; ?>
+                </div>
+                <div class="col-md-6 empresa-item"><strong>Última actualización:</strong> 
+                    <?= htmlspecialchars($emp['fec_actu']); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para editar empresa -->
+    <div class="modal fade" id="editarEmpresaModal" tabindex="-1" aria-labelledby="editarEmpresaLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content rounded-4 shadow-lg">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editarEmpresaLabel"><i class="fas fa-pen-to-square me-2"></i>Editar información de empresa</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+
+          <form action="home.php?pg=<?= $pg; ?>" method="POST" class="needs-validation" novalidate>
+            <div class="modal-body">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label">Nombre Empresa</label>
+                  <input type="text" name="nomemp" class="form-control" value="<?= htmlspecialchars($emp['nomemp']); ?>" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Razón Social</label>
+                  <input type="text" name="razemp" class="form-control" value="<?= htmlspecialchars($emp['razemp']); ?>" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">NIT</label>
+                  <input type="text" name="nitemp" class="form-control" value="<?= htmlspecialchars($emp['nitemp']); ?>" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Dirección</label>
+                  <input type="text" name="diremp" class="form-control" value="<?= htmlspecialchars($emp['diremp']); ?>" required>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Teléfono</label>
+                  <input type="text" name="telemp" class="form-control" value="<?= htmlspecialchars($emp['telemp']); ?>">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Correo electrónico</label>
+                  <input type="email" name="emaemp" class="form-control" value="<?= htmlspecialchars($emp['emaemp']); ?>">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Logo (URL)</label>
+                  <input type="text" name="logo" class="form-control" value="<?= htmlspecialchars($emp['logo']); ?>">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Estado</label>
+                  <select name="act" class="form-select">
+                    <option value="1" <?= $emp['act'] == 1 ? 'selected' : ''; ?>>Activa</option>
+                    <option value="0" <?= $emp['act'] == 0 ? 'selected' : ''; ?>>Inactiva</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <input type="hidden" name="idemp" value="<?= $emp['idemp']; ?>">
+              <input type="hidden" name="ope" value="save">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-gradient"><i class="fas fa-save me-1"></i> Guardar Cambios</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <?php
+}
+
+}
+?>

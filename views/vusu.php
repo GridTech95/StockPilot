@@ -76,13 +76,30 @@ require_once('controllers/cusu.php');
                 $perfiles = $musu->getPerfiles();
                 if($perfiles){
                     foreach($perfiles as $p){
-                        $selected = ($datOne && $datOne['idper'] == $p['idpef']) ? "selected" : "";
-                        echo "<option value='{$p['idpef']}' $selected>{$p['nompef']}</option>";
+                        $selected = ($datOne && $datOne['idper'] == $p['idper']) ? "selected" : "";
+                        echo "<option value='{$p['idper']}' $selected>{$p['nomper']}</option>";
                     }
                 }
                 ?>
             </select>
         </div>
+
+        <!-- Empresa (solo visible para superadmin) -->
+        <?php if (isset($_SESSION['idper']) && $_SESSION['idper'] == 1): ?>
+            <div class="form-group col-md-6">
+                <label for="idemp">Empresa (opcional)</label>
+                <select name="idemp" id="idemp" class="form-control">
+                    <option value="">Sin empresa</option>
+                    <?php 
+                    if (!empty($empresas)) {
+                        foreach ($empresas as $e) {
+                            echo "<option value='{$e['idemp']}'>{$e['nomemp']}</option>";
+                        }
+                    }
+                    ?>
+                </select>
+            </div>
+        <?php endif; ?>
 
         <!-- Activo -->
         <div class="form-group col-md-6">
@@ -125,7 +142,7 @@ require_once('controllers/cusu.php');
                 <td><?= $dt['tdousu'] . ' ' . $dt['ndousu']; ?></td>
                 <td><?= $dt['emausu']; ?></td>
                 <td><?= $dt['celusu']; ?></td>
-                <td><?= $dt['nompef']; ?></td>
+                <td><?= $dt['nomper']; ?></td>
                 <td><?= $dt['act'] ? 'Activo' : 'Inactivo'; ?></td>
                 <td>
                     <a href="home.php?pg=<?= $pg; ?>&idusu=<?= $dt['idusu']; ?>&ope=edi" title="Editar">

@@ -48,7 +48,7 @@ if ($ope == "save") {
                 $musu->setPasusu(password_hash($_POST['pasusu'], PASSWORD_DEFAULT));
             }
 
-            $musu->setIdper(2);
+            $musu->setIdper(3);
             $musu->setFec_crea($fec_crea);
             $musu->setFec_actu($fec_crea);
             $musu->setAct(1);
