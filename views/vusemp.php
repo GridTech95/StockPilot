@@ -8,6 +8,9 @@ echo "<pre>EMPRESA EN SESIÓN: " . ($_SESSION['idemp'] ?? 'no definida') . "</pr
 <!-- FORMULARIO AGREGAR/EDITAR USUARIO -->
 <form action="home.php?pg=<?= $pg; ?>" method="POST">
     <div class="row">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0"><i class="fa-solid fa-user-gear"></i>Gestion de Usuarios</h2>
+    </div>
         <div class="form-group col-md-6">
             <label for="nomusu">Nombre</label>
             <input type="text" name="nomusu" id="nomusu" class="form-control" 
@@ -71,6 +74,7 @@ echo "<pre>EMPRESA EN SESIÓN: " . ($_SESSION['idemp'] ?? 'no definida') . "</pr
 <hr><br>
 
 <!-- TABLA DE USUARIOS DE LA EMPRESA -->
+<div class="table-responsive">
 <table id="example" class="table table-striped">
     <thead>
         <tr>
@@ -131,6 +135,7 @@ echo "<pre>EMPRESA EN SESIÓN: " . ($_SESSION['idemp'] ?? 'no definida') . "</pr
         </tr>
     </tfoot>
 </table>
+</div>
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

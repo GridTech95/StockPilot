@@ -10,30 +10,13 @@ if ($perfil == 1) {
 
 <!-- ======== VISTA PARA SUPER ADMIN ======== -->
 
-<?php if(!empty($mensaje)): ?>
-<!-- Toast de Bootstrap centrado sobre el formulario -->
-<div class="d-flex justify-content-center mb-3">
-  <div id="mensajeToast" class="toast align-items-center text-bg-<?= $tipoMensaje ?> border-0" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-      <div class="toast-body text-center">
-        <?= $mensaje ?>
-      </div>
-      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-  </div>
-</div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var toastEl = document.getElementById('mensajeToast');
-    var toast = new bootstrap.Toast(toastEl, { delay: 3000 });
-    toast.show();
-  });
-</script>
-<?php endif; ?>
 
 <form action="home.php?pg=<?=$pg;?>" method="POST">
 <div class="row">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0"><i class="fa-solid fa-building"></i>Empresas</h2>
+    </div>
     <div class="form-group col-md-6">
         <label for="nomemp">Nombre Empresa</label>
         <input type="text" name="nomemp" id="nomemp" class="form-control" 
@@ -89,6 +72,7 @@ if ($perfil == 1) {
 </form>
 <hr><br>
 
+<div class="table-responsive">
 <table id="example" class="table table-striped">
     <thead>
         <tr>
@@ -134,7 +118,7 @@ if ($perfil == 1) {
         </tr>   
     </tfoot>
 </table>
-
+</div>
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

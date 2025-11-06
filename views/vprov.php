@@ -1,30 +1,12 @@
 <?php require_once("controllers/cprov.php"); ?>
 
-<!-- INICIO: Mensaje de éxito/error -->
-<?php if(!empty($mensaje)): ?>
-<div class="d-flex justify-content-center mb-3">
-    <div id="mensajeToast" class="toast align-items-center text-bg-<?= $tipoMensaje ?> border-0" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex">
-            <div class="toast-body text-center">
-                <?= $mensaje ?>
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-    </div>
-</div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var toastEl = document.getElementById('mensajeToast');
-        var toast = new bootstrap.Toast(toastEl, { delay: 3000 }); // se cierra automáticamente en 3 segundos
-        toast.show();
-    });
-</script>
-<?php endif; ?>
-<!-- FIN: Mensaje de éxito/error -->
 
 <form action="home.php?pg=<?=$pg;?>" method="POST">
 <div class="row">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0"><i class="fa-solid fa-truck-field"></i>Gestion Proveedores</h2>
+    </div>
     <div class="form-group col-md-6">
         <label for="tipoprov">Tipo Proveedor</label>
         <input type="text" name="tipoprov" id="tipoprov" class="form-control" value="<?php if($datOne && $datOne[0]['tipoprov']) echo $datOne[0]['tipoprov']; ?>">
@@ -80,7 +62,7 @@
 </form>
 
 <hr><br>
-
+<div class="table-responsive">
 <table id="example" class="table table-striped">
     <thead>
         <tr>
@@ -121,6 +103,7 @@
         <?php }} ?>
     </tbody>
 </table>
+<div>
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

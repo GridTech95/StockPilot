@@ -249,3 +249,14 @@
         opacity: 0;
     }
 }
+
+/* === CORRECCIÓN: Centrar horizontalmente el ícono de la casa === */
+.navbar-logo {
+    display: flex;
+    justify-content: center !important; /* Centra horizontalmente */
+    align-items: center !important;     /* Centra verticalmente */
+}
+
+.navbar-logo > .navbar-item-inner {
+    justify-content: center !important; /* Centra el contenido interno */
+}

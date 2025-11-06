@@ -1,29 +1,6 @@
 <?php 
 require_once('controllers/cprod.php')
-?> 
-
-<!-- INICIO: Mensaje de éxito/error -->
-<?php if(!empty($mensaje)): ?>
-<div class="d-flex justify-content-center mb-3">
-    <div id="mensajeToast" class="toast align-items-center text-bg-<?= $tipoMensaje ?> border-0" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex">
-            <div class="toast-body text-center">
-                <?= $mensaje ?>
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-    </div>
-</div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var toastEl = document.getElementById('mensajeToast');
-        var toast = new bootstrap.Toast(toastEl, { delay: 3000 }); // se cierra automáticamente en 3 segundos
-        toast.show();
-    });
-</script>
-<?php endif; ?>
-<!-- FIN: Mensaje de éxito/error -->
+?>
 
 <div class="container-fluid py-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -35,6 +12,7 @@ require_once('controllers/cprod.php')
 
     <div class="card shadow-sm rounded-3">
         <div class="card-body">
+            <div class="table-responsive">
             <table class="table table-hover align-middle">
                 <thead class="table-light">
                     <tr>
@@ -85,6 +63,7 @@ require_once('controllers/cprod.php')
                     <?php endif; ?>
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
 </div>
@@ -247,4 +226,22 @@ function confirmarEliminacion(url) {
         }
     });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  const params = new URLSearchParams(window.location.search);
+  const ope = params.get('ope');
+
+  if (ope === 'edi') {
+    const modalEl = document.getElementById('modalProducto');
+    if (modalEl && typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+      const modal = new bootstrap.Modal(modalEl);
+      const title = modalEl.querySelector('.modal-title');
+      if (title) title.innerHTML = '<i class="fa fa-box"></i> Editar Producto';
+      const submitBtn = modalEl.querySelector('button[type="submit"]');
+      if (submitBtn) submitBtn.textContent = 'Actualizar';
+      modal.show();
+    }
+  }
+});
+
 </script>
