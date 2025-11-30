@@ -33,13 +33,4 @@
             </div>
         </div>
     </form>
-    
-    <div class="social-login">
-        <p>O inicia sesión con</p>
-        <div class="social-icons">
-            <a href="#" title="Iniciar sesión con Gmail">
-                <i class="fab fa-google"></i>
-            </a>
-        </div>
-    </div>
 </div>
