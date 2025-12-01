@@ -425,14 +425,14 @@ if (!$emp) {
                 </div>
                 
                 <div class="col-md-12">
-                  <label class="form-label">Subir Nuevo Logo (JPG, PNG, GIF, WEBP, AVIF, SVG)</label>
-                  <input 
-                      type="file" 
-                      name="logo_file" 
-                      class="form-control" 
-                      accept=".jpg, .jpeg, .png, .gif, .webp, .avif, .svg, image/webp, image/avif, image/svg+xml"
-                  >
-                  <small class="form-text text-muted">El logo actual es: **<?= htmlspecialchars($emp['logo']); ?>**. Subir uno nuevo lo reemplazará.</small>
+                    <label class="form-label">Subir Nuevo Logo (JPG, PNG, GIF, WEBP, AVIF, SVG)</label>
+                    <input 
+                        type="file" 
+                        name="logo_file" 
+                        class="form-control" 
+                        accept="image/*, .webp, .avif, .svg" 
+                        >
+                    <small class="form-text text-muted">El logo actual es: **<?= htmlspecialchars($emp['logo']); ?>**. Subir uno nuevo lo reemplazará.</small>
                 </div>
                 
               </div>
