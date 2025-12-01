@@ -42,7 +42,9 @@
         }
     ?>
     <header>
-        
+        <?php
+        require_once("views/cabecera.php");
+        ?>
     </header>
     <section>
         <?php
@@ -51,7 +53,9 @@
         ?>
     </section>
     <footer>
-        
+        <?php
+        require_once("views/pie.php");
+        ?>
     </footer>
 
     <script>

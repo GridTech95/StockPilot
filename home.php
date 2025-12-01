@@ -48,6 +48,7 @@ require_once("models/seg.php");
     <div id="main-content-wrapper">
     <header>
         <?php
+        require_once("views/cabecera.php");
         // require_once("views/cabecera.php");
         // require_once("views/vpf.php"); // Eliminada
         require_once("controllers/misfun.php");
@@ -73,8 +74,8 @@ require_once("models/seg.php");
          ?>
     </section>
     <footer>
-        <?php 
-        // require_once("views/pie.php");
+        <?php
+        require_once("views/pie.php");
         ?>
     </footer>
 </div>
