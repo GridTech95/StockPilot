@@ -33,3 +33,12 @@
 # Si tienes archivos de bases de datos locales (SQLite, etc.)
 *.sqlite
 *.db
+# ... (Contenido anterior: /vendor/, .DS_Store, etc.)
+
+# ------------------------------------
+# EXCLUSIONES DE IMÁGENES Y ARCHIVOS GENERADOS
+# ------------------------------------
+# Excluye todos los archivos dentro de la carpeta de logos
+/img/logos/*
+# Excluye la base de datos (si la subes solo como archivo de código, no como datos)
+/bd/*
