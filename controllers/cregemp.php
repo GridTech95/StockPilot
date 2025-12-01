@@ -1,10 +1,7 @@
 <?php
 // ===============================================
-// Archivo: controllers/CRegEmp.php
+// Archivo: controllers/CRegEmp.php (CORREGIDO)
 // Objetivo: Procesar el registro de la empresa y la vinculación Usuario-Empresa (Paso 2)
-//
-// CORRECCIÓN: Se añade la lógica para manejar la subida del LOGO de la empresa y se ajusta
-//             la consulta fetchUserDetails para obtener el 'idper' para la sesión.
 // ===============================================
 
 // 🚨 PASO 1: Iniciar la sesión para poder guardar los datos de login y autenticar al usuario
@@ -52,11 +49,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $telemp     = $_POST['telemp'] ?? NULL;
     $emaemp     = $_POST['emaemp'] ?? NULL;
     
-    // 🚨 INICIO: Lógica para SUBIR EL LOGO
-    $logo_nombre_final = 'default.png'; // 🔑 Valor por defecto si no se sube nada o falla.
-    $target_dir = "../img/logos/";   // 🔑 RUTA AJUSTADA: Corregido para tu estructura /img/
-    
-    // 1. Verificar si se subió un archivo sin errores
+    // 🚨 INICIO: Lógica para SUBIR EL LOGO (CORREGIDA)
+    // Inicializar con el valor por defecto. Se mantiene si no hay subida exitosa.
+    $logo_nombre_final = 'logo.png'; 
+    $target_dir = "img/logos/";  
+
+    // 1. Verificar si hubo subida de archivo y si fue exitosa (Error code 0)
+    // UPLOAD_ERR_NO_FILE (código 4) significa que el usuario no seleccionó archivo.
+    // Si el error es 4, o si ni siquiera existe la clave 'logoemp', simplemente se 
+    // mantiene $logo_nombre_final = 'default.png'.
     if (isset($_FILES['logoemp']) && $_FILES['logoemp']['error'] === UPLOAD_ERR_OK) {
         
         $file_name = $_FILES['logoemp']['name'];
@@ -76,10 +77,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // 4. Mover el archivo subido del temporal a la carpeta de destino
             if (move_uploaded_file($file_tmp_name, $target_file)) {
                 $logo_nombre_final = $new_file_name; // Sobrescribe 'default.png' con el nombre único.
-            } 
+            } else {
+                // Opcional: Manejar error de movimiento (ej: problema de permisos)
+                // Si falla, se mantiene 'default.png'
+                // Podrías agregar una redirección de error si quieres notificar al usuario.
+                error_log("Fallo al mover archivo subido: " . $file_name);
+            }
+        } else {
+            // Opcional: Manejar error de validación (ej: extensión no permitida)
+            // Si falla, se mantiene 'default.png'
+            error_log("Archivo no válido: " . $file_name);
         }
     }
     // 🚨 FIN: Lógica para SUBIR EL LOGO
+    // Nota: Si el usuario no subió un archivo, $_FILES['logoemp']['error'] será 4 (UPLOAD_ERR_NO_FILE),
+    // por lo tanto, la condición inicial `$_FILES['logoemp']['error'] === UPLOAD_ERR_OK` no se cumple,
+    // y `$logo_nombre_final` mantiene su valor inicial: `'default.png'`. Esto soluciona el problema.
 
     // 2. Obtener el ID del usuario del campo oculto 
     $idusu_token = $_POST['idusu_token'] ?? NULL;
@@ -99,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $memp->setDiremp($diremp);
     $memp->setTelemp($telemp);
     $memp->setEmaemp($emaemp);
-    $memp->setLogo($logo_nombre_final); // 🔑 ASIGNACIÓN FINAL DEL NOMBRE DEL LOGO
+    $memp->setLogo($logo_nombre_final); // 🔑 ASIGNACIÓN FINAL DEL NOMBRE DEL LOGO (default.png o el nuevo)
     $memp->setIdusu($idusu_crea); // ID del usuario creador 
     
     // Valores por defecto

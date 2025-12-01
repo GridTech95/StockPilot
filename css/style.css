@@ -19,6 +19,8 @@ body {
 section {
     padding: 40px 20px;
     flex: 1; /* Hace que el contenido empuje al footer hacia abajo */
+    /* ✅ CORRECCIÓN: Fuerza a la sección a ocupar el espacio restante */
+     min-height: calc(100vh - 120px - 80px);
 }
 
 /* =====================================
@@ -47,7 +49,7 @@ footer {
     color: #fff;
     font-size: 0.9rem;
     box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
-    margin-top: auto; /* Lo mantiene fijo al final sin superponerse */
+   /*margin-top: auto; Lo mantiene fijo al final sin superponerse */
 }
 
 /* =====================================
@@ -630,63 +632,110 @@ h6 {
 /* =====================================
    PERFIL
 ===================================== */
-.pf {
-    display: flex;
-    position: fixed;
-    float: right;
-    right: 0px;
-    top: 10px;
-    background-color: rgba(59, 89, 152, 0.85);
-    padding: 10px 15px;
-    border-radius: 10px 0 0 10px;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-    z-index: 1000;
+/* ==========================================================
+    ESTILOS PARA LA INFORMACIÓN DE USUARIO Y CERRAR SESIÓN EN EL NAVBAR INFERIOR
+========================================================== */
+
+/* ----------------------------------------------------------
+    1. CONTENEDOR DE ÍTEMS INFERIORES (SOLUCIÓN LÍNEA SEPARADORA)
+    Aplica una ÚNICA línea separadora visible sobre la sección de perfil/logout.
+---------------------------------------------------------- */
+.navbar-bottom-items {
+    /* Establece la única línea separadora visible entre el menú de navegación y la sección de usuario */
+    border-top: 1px solid rgba(255, 255, 255, 0.2); 
+    padding-top: 5px; /* Espaciado sobre la línea */
+    padding-bottom: 5px; /* Espaciado bajo la línea */
 }
 
-.divpf {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+
+/* ----------------------------------------------------------
+    2. CONTENEDOR DE INFORMACIÓN DE USUARIO (NO CLICKEABLE)
+---------------------------------------------------------- */
+
+.user-info-display {
+    /* Eliminamos la propiedad 'border-top' que estaba aquí y causaba la doble línea */
+    padding: 10px 0;
+    cursor: default; 
+    opacity: 0.9;
 }
 
-.divico1 {
-    font-size: 22px;
-    color: #fff;
+/* Espacio entre el ícono de Usuario (fa-user-tie) y el texto */
+.user-info-display .navbar-item-inner-icon-wrapper {
+    margin-right: 10px; 
 }
 
-.divitext {
-    font-weight: bold;
-    font-size: 14px;
-    color: #ecf0f1;
+
+/* ----------------------------------------------------------
+    3. ÍTEM CERRAR SESIÓN
+---------------------------------------------------------- */
+
+/* Espacio entre el ícono de Salir (fa-power-off) y el texto "Cerrar Sesión" */
+.navbar-bottom-items li:last-child .navbar-item-inner-icon-wrapper {
+    margin-right: 10px; 
 }
 
-.divico2 a {
-    color: #ff4d4d;
-    font-size: 20px;
+
+/* ----------------------------------------------------------
+    4. COLORES DE ÍCONOS UNIFORMES (BLANCO) Y TAMAÑO ESTÁNDAR
+    Se eliminan los font-size específicos para que tomen el tamaño de los otros ítems.
+---------------------------------------------------------- */
+
+/* Ícono de Usuario (fa-user-tie) - Color blanco */
+.user-info-display .navbar-item-inner-icon-wrapper i {
+    /* Se elimina font-size: 22px; para usar el tamaño por defecto del menú */
+    color: #fff !important; 
+}
+
+/* Ícono de Cerrar Sesión (fa-power-off) - Color blanco */
+.navbar-bottom-items li:last-child a i {
+    /* Se elimina font-size: 20px; para usar el tamaño por defecto del menú */
+    color: #fff !important; 
     transition: color 0.2s;
 }
 
-.divico2 a:hover {
-    color: #e60000;
-}
-/* AJUSTES PARA SEPARAR NOMBRE Y ROL EN DOS LINEAS */
-
-.divitext {
-    /* Quitamos el display: flex del padre .divpf para que el texto fluya normalmente */
-    /* y permita el salto de línea (<br>) de forma tradicional. */
-    display: block; 
-    line-height: 1.1; /* Reducimos el espacio entre líneas para que se vea más compacto */
-    padding-top: 2px; /* Damos un pequeño ajuste superior si es necesario para el centrado */
+/* Hover de Cerrar Sesión (Color Rojo) */
+.navbar-bottom-items li:last-child a:hover i {
+    color: #e60000; 
 }
 
-.divitext small {
-    /* Le quitamos la negrita al rol para diferenciarlo del nombre */
+
+/* ----------------------------------------------------------
+    5. ESTILOS DE TEXTO DEL PERFIL (Edward Salinas / Admin/empresa)
+---------------------------------------------------------- */
+
+/* Contenedor de texto para forzar el apilamiento en dos líneas */
+.profile-text {
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+    line-height: 1.1; 
+    color: #ecf0f1; 
+    font-size: 14px;
+    font-weight: bold; 
+}
+
+/* Estilo específico para el Nombre */
+.profile-name {
+    font-weight: bold;
+    font-size: 14px; 
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Estilo específico para el Rol/Perfil */
+.profile-role {
     font-weight: normal;
-    /* Hacemos que la fuente del rol sea un poco más pequeña */
-    font-size: 0.9em; 
+    font-size: 12px; 
+    color: #bdc3c7; 
 }
+
+/* Regla para ocultar el texto en modo colapsado (si aplica en tu diseño) */
+.collapsed .profile-text {
+    display: none; 
+}
+
+
 
 /* =====================================
    BOTONES, LINKS Y ELEMENTOS INTERACTIVOS

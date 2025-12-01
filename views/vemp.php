@@ -5,7 +5,6 @@ require_once('controllers/cemp.php');
 $perfil = $_SESSION['idper'] ?? 0; // Se maneja por número (1=SuperAdmin)
 
 // Según el perfil, carga la vista correspondiente
-// Según el perfil, carga la vista correspondiente
 if ($perfil == 1) {
 ?>
 
@@ -79,7 +78,7 @@ if ($perfil == 1) {
             <th>Email</th>
             <th>Teléfono</th>
             <th>Estado</th> <th>Acciones</th>
-        </tr>   
+        </tr>   
     </thead>
 
     <tbody>
@@ -121,9 +120,9 @@ if ($perfil == 1) {
                     class="btn btn-sm btn-outline-danger" title="Eliminar">
                     <i class="fa-solid fa-trash-can"></i>
                 </a>
-            </td>      
+            </td>       
         </tr>
-        <?php }}?>  
+        <?php }}?>  
     </tbody>
 
     <tfoot>
@@ -134,7 +133,7 @@ if ($perfil == 1) {
             <th>Email</th>
             <th>Teléfono</th>
             <th>Estado</th> <th>Acciones</th>
-        </tr>   
+        </tr>   
     </tfoot>
 </table>
 </div>
@@ -147,6 +146,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // 🚨 NUEVOS PARÁMETROS: Capturamos 'message' (éxito) y 'error' (falla) de cdelete.php y cstatus.php
     const message = urlParams.get('message'); 
     const error = urlParams.get('error');
+    let showSwal = false; // Flag para saber si se mostró una alerta y si hay que limpiar la URL
 
     // 1. Manejo de mensajes de cdelete.php y cstatus.php (Prioritario)
     if (message) {
@@ -157,6 +157,7 @@ document.addEventListener("DOMContentLoaded", function() {
             confirmButtonColor: '#198754',
             confirmButtonText: 'Aceptar'
         });
+        showSwal = true;
     } else if (error) {
         Swal.fire({
             icon: 'error',
@@ -165,6 +166,7 @@ document.addEventListener("DOMContentLoaded", function() {
             confirmButtonColor: '#dc3545',
             confirmButtonText: 'Aceptar'
         });
+        showSwal = true;
     }
     // 2. Lógica de mensajes CUD original (Solo si no hubo mensaje de cdelete/cstatus)
     else {
@@ -176,6 +178,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 confirmButtonColor: '#198754',
                 confirmButtonText: 'Aceptar'
             });
+            showSwal = true;
         }
 
         if (msg === 'updated') {
@@ -186,6 +189,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 confirmButtonColor: '#0d6efd',
                 confirmButtonText: 'Aceptar'
             });
+            showSwal = true;
         }
         
         // 🚨 NOTA: msg=deleted ya no será activado por el controlador cdelete, 
@@ -198,7 +202,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 confirmButtonColor: '#dc3545',
                 confirmButtonText: 'Aceptar'
             });
+            showSwal = true;
         }
+    }
+    
+    // 🔑 CLAVE: Limpiar la URL después de mostrar la alerta para evitar reaparición
+    if (showSwal && history.replaceState) {
+        // Elimina los parámetros 'msg', 'message', o 'error' de la URL sin recargar la página
+        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + window.location.search.replace(/(\?|&)(msg|message|error)=[^&]*/g, '').replace(/^&/, '?');
+        history.replaceState(null, '', newUrl);
     }
 });
 
@@ -221,8 +233,6 @@ function confirmarEliminacion(url) {
     });
 }
 </script>
-<!-- ======== FIN VISTA SUPER ADMIN ======== -->
-
 <?php
 } else {
 // ======== VISTA MODERNA PARA ADMIN / EMPLEADO ========
@@ -231,23 +241,37 @@ function confirmarEliminacion(url) {
 $idemp = $_SESSION['idemp'] ?? null;
 
 // ===============================================================
-// 🔑 CORRECCIÓN CLAVE 1: Definir la ruta del logo antes del HTML
+// PREPARACIÓN DE RUTA DE LOGO
 // ===============================================================
 
-$logo_empresa = 'logo.png'; 
-// Vuelve a la ruta relativa simple que funciona con archivos subidos
-$ruta_base_logo = "img/logos/";// La ruta desde donde se renderiza la vista
+// ===============================================================
+// PREPARACIÓN DE RUTA DE LOGO (CORREGIDO)
+// ===============================================================
+
+// Nombre del archivo de logo por defecto si la empresa no tiene uno.
+// Asegúrate de que 'default.png' sea el nombre correcto de tu logo de relleno.
+$LOGO_POR_DEFECTO = 'logo.png'; 
+$logo_empresa = $LOGO_POR_DEFECTO; 
+
+$ruta_base_logo = "img/logos/";
 
 if ($idemp) {
-    // Asumiendo que $memp ya está instanciado por el controlador (vEmpresa.php)
+    if (!isset($memp) || !($memp instanceof Memp)) {
+        require_once('models/memp.php'); 
+        $memp = new Memp();
+    }
+    
     $memp->setIdemp($idemp);
     $empresaUsuario = $memp->getOne(); 
     $emp = $empresaUsuario[0] ?? null;
 
+    // ELIMINADO EL CÓDIGO DE DEPURACIÓN CRÍTICA
+    
+    // Si la empresa existe y el campo 'logo' NO está vacío en la DB
     if ($emp && !empty($emp['logo'])) {
-        // Usa el logo de la BD si existe, sino, se queda con 'default.png'
         $logo_empresa = htmlspecialchars($emp['logo']); 
     }
+    // Si $emp['logo'] está vacío (""), se mantiene el valor por defecto $LOGO_POR_DEFECTO.
 } else {
     $emp = null;
 }
@@ -255,7 +279,7 @@ if ($idemp) {
 $ruta_logo_final = $ruta_base_logo . $logo_empresa;
 
 // ===============================================================
-// 🔑 CORRECCIÓN CLAVE 1: FIN
+// FIN PREPARACIÓN DE RUTA DE LOGO
 // ===============================================================
 
 if (!$emp) {
@@ -268,6 +292,7 @@ if (!$emp) {
 } else {
     ?>
     <style>
+        /* (Estilos CSS existentes) */
         .empresa-header {
             background: linear-gradient(135deg, #2c2c2c, #1a1a1a);
             color: #fff;
@@ -327,9 +352,8 @@ if (!$emp) {
     <div class="container-fluid px-4 py-5">
         <div class="empresa-header text-center position-relative">
             <div class="d-flex justify-content-center">
-                
                 <img src="<?= $ruta_logo_final; ?>" alt="Logo Empresa">
-                </div>
+            </div>
             <h2 class="mt-3 mb-0"><?= htmlspecialchars($emp['nomemp']); ?></h2>
             <p class="lead mb-2"><?= htmlspecialchars($emp['razemp']); ?></p>
 
@@ -365,44 +389,52 @@ if (!$emp) {
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
           </div>
 
-          <form action="home.php?pg=<?= $pg; ?>" method="POST" class="needs-validation" novalidate>
+          <form action="home.php?pg=<?= $pg; ?>" method="POST" class="needs-validation" novalidate enctype="multipart/form-data">
             <div class="modal-body">
               <div class="row g-3">
+                
                 <div class="col-md-6">
                   <label class="form-label">Nombre Empresa</label>
                   <input type="text" name="nomemp" class="form-control" value="<?= htmlspecialchars($emp['nomemp']); ?>" required>
                 </div>
+                
                 <div class="col-md-6">
                   <label class="form-label">Razón Social</label>
                   <input type="text" name="razemp" class="form-control" value="<?= htmlspecialchars($emp['razemp']); ?>" required>
                 </div>
+                
                 <div class="col-md-6">
                   <label class="form-label">NIT</label>
-                  <input type="text" name="nitemp" class="form-control" value="<?= htmlspecialchars($emp['nitemp']); ?>" required>
+                  <input type="text" name="nitemp_view" class="form-control" value="<?= htmlspecialchars($emp['nitemp']); ?>" required readonly>
+                  <small class="form-text text-muted">El NIT no puede ser modificado.</small>
                 </div>
+                
                 <div class="col-md-6">
                   <label class="form-label">Dirección</label>
                   <input type="text" name="diremp" class="form-control" value="<?= htmlspecialchars($emp['diremp']); ?>" required>
                 </div>
+                
                 <div class="col-md-6">
                   <label class="form-label">Teléfono</label>
                   <input type="text" name="telemp" class="form-control" value="<?= htmlspecialchars($emp['telemp']); ?>">
                 </div>
+                
                 <div class="col-md-6">
                   <label class="form-label">Correo electrónico</label>
                   <input type="email" name="emaemp" class="form-control" value="<?= htmlspecialchars($emp['emaemp']); ?>">
                 </div>
-                <div class="col-md-6">
-                  <label class="form-label">Logo (URL)</label>
-                  <input type="text" name="logo" class="form-control" value="<?= htmlspecialchars($emp['logo']); ?>">
+                
+                <div class="col-md-12">
+                  <label class="form-label">Subir Nuevo Logo (JPG, PNG, GIF, WEBP, AVIF, SVG)</label>
+                  <input 
+                      type="file" 
+                      name="logo_file" 
+                      class="form-control" 
+                      accept=".jpg, .jpeg, .png, .gif, .webp, .avif, .svg, image/webp, image/avif, image/svg+xml"
+                  >
+                  <small class="form-text text-muted">El logo actual es: **<?= htmlspecialchars($emp['logo']); ?>**. Subir uno nuevo lo reemplazará.</small>
                 </div>
-                <div class="col-md-6">
-                  <label class="form-label">Estado</label>
-                  <select name="act" class="form-select">
-                    <option value="1" <?= $emp['act'] == 1 ? 'selected' : ''; ?>>Activa</option>
-                    <option value="0" <?= $emp['act'] == 0 ? 'selected' : ''; ?>>Inactiva</option>
-                  </select>
-                </div>
+                
               </div>
             </div>
 
@@ -414,10 +446,102 @@ if (!$emp) {
             </div>
           </form>
         </div>
-      </div>
+        </div>
     </div>
-    <?php
-}
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const msg = urlParams.get('msg');
+        const message = urlParams.get('message'); 
+        const error = urlParams.get('error');
+        let showSwal = false;
+
+        // 1. Manejo de mensajes personalizados (message y error)
+        if (message) {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Operación exitosa!',
+                text: decodeURIComponent(message), 
+                confirmButtonColor: '#198754',
+                confirmButtonText: 'Aceptar'
+            });
+            showSwal = true;
+        } else if (error) {
+            Swal.fire({
+                icon: 'error',
+                title: '¡Error!',
+                text: decodeURIComponent(error), 
+                confirmButtonColor: '#dc3545',
+                confirmButtonText: 'Aceptar'
+            });
+            showSwal = true;
+        }
+        // 2. Lógica de mensajes CUD original
+        else {
+            if (msg === 'saved') {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Guardado exitosamente!',
+                    text: 'La empresa se ha registrado correctamente.',
+                    confirmButtonColor: '#198754',
+                    confirmButtonText: 'Aceptar'
+                });
+                showSwal = true;
+            }
+
+            // Mensaje de actualización
+            if (msg === 'updated') {
+                Swal.fire({
+                    icon: 'info',
+                    title: '¡Actualización exitosa!',
+                    text: 'Los datos se han actualizado correctamente.',
+                    confirmButtonColor: '#0d6efd',
+                    confirmButtonText: 'Aceptar'
+                });
+                showSwal = true;
+            }
+            
+            if (msg === 'deleted') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: '¡Eliminación exitosa!',
+                    text: 'La empresa ha sido eliminada correctamente.',
+                    confirmButtonColor: '#dc3545',
+                    confirmButtonText: 'Aceptar'
+                });
+                showSwal = true;
+            }
+        }
+
+        // CLAVE: Limpiar la URL después de mostrar la alerta para evitar reaparición
+        if (showSwal && history.replaceState) {
+            // Elimina los parámetros 'msg', 'message', o 'error' de la URL sin recargar la página
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + window.location.search.replace(/(\?|&)(msg|message|error)=[^&]*/g, '').replace(/^&/, '?');
+            history.replaceState(null, '', newUrl);
+        }
+    });
+
+    function confirmarEliminacion(url) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción eliminará la empresa y todos sus datos dependientes (productos, inventario, etc.) y NO se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    }
+    </script>
+    <?php
+} // Cierre del else de if (!$emp)
 }
 ?>

@@ -315,5 +315,49 @@ public function linkUsuEmp($idusu, $idemp) {
         return false;
     }
 }
+
+// En tu archivo models/memp.php, dentro de la clase Memp
+
+// En tu archivo models/memp.php, dentro de la clase Memp
+
+public function editByEmpresa(){
+    try{
+        // 🔑 CLAVE: El campo 'logo=:logo' DEBE estar en la consulta SQL
+        $sql = "UPDATE empresa SET 
+                nomemp=:nomemp, 
+                razemp=:razemp, 
+                diremp=:diremp, 
+                telemp=:telemp, 
+                emaemp=:emaemp, 
+                logo=:logo, 
+                fec_actu=NOW() 
+                WHERE idemp=:idemp";
+        
+        $modelo = new conexion();
+        $conexion = $modelo->get_conexion();
+        $result = $conexion->prepare($sql);
+        
+        // ... (binding de todos los parámetros, incluyendo :logo)
+        $idemp    = $this->getIdemp();
+        $result->bindParam(':idemp', $idemp);
+        $nomemp   = $this->getNomemp();
+        $result->bindParam(':nomemp', $nomemp);
+        $razemp   = $this->getRazemp();
+        $result->bindParam(':razemp', $razemp);
+        $diremp   = $this->getDiremp();
+        $result->bindParam(':diremp', $diremp);
+        $telemp   = $this->getTelemp();
+        $result->bindParam(':telemp', $telemp);
+        $emaemp   = $this->getEmaemp();
+        $result->bindParam(':emaemp', $emaemp);
+        $logo     = $this->getLogo();
+        $result->bindParam(':logo', $logo); // 🔑 CLAVE: El logo DEBE ser bindeado aquí
+        
+        return $result->execute();
+    }catch(Exception $e){
+        // error_log("Error en Memp->editByEmpresa: " . $e->getMessage());
+        return false;
+    }
+}
 }
 ?>
