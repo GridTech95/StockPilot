@@ -4,234 +4,561 @@ require_once('controllers/cemp.php');
 // Verifica el perfil actual del usuario
 $perfil = $_SESSION['idper'] ?? 0; // Se maneja por número (1=SuperAdmin)
 
+// =========================================================================
+// !!! NOTA IMPORTANTE: SIMULACIÓN DE DATOS PARA LOS CUADROS Y GRÁFICAS !!!
+// Se ASUME que el controlador cemp.php ha cargado estas variables.
+// DEBES ASEGURARTE de que cemp.php las obtenga de la base de datos.
+// =========================================================================
+// Valores de ejemplo para la presentación (Reemplaza con tu lógica real de DB)
+if ($perfil == 1 && !isset($totalEmpresas)) {
+    // Si tu controlador no las carga, esta es una simulación temporal:
+    $totalEmpresas = is_array($datAll) ? count($datAll) : 0;
+    $activasEmpresas = 0;
+    $inactivasEmpresas = 0;
+
+    if ($totalEmpresas > 0 && is_array($datAll)) {
+        foreach ($datAll as $dt) {
+            if ($dt['act'] == 1) {
+                $activasEmpresas++;
+            } else {
+                $inactivasEmpresas++;
+            }
+        }
+    }
+}
+// =========================================================================
+// =========================================================================
+
+
 // Según el perfil, carga la vista correspondiente
 if ($perfil == 1) {
 ?>
 
-<form action="home.php?pg=<?=$pg;?>" method="POST">
-<div class="row">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="mb-0"><i class="fa-solid fa-building"></i>Empresas</h2>
+<style>
+    /* Estilos para los Recuadros de Métricas (Inspirado en tarjetas tipo Dashboard) */
+    .metric-card {
+        background-color: #ffffff; /* Fondo blanco, como solicitaste */
+        border: 1px solid #e9ecef; /* Borde muy sutil */
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+    .metric-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 12px rgba(0,0,0,0.1);
+    }
+    .metric-icon {
+        font-size: 2.5rem;
+        color: #343a40; /* Icono gris oscuro para mantener la elegancia */
+        margin-bottom: 0.5rem;
+    }
+    .metric-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #000;
+        display: block;
+    }
+    .metric-title {
+        font-size: 1rem;
+        color: #6c757d; /* Título gris para contraste sutil */
+        margin: 0;
+    }
+    .btn-create-empresa {
+        background-color: #343a40; /* Botón oscuro, estilo desarrollador */
+        border-color: #343a40;
+        color: #fff;
+    }
+    .btn-create-empresa:hover {
+        background-color: #212529;
+        border-color: #212529;
+        color: #fff;
+    }
+    .chart-container {
+        background-color: #ffffff;
+        border: 1px solid #e9ecef;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        height: 350px; /* Altura fija para la gráfica */
+    }
+    .modal-header-custom {
+        background-color: #343a40;
+        color: white;
+    }
+</style>
+
+<div class="container-fluid px-4 py-3">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0 text-dark"><i class="fa-solid fa-screwdriver-wrench me-2"></i>Panel de Administración de Empresas</h2>
+        <button type="button" class="btn btn-create-empresa" data-bs-toggle="modal" data-bs-target="#empresaFormModal">
+            <i class="fa-solid fa-square-plus me-1"></i> 
+            <?php echo ($datOne && $datOne[0]['idemp']) ? 'Editar Empresa' : 'Registrar Nueva Empresa'; ?>
+        </button>
     </div>
-    <div class="form-group col-md-6">
-        <label for="nomemp">Nombre Empresa</label>
-        <input type="text" name="nomemp" id="nomemp" class="form-control" 
-               value="<?php if($datOne && $datOne[0]['nomemp']) echo $datOne[0]['nomemp']; ?>">
+
+    <div class="row g-4 mb-5">
+        
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="metric-card">
+                <i class="fa-solid fa-list-ul metric-icon"></i>
+                <span class="metric-value"><?= number_format($totalEmpresas ?? 0, 0, ',', '.'); ?></span>
+                <p class="metric-title">Total de Empresas Registradas</p>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="metric-card">
+                <i class="fa-solid fa-circle-check metric-icon text-success"></i>
+                <span class="metric-value"><?= number_format($activasEmpresas ?? 0, 0, ',', '.'); ?></span>
+                <p class="metric-title">Empresas Activas</p>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="metric-card">
+                <i class="fa-solid fa-circle-xmark metric-icon text-danger"></i>
+                <span class="metric-value"><?= number_format($inactivasEmpresas ?? 0, 0, ',', '.'); ?></span>
+                <p class="metric-title">Empresas Inactivas</p>
+            </div>
+        </div>
     </div>
-    <div class="form-group col-md-6">
-        <label for="razemp">Razón Social</label>
-        <input type="text" name="razemp" id="razemp" class="form-control" 
-               value="<?php if($datOne && $datOne[0]['razemp']) echo $datOne[0]['razemp']; ?>">
+
+    <h4 class="mb-3 text-dark"><i class="fa-solid fa-chart-bar me-2"></i>Estadísticas Clave</h4>
+    <div class="row g-4 mb-5">
+        <div class="col-lg-6">
+            <div class="chart-container">
+                <canvas id="empresasActivasChart"></canvas>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="chart-container">
+                <canvas id="otroGrafico"></canvas>
+            </div>
+        </div>
     </div>
-    <div class="form-group col-md-6">
-        <label for="nitemp">NIT</label>
-        <input type="text" name="nitemp" id="nitemp" class="form-control" 
-               value="<?php if($datOne && $datOne[0]['nitemp']) echo $datOne[0]['nitemp']; ?>">
+
+    <hr>
+    
+    <h4 class="mb-3 text-dark"><i class="fa-solid fa-table me-2"></i>Gestión de Empresas</h4>
+    
+    <div class="table-responsive">
+        <table id="example" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>NIT</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Estado</th> <th>Acciones</th>
+                </tr>   
+            </thead>
+
+            <tbody>
+                <?php if($datAll){foreach($datAll AS $dt){ ?>
+                <tr>
+                    <td><?=$dt['idemp'] ?></td>
+                    <td><?=$dt['nomemp'] ?></td>
+                    <td><?=$dt['nitemp'] ?></td>
+                    <td><?=$dt['emaemp'] ?></td>
+                    <td><?=$dt['telemp'] ?></td>
+                    <td>
+                        <?php 
+                            // Muestra el estado actual (Activo/Inactivo)
+                            echo $dt['act'] == 1 ? '<span class="badge bg-success">Activa</span>' : '<span class="badge bg-danger">Inactiva</span>'; 
+                        ?>
+                    </td>
+                    <td style="text-align: right;">
+                        
+                        <?php 
+                            // Lógica para el botón de Activar/Desactivar
+                            $current_status = $dt['act'];
+                            $new_status = $current_status == 1 ? 0 : 1; // Cambia el estado opuesto
+                            $btn_class = $current_status == 1 ? 'btn-outline-danger' : 'btn-outline-success';
+                            $btn_icon = $current_status == 1 ? 'fa-lock' : 'fa-unlock';
+                            $btn_title = $current_status == 1 ? 'Desactivar Empresa' : 'Activar Empresa';
+                        ?>
+                        <a href="controllers/cstatus.php?action=empresa&id=<?= $dt['idemp']; ?>&estado=<?= $new_status; ?>" 
+                            class="btn btn-sm <?= $btn_class; ?> me-2" title="<?= $btn_title; ?>">
+                            <i class="fa-solid <?= $btn_icon; ?>"></i>
+                        </a>
+                        
+                        <a href="home.php?pg=<?= $pg; ?>&idemp=<?= $dt['idemp']; ?>&ope=edi" 
+                            class="btn btn-sm btn-outline-warning me-2" title="Editar">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                        <a href="javascript:void(0);" onclick="confirmarEliminacion(
+                            'controllers/cdelete.php?action=empresa&id=<?= $dt['idemp']; ?>'
+                        )" 
+                            class="btn btn-sm btn-outline-danger" title="Eliminar">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </a>
+                    </td>       
+                </tr>
+                <?php }}?>  
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>NIT</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Estado</th> <th>Acciones</th>
+                </tr>   
+            </tfoot>
+        </table>
     </div>
-    <div class="form-group col-md-6">
-        <label for="diremp">Dirección</label>
-        <input type="text" name="diremp" id="diremp" class="form-control" 
-               value="<?php if($datOne && $datOne[0]['diremp']) echo $datOne[0]['diremp']; ?>">
-    </div>
-    <div class="form-group col-md-6">
-        <label for="telemp">Teléfono</label>
-        <input type="text" name="telemp" id="telemp" class="form-control" 
-               value="<?php if($datOne && $datOne[0]['telemp']) echo $datOne[0]['telemp']; ?>">
-    </div>
-    <div class="form-group col-md-6">
-        <label for="emaemp">Email</label>
-        <input type="email" name="emaemp" id="emaemp" class="form-control" 
-               value="<?php if($datOne && $datOne[0]['emaemp']) echo $datOne[0]['emaemp']; ?>">
-    </div>
-    <div class="form-group col-md-6">
-        <label for="logo">Logo</label>
-        <input type="text" name="logo" id="logo" class="form-control" 
-               value="<?php if($datOne && $datOne[0]['logo']) echo $datOne[0]['logo']; ?>">
-    </div>
-    <div class="form-group col-md-6">
-        <label for="estado">Estado</label>
-        <input type="number" name="estado" id="estado" class="form-control" 
-               value="<?php if($datOne && $datOne[0]['estado']) echo $datOne[0]['estado']; ?>">
-    </div>
-    <div class="form-group col-md-6">
-        <label for="act">Activo</label>
-        <input type="number" name="act" id="act" class="form-control" 
-               value="<?php if($datOne && $datOne[0]['act']) echo $datOne[0]['act']; ?>">
-    </div>
-    <div class="form-group col-md-6">
-        <input type="hidden" name="idemp" value="<?php if($datOne && $datOne[0]['idemp']) echo $datOne[0]['idemp']; ?>">
-        <input type="hidden" name="ope" value="save">
-        <br>
-        <input type="submit" class="btn btn-primary" value="Enviar">
-    </div>
+    
 </div>
-</form>
-<hr><br>
 
-<div class="table-responsive">
-<table id="example" class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>NIT</th>
-            <th>Email</th>
-            <th>Teléfono</th>
-            <th>Estado</th> <th>Acciones</th>
-        </tr>   
-    </thead>
+<div class="modal fade" id="empresaFormModal" tabindex="-1" aria-labelledby="empresaFormModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header modal-header-custom">
+        <h5 class="modal-title" id="empresaFormModalLabel">
+            <i class="fa-solid fa-building me-2"></i>
+            <?php echo ($datOne && $datOne[0]['idemp']) ? 'Editar Empresa' : 'Registrar Nueva Empresa'; ?>
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
 
-    <tbody>
-        <?php if($datAll){foreach($datAll AS $dt){ ?>
-        <tr>
-            <td><?=$dt['idemp'] ?></td>
-            <td><?=$dt['nomemp'] ?></td>
-            <td><?=$dt['nitemp'] ?></td>
-            <td><?=$dt['emaemp'] ?></td>
-            <td><?=$dt['telemp'] ?></td>
-            <td>
-                <?php 
-                    // Muestra el estado actual (Activo/Inactivo)
-                    echo $dt['act'] == 1 ? '<span class="badge bg-success">Activa</span>' : '<span class="badge bg-danger">Inactiva</span>'; 
-                ?>
-            </td>
-            <td style="text-align: right;">
-                
-                <?php 
-                    // Lógica para el botón de Activar/Desactivar
-                    $current_status = $dt['act'];
-                    $new_status = $current_status == 1 ? 0 : 1; // Cambia el estado opuesto
-                    $btn_class = $current_status == 1 ? 'btn-outline-danger' : 'btn-outline-success';
-                    $btn_icon = $current_status == 1 ? 'fa-lock' : 'fa-unlock';
-                    $btn_title = $current_status == 1 ? 'Desactivar Empresa' : 'Activar Empresa';
-                ?>
-                <a href="controllers/cstatus.php?action=empresa&id=<?= $dt['idemp']; ?>&estado=<?= $new_status; ?>" 
-                    class="btn btn-sm <?= $btn_class; ?> me-2" title="<?= $btn_title; ?>">
-                    <i class="fa-solid <?= $btn_icon; ?>"></i>
-                </a>
-                
-                <a href="home.php?pg=<?= $pg; ?>&idemp=<?= $dt['idemp']; ?>&ope=edi" 
-                    class="btn btn-sm btn-outline-warning me-2" title="Editar">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </a>
-                <a href="javascript:void(0);" onclick="confirmarEliminacion(
-                    'controllers/cdelete.php?action=empresa&id=<?= $dt['idemp']; ?>'
-                )" 
-                    class="btn btn-sm btn-outline-danger" title="Eliminar">
-                    <i class="fa-solid fa-trash-can"></i>
-                </a>
-            </td>       
-        </tr>
-        <?php }}?>  
-    </tbody>
+      <form action="home.php?pg=<?=$pg;?>" method="POST" enctype="multipart/form-data">
+        <div class="modal-body">
+            <div class="row g-3">
 
-    <tfoot>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>NIT</th>
-            <th>Email</th>
-            <th>Teléfono</th>
-            <th>Estado</th> <th>Acciones</th>
-        </tr>   
-    </tfoot>
-</table>
+                <div class="form-group col-md-6">
+                    <label for="nomemp">Nombre Empresa</label>
+                    <input type="text" name="nomemp" id="nomemp" class="form-control" 
+                        value="<?php if($datOne && $datOne[0]['nomemp']) echo htmlspecialchars($datOne[0]['nomemp']); ?>" required>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="razemp">Razón Social</label>
+                    <input type="text" name="razemp" id="razemp" class="form-control" 
+                        value="<?php if($datOne && $datOne[0]['razemp']) echo htmlspecialchars($datOne[0]['razemp']); ?>" required>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="nitemp">NIT</label>
+                    <input type="text" name="nitemp" id="nitemp" class="form-control" 
+                        value="<?php if($datOne && $datOne[0]['nitemp']) echo htmlspecialchars($datOne[0]['nitemp']); ?>" required>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="diremp">Dirección</label>
+                    <input type="text" name="diremp" id="diremp" class="form-control" 
+                        value="<?php if($datOne && $datOne[0]['diremp']) echo htmlspecialchars($datOne[0]['diremp']); ?>" required>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="telemp">Teléfono</label>
+                    <input type="text" name="telemp" id="telemp" class="form-control" 
+                        value="<?php if($datOne && $datOne[0]['telemp']) echo htmlspecialchars($datOne[0]['telemp']); ?>">
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="emaemp">Email</label>
+                    <input type="email" name="emaemp" id="emaemp" class="form-control" 
+                        value="<?php if($datOne && $datOne[0]['emaemp']) echo htmlspecialchars($datOne[0]['emaemp']); ?>">
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="logo_file">Logo de la Empresa</label>
+
+                    <?php if ($datOne && $datOne[0]['idemp'] && !empty($datOne[0]['logo'])): ?>
+                        <p>Logo actual:</p>
+                        <img src="img/logos/<?php echo htmlspecialchars($datOne[0]['logo']); ?>" 
+                             alt="Logo Empresa" 
+                             style="max-width: 100px; max-height: 100px; margin-bottom: 10px;">
+                        <br>
+                    <?php endif; ?>
+
+                    <input type="file" class="form-control-file" id="logo_file" name="logo_file" accept="image/*">
+                    <small class="form-text text-muted">Sube una nueva imagen (JPG, PNG, GIF, etc.).</small>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="act">Estado (ID)</label>
+                    <select name="act" id="act" class="form-control">
+                        <option value="1" <?php if($datOne && $datOne[0]['act'] == 1) echo 'selected'; ?>>Activa (1)</option>
+                        <option value="0" <?php if($datOne && $datOne[0]['act'] == 0) echo 'selected'; ?>>Inactiva (0)</option>
+                    </select>
+
+                    <input type="hidden" name="estado" id="estado" 
+                        value="<?php if($datOne && $datOne[0]['estado']) echo htmlspecialchars($datOne[0]['estado']); else echo 'Activa'; ?>">
+                </div>
+
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <input type="hidden" name="idemp" 
+                value="<?php if($datOne && $datOne[0]['idemp']) echo htmlspecialchars($datOne[0]['idemp']); ?>">
+
+            <input type="hidden" name="ope" 
+                value="<?php echo ($datOne && $datOne[0]['idemp']) ? 'save' : 'save_reg'; ?>">
+
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <input type="submit" class="btn btn-create-empresa" 
+                value="<?php echo ($datOne && $datOne[0]['idemp']) ? 'Actualizar' : 'Guardar Empresa'; ?>">
+        </div>
+      </form>
+
+    </div>
+  </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const msg = urlParams.get('msg');
-    // 🚨 NUEVOS PARÁMETROS: Capturamos 'message' (éxito) y 'error' (falla) de cdelete.php y cstatus.php
-    const message = urlParams.get('message'); 
-    const error = urlParams.get('error');
-    let showSwal = false; // Flag para saber si se mostró una alerta y si hay que limpiar la URL
+    // Tu Script de SweetAlert y DataTables... (Se mantiene sin cambios, solo se asegura de que el DataTables se inicialice)
+    
+    // ===========================================================================
+    // SCRIPT DE SWEETALERT Y FUNCIÓN confirmarEliminacion (Mantener Original)
+    // ===========================================================================
+    document.addEventListener("DOMContentLoaded", function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const ope = urlParams.get('ope'); // Necesario para identificar si estamos en modo edición
+        
+        // El resto de tu lógica de SweetAlert (msg, message, error)
 
-    // 1. Manejo de mensajes de cdelete.php y cstatus.php (Prioritario)
-    if (message) {
-        Swal.fire({
-            icon: 'success',
-            title: '¡Operación exitosa!',
-            text: decodeURIComponent(message), // Usar el mensaje retornado por el controlador
-            confirmButtonColor: '#198754',
-            confirmButtonText: 'Aceptar'
-        });
-        showSwal = true;
-    } else if (error) {
-        Swal.fire({
-            icon: 'error',
-            title: '¡Error!',
-            text: decodeURIComponent(error), // Usar el error retornado por el controlador
-            confirmButtonColor: '#dc3545',
-            confirmButtonText: 'Aceptar'
-        });
-        showSwal = true;
-    }
-    // 2. Lógica de mensajes CUD original (Solo si no hubo mensaje de cdelete/cstatus)
-    else {
-        if (msg === 'saved') {
+        const msg = urlParams.get('msg');
+        const message = urlParams.get('message'); 
+        const error = urlParams.get('error');
+        let showSwal = false; 
+
+        // 1. Manejo de mensajes de cdelete.php y cstatus.php (Prioritario)
+        if (message) {
             Swal.fire({
                 icon: 'success',
-                title: '¡Guardado exitosamente!',
-                text: 'La empresa se ha registrado correctamente.',
+                title: '¡Operación exitosa!',
+                text: decodeURIComponent(message),
                 confirmButtonColor: '#198754',
                 confirmButtonText: 'Aceptar'
             });
             showSwal = true;
-        }
-
-        if (msg === 'updated') {
+        } else if (error) {
             Swal.fire({
-                icon: 'info',
-                title: '¡Actualización exitosa!',
-                text: 'Los datos se han actualizado correctamente.',
-                confirmButtonColor: '#0d6efd',
-                confirmButtonText: 'Aceptar'
-            });
-            showSwal = true;
-        }
-        
-        // 🚨 NOTA: msg=deleted ya no será activado por el controlador cdelete, 
-        // pero se mantiene aquí si tu controlador cemp.php lo activa en otras partes.
-        if (msg === 'deleted') {
-            Swal.fire({
-                icon: 'warning',
-                title: '¡Eliminación exitosa!',
-                text: 'La empresa ha sido eliminada correctamente.',
+                icon: 'error',
+                title: '¡Error!',
+                text: decodeURIComponent(error),
                 confirmButtonColor: '#dc3545',
                 confirmButtonText: 'Aceptar'
             });
             showSwal = true;
         }
-    }
-    
-    // 🔑 CLAVE: Limpiar la URL después de mostrar la alerta para evitar reaparición
-    if (showSwal && history.replaceState) {
-        // Elimina los parámetros 'msg', 'message', o 'error' de la URL sin recargar la página
-        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + window.location.search.replace(/(\?|&)(msg|message|error)=[^&]*/g, '').replace(/^&/, '?');
-        history.replaceState(null, '', newUrl);
-    }
-});
+        // 2. Lógica de mensajes CUD original (Solo si no hubo mensaje de cdelete/cstatus)
+        else {
+            if (msg === 'saved') {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Guardado exitosamente!',
+                    text: 'La empresa se ha registrado correctamente.',
+                    confirmButtonColor: '#198754',
+                    confirmButtonText: 'Aceptar'
+                });
+                showSwal = true;
+            }
 
-function confirmarEliminacion(url) {
-    Swal.fire({
-        title: '¿Estás seguro?',
-        // Se recomienda dar más detalle de la acción aquí, ya que es destructiva.
-        text: 'Esta acción eliminará la empresa y todos sus datos dependientes (productos, inventario, etc.) y NO se puede deshacer.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#dc3545',
-        cancelButtonColor: '#6c757d',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Se usa el URL que apunta a cdelete.php
-            window.location.href = url;
+            if (msg === 'updated') {
+                Swal.fire({
+                    icon: 'info',
+                    title: '¡Actualización exitosa!',
+                    text: 'Los datos se han actualizado correctamente.',
+                    confirmButtonColor: '#0d6efd',
+                    confirmButtonText: 'Aceptar'
+                });
+                showSwal = true;
+            }
+            
+            if (msg === 'deleted') {
+                Swal.fire({
+                    icon: 'warning',
+                    title: '¡Eliminación exitosa!',
+                    text: 'La empresa ha sido eliminada correctamente.',
+                    confirmButtonColor: '#dc3545',
+                    confirmButtonText: 'Aceptar'
+                });
+                showSwal = true;
+            }
         }
+        
+        // 🔑 CLAVE: Limpiar la URL después de mostrar la alerta para evitar reaparición
+        if (showSwal && history.replaceState) {
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + window.location.search.replace(/(\?|&)(msg|message|error)=[^&]*/g, '').replace(/^&/, '?');
+            history.replaceState(null, '', newUrl);
+        }
+        
+        // CLAVE: Lógica para abrir el modal automáticamente en modo edición (ope=edi)
+        // Esto captura los datos del controlador al cargar la página y muestra el modal.
+        if (ope === 'edi') {
+            var myModal = new bootstrap.Modal(document.getElementById('empresaFormModal'), {
+                keyboard: false
+            });
+            myModal.show();
+        }
+
     });
-}
+
+    function confirmarEliminacion(url) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción eliminará la empresa y todos sus datos dependientes y NO se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    }
+
+    // ===========================================================================
+    // DATATABLES PARA EMPRESAS (PERFIL 1) - Tu código original
+    // ===========================================================================
+    $(document).ready(function() {
+        if ($.fn.DataTable.isDataTable('#example')) {
+            $('#example').DataTable().destroy();
+        }
+
+        $('#example').DataTable({
+            "language": {
+                "decimal":        "",
+                "emptyTable":     "No hay empresas registradas",
+                "info":           "Mostrando _START_ a _END_ de _TOTAL_ empresas",
+                "infoEmpty":      "Mostrando 0 a 0 de 0 empresas",
+                "infoFiltered":   "(filtrado de _MAX_ empresas totales)",
+                "infoPostFix":    "",
+                "thousands":      ".",
+                "lengthMenu":     "Mostrar _MENU_ empresas",
+                "loadingRecords": "Cargando...",
+                "processing":     "Procesando...",
+                "search":         "Buscar:",
+                "zeroRecords":    "No se encontraron empresas coincidentes",
+                "paginate": {
+                    "first":      "Primero",
+                    "last":       "Último",
+                    "next":       "Siguiente",
+                    "previous":   "Anterior"
+                },
+                "aria": {
+                    "sortAscending":  ": activar para ordenar la columna de forma ascendente",
+                    "sortDescending": ": activar para ordenar la columna de forma descendente"
+                }
+            },
+            "dom": '<"row mb-3"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>><"row"<"col-sm-12"tr>><"row mt-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+            "pagingType": "full_numbers",
+            "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "Todos"] ],
+            "oClasses": {
+                "sFilterInput": "form-control form-control-sm",
+                "sLengthSelect": "form-select form-select-sm"
+            },
+        });
+        
+        $('div.dataTables_filter input').attr('placeholder', 'Buscar empresa...');
+        $('div.dataTables_filter label').contents().filter(function(){
+            return this.nodeType === 3; 
+        }).remove();
+
+        // ===========================================================================
+        // LÓGICA DE GRÁFICAS (Requiere Chart.js)
+        // ===========================================================================
+        const total = <?php echo $totalEmpresas ?? 0; ?>;
+        const activas = <?php echo $activasEmpresas ?? 0; ?>;
+        const inactivas = <?php echo $inactivasEmpresas ?? 0; ?>;
+
+        // Gráfico de Barras/Donut: Estado de Actividad de Empresas
+        const ctx1 = document.getElementById('empresasActivasChart');
+        if (ctx1) {
+            new Chart(ctx1, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Activas', 'Inactivas'],
+                    datasets: [{
+                        label: 'Estado de Empresas',
+                        data: [activas, inactivas],
+                        backgroundColor: [
+                            'rgba(25, 135, 84, 0.8)', // Color para Activas (Verde)
+                            'rgba(220, 53, 69, 0.8)' // Color para Inactivas (Rojo)
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Distribución de Empresas (Activas vs. Inactivas)',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Gráfico de Ejemplo (Línea): Para que veas un ejemplo de otro gráfico
+        const ctx2 = document.getElementById('otroGrafico');
+        if (ctx2) {
+            new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Crecimiento de Nuevas Empresas (Ejemplo)',
+                        data: [1, 3, 4, 6, 8, 10], // Datos de ejemplo
+                        borderColor: 'rgba(52, 58, 64, 1)', // Gris oscuro/Negro
+                        backgroundColor: 'rgba(52, 58, 64, 0.2)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Crecimiento Histórico de Empresas (Ejemplo)',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+        // ===========================================================================
+    });
+    // ===========================================================================
 </script>
 <?php
 } else {

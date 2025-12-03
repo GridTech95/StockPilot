@@ -160,4 +160,59 @@ function confirmarEliminacion(url) {
         }
     });
 }
+// ============== CÓDIGO DATATABLES CORREGIDO (Incluyendo destrucción) =================
+$(document).ready(function() {
+    // Verificar si ya existe una instancia de DataTables en #example y destruirla
+    if ($.fn.DataTable.isDataTable('#example')) {
+        $('#example').DataTable().destroy();
+    }
+
+    // Inicializar DataTables con tus opciones de diseño y traducción
+    $('#example').DataTable({
+        // Ya no necesitamos "retrieve: true" porque la destruimos antes.
+        
+        // 1. Traducción al español
+        "language": {
+            "decimal":        "",
+            "emptyTable":     "No hay datos disponibles en la tabla",
+            "info":           "Mostrando _START_ a _END_ de _TOTAL_ proveedores",
+            "infoEmpty":      "Mostrando 0 a 0 de 0 proveedores",
+            "infoFiltered":   "(filtrado de _MAX_ proveedores totales)",
+            "infoPostFix":    "",
+            "thousands":      ".",
+            "lengthMenu":     "Mostrar _MENU_ proveedores",
+            "loadingRecords": "Cargando...",
+            "processing":     "Procesando...",
+            "search":         "Buscar:",
+            "zeroRecords":    "No se encontraron proveedores coincidentes",
+            "paginate": {
+                "first":      "Primero",
+                "last":       "Último",
+                "next":       "Siguiente",
+                "previous":   "Anterior"
+            },
+            "aria": {
+                "sortAscending":  ": activar para ordenar la columna de forma ascendente",
+                "sortDescending": ": activar para ordenar la columna de forma descendente"
+            }
+        },
+        // 2. Aplicar clases de Bootstrap al diseño de DataTables
+        "dom": '<"row mb-3"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>><"row"<"col-sm-12"tr>><"row mt-3"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+        "pagingType": "full_numbers",
+        "lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "Todos"] ],
+        
+        // 3. Clases de Bootstrap
+        "oClasses": {
+            "sFilterInput": "form-control form-control-sm",
+            "sLengthSelect": "form-select form-select-sm"
+        },
+    });
+    
+    // 4. Mejorar el estilo del campo de búsqueda
+    $('div.dataTables_filter input').attr('placeholder', 'Buscar proveedor...');
+    $('div.dataTables_filter label').contents().filter(function(){
+        return this.nodeType === 3; // Elimina el texto "Search:"
+    }).remove();
+});
+// ===================================================================================
 </script>

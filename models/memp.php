@@ -175,57 +175,76 @@ class Memp {
     }
 }
 
-    public function edit(){
-    try{
+    public function edit() {
+    try {
         $sql = "UPDATE empresa SET 
-                nomemp=:nomemp, 
-                razemp=:razemp, 
-                nitemp=:nitemp, 
-                diremp=:diremp, 
-                telemp=:telemp, 
-                emaemp=:emaemp, 
-                logo=:logo, 
-                idusu=:idusu, 
-                fec_crea=:fec_crea, 
-                fec_actu=:fec_actu, 
-                act=:act, 
-                estado=:estado 
-                WHERE idemp=:idemp";
+                    nomemp = :nomemp, 
+                    razemp = :razemp, 
+                    nitemp = :nitemp, 
+                    diremp = :diremp, 
+                    telemp = :telemp, 
+                    emaemp = :emaemp, 
+                    logo = :logo, 
+                    idusu = :idusu, 
+                    fec_crea = :fec_crea, 
+                    fec_actu = :fec_actu, 
+                    act = :act, 
+                    estado = :estado 
+                WHERE idemp = :idemp";
+
         $modelo = new conexion();
         $conexion = $modelo->get_conexion();
-        $result = $conexion->prepare($sql);
-        $idemp    = $this->getIdemp();
+        $result   = $conexion->prepare($sql);
+
+        // ===== BIND DE PARÁMETROS =====
+        $idemp = $this->getIdemp();
         $result->bindParam(':idemp', $idemp);
-        $nomemp   = $this->getNomemp();
+
+        $nomemp = $this->getNomemp();
         $result->bindParam(':nomemp', $nomemp);
-        $razemp   = $this->getRazemp();
+
+        $razemp = $this->getRazemp();
         $result->bindParam(':razemp', $razemp);
-        $nitemp   = $this->getNitemp();
+
+        $nitemp = $this->getNitemp();
         $result->bindParam(':nitemp', $nitemp);
-        $diremp   = $this->getDiremp();
+
+        $diremp = $this->getDiremp();
         $result->bindParam(':diremp', $diremp);
-        $telemp   = $this->getTelemp();
+
+        $telemp = $this->getTelemp();
         $result->bindParam(':telemp', $telemp);
-        $emaemp   = $this->getEmaemp();
+
+        $emaemp = $this->getEmaemp();
         $result->bindParam(':emaemp', $emaemp);
-        $logo     = $this->getLogo();
+
+        $logo = $this->getLogo();
         $result->bindParam(':logo', $logo);
-        $idusu    = $this->getIdusu();
+
+        $idusu = $this->getIdusu();
         $result->bindParam(':idusu', $idusu);
+
         $fec_crea = $this->getFec_crea();
         $result->bindParam(':fec_crea', $fec_crea);
+
         $fec_actu = $this->getFec_actu();
         $result->bindParam(':fec_actu', $fec_actu);
-        $act      = $this->getAct();
+
+        $act = $this->getAct();
         $result->bindParam(':act', $act);
-        $estado   = $this->getEstado();
+
+        $estado = $this->getEstado();
         $result->bindParam(':estado', $estado);
+
+        // Ejecutar
         $result->execute();
         return true;
-    }catch(Exception $e){
+
+    } catch (Exception $e) {
         return false;
     }
 }
+
 
     public function del(){
         try {
@@ -244,9 +263,8 @@ class Memp {
 
     // 🔑 MÉTODOS CLAVE PARA EL REGISTRO DE EMPRESA (con ajustes)
     
-    public function insertNewEmpresa(){
-    try{
-        // 🔑 CORRECCIÓN: La sentencia SQL ya incluye :logo, lo cual es correcto.
+    public function insertNewEmpresa() {
+    try {
         $sql = "INSERT INTO empresa
                 (nomemp, razemp, nitemp, diremp, telemp, emaemp, logo, idusu, fec_crea, fec_actu, act, estado) 
                 VALUES 
@@ -255,40 +273,51 @@ class Memp {
         $modelo = new conexion();
         $conexion = $modelo->get_conexion();
         $result = $conexion->prepare($sql);
-        
-        $nomemp   = $this->getNomemp();
+
+        // ====== BIND DE PARÁMETROS ======
+        $nomemp = $this->getNomemp();
         $result->bindParam(':nomemp', $nomemp);
-        $razemp   = $this->getRazemp();
+
+        $razemp = $this->getRazemp();
         $result->bindParam(':razemp', $razemp);
-        $nitemp   = $this->getNitemp();
+
+        $nitemp = $this->getNitemp();
         $result->bindParam(':nitemp', $nitemp);
-        $diremp   = $this->getDiremp();
+
+        $diremp = $this->getDiremp();
         $result->bindParam(':diremp', $diremp);
-        $telemp   = $this->getTelemp();
+
+        $telemp = $this->getTelemp();
         $result->bindParam(':telemp', $telemp);
-        $emaemp   = $this->getEmaemp();
+
+        $emaemp = $this->getEmaemp();
         $result->bindParam(':emaemp', $emaemp);
-        $logo     = $this->getLogo();
-        $result->bindParam(':logo', $logo); // 🔑 YA EXISTE - Bindeo del campo logo
-        $idusu    = $this->getIdusu();
+
+        $logo = $this->getLogo();
+        $result->bindParam(':logo', $logo); // Logo correcto
+
+        $idusu = $this->getIdusu();
         $result->bindParam(':idusu', $idusu);
+
         $fec_crea = $this->getFec_crea();
         $result->bindParam(':fec_crea', $fec_crea);
+
         $fec_actu = $this->getFec_actu();
         $result->bindParam(':fec_actu', $fec_actu);
-        $act      = $this->getAct();
+
+        $act = $this->getAct();
         $result->bindParam(':act', $act);
-        $estado   = $this->getEstado();
+
+        $estado = $this->getEstado();
         $result->bindParam(':estado', $estado);
-        
+
+        // Ejecuta la inserción
         $result->execute();
-        
-        // 🔑 AJUSTE CLAVE: Retorna el ID de la fila recién insertada (necesario para linkUsuEmp)
-        return $conexion->lastInsertId(); 
-        
-    }catch(Exception $e){
-        // 🔑 AJUSTE CLAVE: Se usa un error_log más detallado y retorna 0 en caso de fallo.
-        // error_log("Error en Memp->insertNewEmpresa: " . $e->getMessage());
+
+        // Retorna ID de la nueva empresa
+        return $conexion->lastInsertId();
+
+    } catch (Exception $e) {
         return 0; 
     }
 }
@@ -322,42 +351,49 @@ public function linkUsuEmp($idusu, $idemp) {
 
 public function editByEmpresa(){
     try{
-        // 🔑 CLAVE: El campo 'logo=:logo' DEBE estar en la consulta SQL
+        // 🔑 Consulta limitada: Admin/Empresa NO puede modificar nitemp, act ni estado.
         $sql = "UPDATE empresa SET 
-                nomemp=:nomemp, 
-                razemp=:razemp, 
-                diremp=:diremp, 
-                telemp=:telemp, 
-                emaemp=:emaemp, 
-                logo=:logo, 
-                fec_actu=NOW() 
+                    nomemp=:nomemp, 
+                    razemp=:razemp, 
+                    diremp=:diremp, 
+                    telemp=:telemp, 
+                    emaemp=:emaemp, 
+                    logo=:logo, 
+                    fec_actu=NOW() 
                 WHERE idemp=:idemp";
-        
+
         $modelo = new conexion();
         $conexion = $modelo->get_conexion();
         $result = $conexion->prepare($sql);
-        
-        // ... (binding de todos los parámetros, incluyendo :logo)
-        $idemp    = $this->getIdemp();
+
+        // 🔽 Bindeo de parámetros
+        $idemp = $this->getIdemp();
         $result->bindParam(':idemp', $idemp);
-        $nomemp   = $this->getNomemp();
+
+        $nomemp = $this->getNomemp();
         $result->bindParam(':nomemp', $nomemp);
-        $razemp   = $this->getRazemp();
+
+        $razemp = $this->getRazemp();
         $result->bindParam(':razemp', $razemp);
-        $diremp   = $this->getDiremp();
+
+        $diremp = $this->getDiremp();
         $result->bindParam(':diremp', $diremp);
-        $telemp   = $this->getTelemp();
+
+        $telemp = $this->getTelemp();
         $result->bindParam(':telemp', $telemp);
-        $emaemp   = $this->getEmaemp();
+
+        $emaemp = $this->getEmaemp();
         $result->bindParam(':emaemp', $emaemp);
-        $logo     = $this->getLogo();
-        $result->bindParam(':logo', $logo); // 🔑 CLAVE: El logo DEBE ser bindeado aquí
-        
+
+        $logo = $this->getLogo();
+        $result->bindParam(':logo', $logo); // ✅ Logo bindeado correctamente
+
         return $result->execute();
     }catch(Exception $e){
         // error_log("Error en Memp->editByEmpresa: " . $e->getMessage());
         return false;
     }
 }
+
 }
 ?>

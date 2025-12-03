@@ -39,7 +39,7 @@ require_once("models/seg.php");
 
 <body>
     <?php
-    // La variable $pg debe obtenerse aquí nuevamente o usarse la ya establecida por Cemp.php
+    // Obtención de $pg (Esta es la única definición necesaria en este punto)
     $pg = isset($_REQUEST["pg"]) ? $_REQUEST["pg"]:NULL; 
         require_once("models/conexion.php");
     ?>
@@ -56,21 +56,53 @@ require_once("models/seg.php");
     </header>
     <section>
         <?php
-          // No es necesario redefinir $pg aquí, pero si lo haces debe ser igual
-          $pg = isset($_REQUEST["pg"]) ? $_REQUEST["pg"]:NULL;
+          // *** SE ELIMINÓ LA LÍNEA REDUNDANTE DE $pg AQUÍ ***
              if(!$pg OR $pg==1001)
-                 require_once("views/vemp.php");
+                require_once("views/vemp.php"); // 1001: Empresas
              elseif($pg==1002)
-                 require_once("views/vprod.php");
+                require_once("views/vprod.php"); // 1002: Productos
              elseif($pg==1003)
-                 require_once("views/vprov.php");
+                require_once("views/vprov.php"); // 1003: Proveedores
              elseif($pg==1004)
-                 require_once("views/vusemp.php");
-             // ... (El resto de las condiciones de vistas es igual) ...
+                require_once("views/vusemp.php"); // 1004: Empleados
+                 
+             // *** INICIO DE CONDICIONES AGREGADAS (1005 a 1019) ***
+             elseif($pg==1005)
+                require_once("views/vcat.php"); // 1005: Categorías
+             elseif($pg==1006)
+                require_once("views/vaukard.php"); // 1006: Auditoría
+             elseif($pg==1007)
+                require_once("views/vkard.php"); // 1007: Kardex
+             elseif($pg==1008)
+                require_once("views/vlote.php"); // 1008: Lotes
+             elseif($pg==1009)
+                require_once("views/vinv.php"); // 1009: Inventario
+             elseif($pg==1010)
+                require_once("views/vmovim.php"); // 1010: Movimientos
+             elseif($pg==1011)
+                require_once("views/vdom.php"); // 1011: Dominios
+             elseif($pg==1012)
+                require_once("views/vval.php"); // 1012: Valores
+             elseif($pg==1013)
+                require_once("views/vsolrsal.php"); // 1013: Solicitud Salida
+             elseif($pg==1014)
+                require_once("views/vdetsal.php"); // 1014: Detalle salida
+             elseif($pg==1015)
+                require_once("views/vsoent.php"); // 1015: Solicitud entrada
+             elseif($pg==1016)
+                require_once("views/vmodi.php"); // 1016: Modulo
+             elseif($pg==1017)
+                require_once("views/vubi.php"); // 1017: Ubicacion
+             elseif($pg==1018)
+                require_once("views/vusu.php"); // 1018: Usuarios
+             elseif($pg==1019)
+                require_once("views/vpag.php"); // 1019: Pagina
+             // *** FIN DE CONDICIONES AGREGADAS ***
+                 
              elseif($pg==1020)
-                 require_once("views/vper.php");
+                require_once("views/vper.php"); // 1020: Perfil (Vuelve a aparecer la que tenías)
              else
-                 echo "Pagina No Disponible Para Este Usuario";
+                echo "Pagina No Disponible Para Este Usuario";
          ?>
     </section>
     <footer>
